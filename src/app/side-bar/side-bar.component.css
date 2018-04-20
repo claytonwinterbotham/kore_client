@@ -1,0 +1,17 @@
+.sidebar_list{
+
+}
+
+.nav a{
+    color: #fff;
+}
+
+.timeslip_list{
+    position: absolute;
+    top: 15vh;
+}
+
+.manage_list{
+    position: absolute;
+    top: 40vh;
+}
