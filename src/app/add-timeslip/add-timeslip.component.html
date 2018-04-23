@@ -3,13 +3,12 @@
     <div class="col-8 offset-md-2 content">
         <form>
             <div class="form-group">
-              <label for="tag">Select Tag (select one):</label>
-              <select class="form-control" id="tag">
-                <option>Default</option>
-                <option>Default Monday</option>
-                <option>Project A</option>
-                <option>Weekly Service</option>
-              </select>
+              <label for="tag">Tag:</label>
+                <ng-select [dropdownPosition]="'down'"
+                id="tag"
+                [searchable]="true"
+                [items]="tags">
+                </ng-select>
             </div>
             <div class="form-group">
                 <label for="date">Date:</label>
@@ -19,10 +18,23 @@
                 <ngbd-timepicker></ngbd-timepicker>
             </div>
        
-            <ng-select [dropdownPosition]="'top'"
-            [searchable]="true"
-            [items]="projects">
-            </ng-select>
+            <div class="form-group">
+              <label for="projects">Project:</label>
+                <ng-select [dropdownPosition]="'down'"
+                id="projects"
+                [searchable]="true"
+                [items]="projects">
+                </ng-select>
+            </div>
+
+            <div class="form-group">
+              <label for="wbis">WBI:</label>
+                <ng-select [dropdownPosition]="'down'"
+                id="wbis"
+                [searchable]="true"
+                [items]="wbis">
+                </ng-select>
+            </div>
       
         </form>
     </div>

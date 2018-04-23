@@ -2,4 +2,8 @@
 body{
     font-family: "Open Sans",Arial, Helvetica, sans-serif;
     font-weight: 400;
-}    
+}   
+
+.content{
+    margin-top: 5em;
+}
