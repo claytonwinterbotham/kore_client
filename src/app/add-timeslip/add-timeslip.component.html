@@ -1,45 +1,82 @@
 <div class="container">
   <div class="row">
-    <div class="col-8 offset-md-2 content">
+    <div class="col-lg-10 offset-lg-2 col-md-10 offset-md-2 col-sm-10 offset-sm-2 content">
         <form>
-            <div class="form-group">
-              <label for="tag">Tag:</label>
-                <ng-select [dropdownPosition]="'down'"
-                id="tag"
-                [searchable]="true"
-                [items]="tags">
-                </ng-select>
+          <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="date">Date:</label>
+                    <ngbd-datepicker-popup></ngbd-datepicker-popup>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="date">Date:</label>
-                <ngbd-datepicker-popup></ngbd-datepicker-popup>
+            <div class="col-md-4">
+                <div class="form-group">
+                  <label for="tag">Tag:</label>
+                    <ng-select [dropdownPosition]="'down'"
+                    id="tag"
+                    [searchable]="true"
+                    [items]="tags">
+                    </ng-select>
+                </div>
             </div>
-            <div class="form-group">
-                <ngbd-timepicker></ngbd-timepicker>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <ngbd-timepicker></ngbd-timepicker>
+                </div>
             </div>
-       
-            <div class="form-group">
-              <label for="projects">Project:</label>
-                <ng-select [dropdownPosition]="'down'"
-                id="projects"
-                [searchable]="true"
-                [items]="projects">
-                </ng-select>
+          </div> 
+          <div class="row">
+            <div class="col-md-8">
+              <div class="form-group">
+                <label for="projects">Project:</label>
+                  <ng-select [dropdownPosition]="'down'"
+                  id="projects"
+                  [searchable]="true"
+                  [items]="projects">
+                  </ng-select>
+              </div>
             </div>
-
-            <div class="form-group">
-              <label for="wbis">WBI:</label>
-                <ng-select [dropdownPosition]="'down'"
-                id="wbis"
-                [searchable]="true"
-                [items]="wbis">
-                </ng-select>
+            <div class="col-md-8">
+              <div class="form-group">
+                <label for="wbis">WBI:</label>
+                  <ng-select [dropdownPosition]="'down'"
+                  id="wbis"
+                  [searchable]="true"
+                  [items]="wbis">
+                  </ng-select>
+              </div>
             </div>
-      
+          </div>
+          <div class="row">
+            <div class="col-md-8">
+              <div class="form-group">
+                  <label for="description">Description:</label>
+                  <textarea class="form-control" rows="5" id="description"></textarea>
+              </div>   
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="tag_input" class="">Tag (optional):</label>
+                <div class="col-10">
+                  <input class="form-control" type="text" value="" id="tag_input">
+                </div>
+              </div>   
+            </div>
+            <div class="col-md-4">
+              <div class="form-group form-check">
+                  <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"> Save profile
+                  </label>
+              </div> 
+            </div>
+          </div> 
+          <button type="submit" class="btn btn-primary">Submit</button>     
         </form>
-    </div>
-  
-      
+    </div>   
   </div>
 </div>
 
