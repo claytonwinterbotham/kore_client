@@ -17,8 +17,16 @@
         <table class="table table-bordered">
             <tbody>
               <tr *ngFor="let event of events; let index = index">
-                <td colspan="4"> 
-                  <ng-select [dropdownPosition]="'down'"
+                <td> 
+                  <label for="project" class="col-2 col-form-label">Project</label>
+                  <div class="col-10">
+                    <input [(ngModel)]="event.project" class="form-control" type="text" value="Artisanal kale" id="project">
+                  </div>
+                  <label for="wbi" class="col-2 col-form-label">Project</label>
+                  <div class="col-10">
+                    <input [(ngModel)]="event.wbu" class="form-control" type="text" value="Artisanal kale" id="wbi">
+                  </div>
+                  <!-- <ng-select [dropdownPosition]="'down'"
                   class="form-control"
                   [(ngModel)]="event.project"
                   (ngModelChange)="refresh.next()"
@@ -27,8 +35,8 @@
                   [items]="projects"
                   bindlabel="label"
                   bindvalue="value">
-                  </ng-select>
-                  <ng-select [dropdownPosition]="'down'"
+                  </ng-select> -->
+                  <!-- <ng-select [dropdownPosition]="'down'"
                   class="form-control"
                   [(ngModel)]="event.wbi"
                   (ngModelChange)="refresh.next()"
@@ -37,7 +45,7 @@
                   [items]="wbis"
                   bindlabel="label"
                   bindvalue="value">
-                  </ng-select>
+                  </ng-select> -->
                 </td>
                 <td>
                   <div class="form-group">
