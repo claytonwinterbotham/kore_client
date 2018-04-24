@@ -1,16 +1,14 @@
 <div class="container">
   <div class="row">
-    <div class="col-12 navigation">
-      <nav class="navbar navbar-light bg-light">
-            <form class="form-inline col-12">
-              <button
-              class="btn btn-outline-success"
-              (click)="addEvent()">
-              Add new
-              </button>
-            </form>
-      </nav>
-    </div>
+    <nav class="navigation navbar navbar-light bg-light">
+        <form class="form-inline my-2 my-lg-0 float-right">
+          <button
+          class="add_timeslip_btn btn btn-outline-success my-2 my-sm-0"
+          (click)="addEvent()">
+          Add new
+          </button>
+        </form>
+    </nav>
   </div>  
   <div class="row">
     <div class="col-12 main-content">
@@ -22,9 +20,9 @@
                   <div class="col-10">
                     <input [(ngModel)]="event.project" class="form-control" type="text" value="Artisanal kale" id="project">
                   </div>
-                  <label for="wbi" class="col-2 col-form-label">Project</label>
+                  <label for="wbi" class="col-2 col-form-label">WBI</label>
                   <div class="col-10">
-                    <input [(ngModel)]="event.wbu" class="form-control" type="text" value="Artisanal kale" id="wbi">
+                    <input [(ngModel)]="event.wbi" class="form-control" type="text" value="Artisanal kale" id="wbi">
                   </div>
                   <!-- <ng-select [dropdownPosition]="'down'"
                   class="form-control"

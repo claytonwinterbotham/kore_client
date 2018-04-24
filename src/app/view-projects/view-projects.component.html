@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <p>
   view-projects works!
   <tr *ngFor="let project of projectList">
@@ -56,3 +57,77 @@ One project Detail
       [(ngModel)]="oneProject.newEndDate" /></p>
         <button type="button"
         (click)="updateProject(oneProject)">Submit</button>
+=======
+<div class="container">
+  <div class="row">
+    <div class="col-8 offset-md-2 main-content">
+        <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+          <div class="form-group">
+            <label for="project">Project Name:</label>
+            <input 
+            type="text" 
+            class="form-control" 
+            id="project" 
+            placeholder="project name"
+            name="project"
+            ngModel
+            required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="client">Client:</label>
+            <ng-select [dropdownPosition]="'down'"
+              id="clients"
+              [searchable]="true"
+              [items]="clients"
+              bindlabel="label"
+              bindvalue="value"
+              name="client"
+              ngModel
+              required>
+            </ng-select>
+          </div>
+          <div class="form-group">
+              <label for="start_date">Start Date:</label>
+            <div class="input-group">
+              <input class="form-control" placeholder="yyyy-mm-dd"
+                      name="start_date" ngModel ngbDatepicker #d1="ngbDatepicker" required>
+              <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
+                  <img src="../../assets/img/calendar.svg" style="width: 2rem; height: 2rem; cursor: pointer;"/>
+                  </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+              <label for="end_date">End Date:</label>
+              <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd"
+                name="end_date" ngModel ngbDatepicker #d2="ngbDatepicker" required>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
+                    <img src="../../assets/img/calendar.svg" style="width: 2rem; height: 2rem; cursor: pointer;"/>
+                    </button>
+                </div>
+              </div>
+            </div>
+          
+          <div class="form-group">
+            <label for="project_type">Project Type:</label>
+            <input type="text" class="form-control" id="" placeholder="project type"
+            name="project_type"
+            ngModel
+            required>
+          </div>
+
+          <button type="submit" class="btn btn-outline-success" [disabled]="!f.valid">Submit</button>
+          <button type="button" class="btn btn-outline-info" (click)="onClear(f)">Clear</button>
+        </form>
+    </div>   
+  </div>
+</div>
+
+
+>>>>>>> 8b6b466c02ce3bbaea5d6244380c21672caeb471

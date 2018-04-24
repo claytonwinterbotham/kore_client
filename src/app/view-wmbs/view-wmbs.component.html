@@ -1,3 +1,42 @@
-<p>
-  view-wmbs works!
-</p>
+<div class="container">
+    <div class="row">
+      <div class="col-8 offset-md-2 main-content">
+          <form>
+            <div class="form-group">
+              <label for="wbi">WBI:</label>
+              <input type="text" class="form-control" id="wbi" placeholder="">
+            </div>
+
+            <div class="form-group">
+                <label for="projects">Project:</label>
+                <ng-select [dropdownPosition]="'down'"
+                  id="projects"
+                  [searchable]="true"
+                  [items]="projects"
+                  bindlabel="label"
+                  bindvalue="value">
+                </ng-select>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea 
+                class="form-control" 
+                rows="5" 
+                id="description"
+                (keyup)="refresh.next()"
+                ></textarea>
+              </div>   
+  
+            <div class="form-group">
+                <label for="estimated_hours">Estimated Hours:</label>
+                <input type="text" class="form-control" id="estimated_hours" placeholder="">
+            </div>
+          <button type="submit" class="btn btn-outline-success">Submit</button>
+        </form>
+    </div>   
+  </div>
+</div>
+  
+  
+  
