@@ -17,7 +17,7 @@
         <table class="table table-bordered">
             <tbody>
               <tr *ngFor="let event of events; let index = index">
-                <td>
+                <td colspan="4"> 
                   <ng-select [dropdownPosition]="'down'"
                   class="form-control"
                   [(ngModel)]="event.project"
@@ -28,8 +28,6 @@
                   bindlabel="label"
                   bindvalue="value">
                   </ng-select>
-                </td>
-                <td>
                   <ng-select [dropdownPosition]="'down'"
                   class="form-control"
                   [(ngModel)]="event.wbi"
@@ -38,8 +36,7 @@
                   [searchable]="true"
                   [items]="wbis"
                   bindlabel="label"
-                  bindvalue="value"
-                 >
+                  bindvalue="value">
                   </ng-select>
                 </td>
                 <td>

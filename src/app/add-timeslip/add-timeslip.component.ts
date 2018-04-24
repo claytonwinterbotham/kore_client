@@ -51,12 +51,12 @@ export class AddTimeslipComponent{
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
   projects = [
-    { value: 1, label: 'wbis1' },
-    { value: 2, label: 'wbis2' },
-    { value: 3, label: 'wbis3' },
-    { value: 4, label: 'wbis4' },
-    { value: 5, label: 'wbis5' },
-    { value: 6, label: 'wbis6' }
+    { value: 1, label: 'projects1' },
+    { value: 2, label: 'projects2' },
+    { value: 3, label: 'projects3' },
+    { value: 4, label: 'projects4' },
+    { value: 5, label: 'projects5' },
+    { value: 6, label: 'projects6' }
   ];
 
   wbis = [
@@ -144,12 +144,8 @@ export class AddTimeslipComponent{
 
   addEvent(): void {
     this.events.push({
-      project: {
-        value: ''
-      },
-      wbi: {
-        value: ''
-      },
+      project: '',
+      wbi: '',
       description: '',
       start: startOfDay(new Date()),
       end: endOfDay(new Date()),
