@@ -11,7 +11,7 @@ const appRoutes: Routes = [
     {path: 'addtimeslip', component: AddTimeslipComponent},
     {path: 'viewalltimeslips', component: ViewTimeslipComponent},
     {path: 'viewallprojects', component: ViewProjectsComponent},
-    {path: 'viewallwbis', component: AddTimeslipComponent}
+    {path: 'viewallwbis', component: ViewWmbsComponent}
 ];
 
 export const routing : ModuleWithProviders = RouterModule.forRoot(appRoutes);
