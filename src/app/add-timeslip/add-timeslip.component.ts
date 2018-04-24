@@ -144,9 +144,7 @@ export class AddTimeslipComponent{
 
   addEvent(): void {
     this.events.push({
-      project: '',
-      wbi: '',
-      description: '',
+      title: '',
       start: startOfDay(new Date()),
       end: endOfDay(new Date()),
       color: colors.red,

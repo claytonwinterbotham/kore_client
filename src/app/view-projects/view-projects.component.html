@@ -1,3 +1,58 @@
 <p>
   view-projects works!
+  <tr *ngFor="let project of projectList">
+    <td>{{project.newName}}</td><td> 
+      <button type="button"
+      (click)="getOneProject(project.newProjectId)">detail
+      </button>
+      <button type="button"
+      (click)="deleteOneProject(project.newProjectId)">delete
+      </button>     
+  </td>
+  </tr>
+  <br>
+
+<!-- {{oneProject.newName}}<br>
+{{oneProject.newStartDate}} -->
+  <br>
+  Create new project
+  <br>
+  <p>project Name: <input type="text"
+    name="Name"
+    [(ngModel)]="newProject.Name" /></p>
+
+    <p>StartDate: <input type="text"
+      name="StartDate"
+      [(ngModel)]="newProject.StartDate" /></p>
+
+      <p>EndDate: <input type="text"
+        name="EndDate"
+        [(ngModel)]="newProject.EndDate" /></p>
+
+        <p>ProjectType: <input type="text"
+          name="ProjectType"
+          [(ngModel)]="newProject.ProjectType" /></p>
+
+          <button type="button"
+          (click)="createProject(newProject)">Submit</button>
+
+
 </p>
+
+
+<br>
+One project Detail
+<br>
+<p>project Name: <input type="text"
+  name="Name"
+  [(ngModel)]="oneProject.newName" /></p>
+
+  <p>StartDate: <input type="text"
+    name="StartDate"
+    [(ngModel)]="oneProject.newStartDate" /></p>
+
+    <p>EndDate: <input type="text"
+      name="EndDate"
+      [(ngModel)]="oneProject.newEndDate" /></p>
+        <button type="button"
+        (click)="updateProject(oneProject)">Submit</button>

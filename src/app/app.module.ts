@@ -7,7 +7,7 @@ import { CalendarModule } from 'angular-calendar';
 import { CommonModule } from '@angular/common';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarUtilsModule } from './calendar-utils/module';
-
+import { HttpModule }    from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { AddTimeslipComponent } from './add-timeslip/add-timeslip.component';
@@ -44,6 +44,7 @@ import { NgbdTimepickerMeridian } from './widgets/timepicker/timepicker';
     CommonModule,
     NgbModalModule.forRoot(),
     CalendarUtilsModule,
+    HttpModule,
     BrowserAnimationsModule
   ],
   providers: [],
