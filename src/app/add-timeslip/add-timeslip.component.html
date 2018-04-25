@@ -18,7 +18,10 @@
                 <td> 
                   <label for="project" class="col-2 col-form-label">Project</label>
                   <div class="col-10">
-                    <input [(ngModel)]="event.project" class="form-control" type="text" value="Artisanal kale" id="project">
+                      <select  name="cat_num" class="form-control">
+                          <option *ngFor="let project of projectList" value="{{project.newProjectId}}"  >{{project.newName}}</option>                       
+                      </select>
+                    <!-- <input [(ngModel)]="event.project" class="form-control" type="text" value="Artisanal kale" id="project"> -->
                   </div>
                   <label for="wbi" class="col-2 col-form-label">WBI</label>
                   <div class="col-10">
@@ -114,7 +117,9 @@
               mwlCalendarPreviousView
               [view]="view"
               [(viewDate)]="viewDate"
-              (viewDateChange)="activeDayIsOpen = false">
+              (viewDateChange)="activeDayIsOpen = false"
+              >
+              <!-- (viewDateChange)="skipWeekends('back')" -->
               Previous
             </div>
             <div
@@ -128,7 +133,9 @@
               mwlCalendarNextView
               [view]="view"
               [(viewDate)]="viewDate"
-              (viewDateChange)="activeDayIsOpen = false">
+              (viewDateChange)="activeDayIsOpen = false"
+              >
+              <!-- (viewDateChange)="skipWeekends('forward')" -->
               Next
             </div>
           </div>
@@ -165,19 +172,22 @@
           *ngSwitchCase="'month'"
           [viewDate]="viewDate"
           [events]="events"
+         
           [refresh]="refresh"
           [activeDayIsOpen]="activeDayIsOpen"
           (dayClicked)="dayClicked($event.day)"
           (eventClicked)="handleEvent('Clicked', $event.event)"
           (eventTimesChanged)="eventTimesChanged($event)">
+           <!-- [excludeDays]="excludeDays" -->
         </mwl-calendar-month-view>
         <mwl-calendar-week-view
-          *ngSwitchCase="'week'"
+          *ngSwitchCase="'week'"     
           [viewDate]="viewDate"
           [events]="events"
           [refresh]="refresh"
           (eventClicked)="handleEvent('Clicked', $event.event)"
           (eventTimesChanged)="eventTimesChanged($event)">
+          <!-- [excludeDays]="excludeDays" -->
         </mwl-calendar-week-view>
         <mwl-calendar-day-view
           *ngSwitchCase="'day'"

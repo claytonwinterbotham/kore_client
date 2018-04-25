@@ -16,6 +16,7 @@ import {
   addHours
 } from 'date-fns';
 import { NgModel } from '@angular/forms';
+import { MyProjectService } from "../services/app.projectservice"
 import { Subject } from 'rxjs/Subject';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -108,10 +109,48 @@ export class AddTimeslipComponent{
     // }
   ];
 
+      // exclude weekends
+      excludeDays: number[] = [0, 6];
+
+      skipWeekends(direction: 'back' | 'forward'): void {
+        if (this.view === 'day') {
+          if (direction === 'back') {
+            while (this.excludeDays.indexOf(this.viewDate.getDay()) > -1) {
+              this.viewDate = subDays(this.viewDate, 1);
+            }
+          } else if (direction === 'forward') {
+            while (this.excludeDays.indexOf(this.viewDate.getDay()) > -1) {
+              this.viewDate = addDays(this.viewDate, 1);
+            }
+          }
+        }
+      }
+
   activeDayIsOpen: boolean = true;
+  projectService : MyProjectService;
+  projectList : any;
+  
+  constructor(private modal: NgbModal,_projectService:MyProjectService) {
+    this.projectService = _projectService;
+  }
 
-  constructor(private modal: NgbModal) {}
+  ngOnInit() {
+    this.showProjectList();
+  }
 
+  showProjectList(){
+    this.projectService.getProjects().subscribe(
+      data=> {
+        console.log(data);
+        this.projectList = data;
+      },
+    error => {
+      alert(error);
+    }
+  )
+  }
+
+  // handler for clicking each day.
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       if (
@@ -126,6 +165,7 @@ export class AddTimeslipComponent{
     }
   }
 
+  //hander for the change of time of events
   eventTimesChanged({
     event,
     newStart,
@@ -144,7 +184,7 @@ export class AddTimeslipComponent{
 
   addEvent(): void {
     this.events.push({
-      title: '',
+      title: 'myTest',
       start: startOfDay(new Date()),
       end: endOfDay(new Date()),
       color: colors.red,
@@ -157,4 +197,6 @@ export class AddTimeslipComponent{
     });
     this.refresh.next();
   }
+
+
 }

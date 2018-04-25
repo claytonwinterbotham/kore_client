@@ -1,4 +1,3 @@
-
 import { Router, NavigationExtras } from '@angular/router';
 import { MyProjectService } from "../services/app.projectservice"
 import  {ProjectModel} from "../services/app.projectservice"
@@ -27,7 +26,6 @@ export class ViewProjectsComponent implements OnInit {
     { value: 5, label: 'client5' },
     { value: 6, label: 'client6' }
   ];
-
 
     start_time;
     end_time;
