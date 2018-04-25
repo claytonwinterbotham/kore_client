@@ -1,6 +1,8 @@
 import { Router, NavigationExtras } from '@angular/router';
-import { MyProjectService } from "../services/app.projectservice"
-import  {ProjectModel} from "../services/app.projectservice"
+import { MyProjectService } from "../services/app.projectservice";
+import  {ProjectModel} from "../services/app.projectservice";
+import { MyClientService } from "../services/app.clientservice";
+import  {ClientModel} from "../services/app.clientservice";
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 @Component({
@@ -15,25 +17,22 @@ export class ViewProjectsComponent implements OnInit {
   oneProject :any = {};
   newProject : any = {};
 
-  constructor(_projectService:MyProjectService) {
+  clientService : MyClientService;
+  clientList: any;
+
+  constructor(_projectService:MyProjectService, _clientService:MyClientService) {
     this.projectService = _projectService;
+    this.clientService = _clientService;
    }
-  clients = [
-    { value: 1, label: 'client1' },
-    { value: 2, label: 'client2' },
-    { value: 3, label: 'client3' },
-    { value: 4, label: 'client4' },
-    { value: 5, label: 'client5' },
-    { value: 6, label: 'client6' }
-  ];
 
     start_time;
     end_time;
   ngOnInit() {
     this.showProjectList();
+    this.showClientList()
   }
 
-  createProject(project : ProjectModel){
+  createProject(form: NgForm, project : ProjectModel){
     this.projectService.postProject(project).subscribe(
       data=> {
         console.log(data);
@@ -41,6 +40,7 @@ export class ViewProjectsComponent implements OnInit {
         alert(error);
       }
     )
+    form.reset();
   }
 
   showProjectList(){
@@ -48,6 +48,18 @@ export class ViewProjectsComponent implements OnInit {
       data=> {
         console.log(data);
         this.projectList = data;
+      },
+    error => {
+      alert(error);
+    }
+  )
+  }
+
+  showClientList(){
+    this.clientService.getClients().subscribe(
+      data=> {
+        console.log(data);
+        this.clientList = data;
       },
     error => {
       alert(error);
@@ -65,7 +77,7 @@ export class ViewProjectsComponent implements OnInit {
       }
     )
   }
-
+  
   updateProject(project : any){
     this.projectService.updateProject(project).subscribe(
       data=> {
@@ -80,22 +92,23 @@ export class ViewProjectsComponent implements OnInit {
     this.projectService.deleteProject(id).subscribe(
       data=> {
         console.log(data);
+        this.clientList = data;
       },error => {
         alert(error);
       }      
     )
   }
 
-  onSubmit(form: NgForm){
-    const value = form.value;
-    console.log(
-    ` project: ${value.project} 
-      client:  ${value.client.label}
-      start date: ${new Date(value.start_date.year, value.start_date.month, value.start_date.day)} 
-      end date: ${new Date(value.end_date.year, value.end_date.month, value.end_date.day)}   
-      project type: ${value.project_type}`)
-    form.reset();
-  }
+  // onSubmit(form: NgForm){
+  //   const value = form.value;
+  //   console.log(
+  //   ` project: ${value.project} 
+  //     client:  ${value.client.label}
+  //     start date: ${new Date(value.start_date.year, value.start_date.month, value.start_date.day)} 
+  //     end date: ${new Date(value.end_date.year, value.end_date.month, value.end_date.day)}   
+  //     project type: ${value.project_type}`)
+  //   form.reset();
+  // }
 
   onClear(form: NgForm){
     form.reset();

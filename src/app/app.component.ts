@@ -1,13 +1,17 @@
 import { Component } from '@angular/core';
 import { ViewTimeslipComponent } from './view-timeslip/view-timeslip.component';
 import { SideBarComponent } from './side-bar/side-bar.component';
-import {MyProjectService} from "./services/app.projectservice"
+import {MyProjectService} from "./services/app.projectservice";
+import {MyClientService} from "./services/app.clientservice"
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers:[MyProjectService]
+  providers:[
+    MyProjectService,
+    MyClientService
+   ]
 })
 export class AppComponent {
   name = 'Clayton Winterbotham';
