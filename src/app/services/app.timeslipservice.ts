@@ -31,11 +31,12 @@ export class MyTimeslipService {
      }
 
     //add a Timeslip
-    postTimeslip(_timeslip: TimeslipModel): Observable<Comment[]> {
+    postTimeslip(_timeslip: any): Observable<Comment[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({headers: headers});       
         let dataUrl = this.site + "Create";
-        let TimeslipJson = {         
+        let TimeslipJson = {
+            "TimeslipId": _timeslip.TimeslipId,         
             "StartDate": new Date(Number(_timeslip.StartDate.year), Number(_timeslip.StartDate.month),Number(_timeslip.StartDate.day)),
             "EndDate": new Date(Number(_timeslip.EndDate.year), Number(_timeslip.EndDate.month),Number(_timeslip.EndDate.day)),
             "Remarks": _timeslip.Remarks,
