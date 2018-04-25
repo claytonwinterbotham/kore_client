@@ -9,9 +9,18 @@ import 'rxjs/add/observable/throw';
 
 export class ProjectModel {
     Name : string;
-    StartDate : string;
-    EndDate : string;
-    ProjectType : string;
+    StartDate: {
+        year: String,
+        month: String,
+        day: String
+    };
+    EndDate : {
+        year: String,
+        month: String,
+        day: String
+    };
+    ProjectType: string;
+    Client: String;
 }
 
 @Injectable()
@@ -28,11 +37,12 @@ export class MyProjectService {
         let dataUrl = this.site + "Create";
         let ProjectJson = {         
             "ProjectName": _project.Name,
-            "StartDate": _project.StartDate,
-            "EndDate": _project.EndDate,
+            "StartDate": new Date(Number(_project.StartDate.year), Number(_project.StartDate.month),Number(_project.StartDate.day)),
+            "EndDate": new Date(Number(_project.EndDate.year), Number(_project.EndDate.month),Number(_project.EndDate.day)),
             "ProjectType": _project.ProjectType,
-            "ClientId": "78505353-5c24-42c4-bf66-278058e6a108"
+            "ClientId": _project.Client
         }
+        console.log(ProjectJson)
         return this.http.post(dataUrl, ProjectJson,options)
             .map(this.extractData) 
             .catch(this.handleError); 
