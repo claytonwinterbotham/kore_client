@@ -15,6 +15,7 @@ export class ViewProjectsComponent implements OnInit {
   oneProject :any = {};
   newProject : any = {};
 
+  
   constructor(_projectService:MyProjectService) {
     this.projectService = _projectService;
    }

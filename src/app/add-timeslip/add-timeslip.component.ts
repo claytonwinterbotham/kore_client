@@ -1,3 +1,4 @@
+//all the imports
 import {
   Component,
   OnInit, 
@@ -26,6 +27,7 @@ import {
   CalendarEventTitleFormatter
 } from 'angular-calendar';
 
+//const
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -126,9 +128,15 @@ export class AddTimeslipComponent{
         }
       }
 
+//variables 
   activeDayIsOpen: boolean = true;
   projectService : MyProjectService;
   projectList : any;
+  selectedProject : string;
+  newEventForm :boolean = false;
+  newEvent : CalendarEvent[]= [];
+  
+
   
   constructor(private modal: NgbModal,_projectService:MyProjectService) {
     this.projectService = _projectService;
@@ -182,6 +190,25 @@ export class AddTimeslipComponent{
     this.modal.open(this.modalContent, { size: 'lg' });
   }
 
+  showNewEvent(): void  {
+    this.showProjectList();
+    this.newEvent.push({
+      title: 'myTest',
+      start: startOfDay(new Date()),
+      end: endOfDay(new Date()),
+      color: colors.red,
+      draggable: true,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true
+      },
+      actions: this.actions
+    });
+    this.refresh.next();
+    this.selectedProject = "";
+    this.newEventForm = true;
+  }
+
   addEvent(): void {
     this.events.push({
       title: 'myTest',
@@ -196,6 +223,10 @@ export class AddTimeslipComponent{
       actions: this.actions
     });
     this.refresh.next();
+  }
+
+  changeProject(){
+    
   }
 
 

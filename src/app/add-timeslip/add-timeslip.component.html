@@ -4,28 +4,37 @@
         <form class="form-inline my-2 my-lg-0 float-right">
           <button
           class="add_timeslip_btn btn btn-outline-success my-2 my-sm-0"
-          (click)="addEvent()">
+          (click)="showNewEvent()">
           Add new
           </button>
         </form>
     </nav>
   </div>  
-  <div class="row">
+
+
+  <div class="row" *ngIf="newEventForm">
     <div class="col-12 main-content">
         <table class="table table-bordered">
             <tbody>
-              <tr *ngFor="let event of events; let index = index">
+              <tr>
+              <!-- <tr *ngFor="let event of events; let index = index"> -->
                 <td> 
                   <label for="project" class="col-2 col-form-label">Project</label>
                   <div class="col-10">
-                      <select  name="cat_num" class="form-control">
+                      <!-- <select  name="cat_num" class="form-control" [(ngModel)]="selectedProject" onchange="changeProject()">
                           <option *ngFor="let project of projectList" value="{{project.newProjectId}}"  >{{project.newName}}</option>                       
-                      </select>
-                    <!-- <input [(ngModel)]="event.project" class="form-control" type="text" value="Artisanal kale" id="project"> -->
+                      </select> -->
+                      <ng-select [items]="projectList"
+                      bindLabel="newName"
+                      bindValue="newProjectId"
+                      [(ngModel)]="selectedProject"
+                      onchange="changeProject()">
+                      </ng-select>
                   </div>
                   <label for="wbi" class="col-2 col-form-label">WBI</label>
                   <div class="col-10">
-                    <input [(ngModel)]="event.wbi" class="form-control" type="text" value="Artisanal kale" id="wbi">
+
+                    <input  class="form-control" type="text"  id="wbi" value="{{selectedProject}}">
                   </div>
                   <!-- <ng-select [dropdownPosition]="'down'"
                   class="form-control"
@@ -54,21 +63,21 @@
                     class="form-control" 
                     rows="5" 
                     id="description"
-                    [(ngModel)]="event.description"
+                   
                     (keyup)="refresh.next()"
                     ></textarea>
                   </div>   
                 </td>
                 <td>
                   <calendar-utils-date-time-picker
-                    [(ngModel)]="event.start"
+                    [(ngModel)]="newEvent[0].start"
                     (ngModelChange)="refresh.next()"
                     placeholder="Not set">
                   </calendar-utils-date-time-picker>
                 </td>
                 <td>
                   <calendar-utils-date-time-picker
-                    [(ngModel)]="event.end"
+                    [(ngModel)]="newEvent[0].end"
                     (ngModelChange)="refresh.next()"
                     placeholder="Not set">
                   </calendar-utils-date-time-picker>
@@ -76,7 +85,7 @@
                 <td>
                   <button
                     class="btn btn-danger"
-                    (click)="events.splice(index, 1); refresh.next()">
+                    (click)="newEvent.splice(index, 1); refresh.next()">
                     Delete
                   </button>
                 </td>
