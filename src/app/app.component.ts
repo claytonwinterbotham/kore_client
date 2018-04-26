@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { ViewTimeslipComponent } from './view-timeslip/view-timeslip.component';
 import { SideBarComponent } from './side-bar/side-bar.component';
 import {MyProjectService} from "./services/app.projectservice";
-import {MyClientService} from "./services/app.clientservice"
+import {MyClientService} from "./services/app.clientservice";
+import {MyWBIService} from "./services/app.wbiservice";
+import {MyTimeslipService} from "./services/app.timeslipservice"
 
 @Component({
   selector: 'app-root',
@@ -10,7 +12,9 @@ import {MyClientService} from "./services/app.clientservice"
   styleUrls: ['./app.component.css'],
   providers:[
     MyProjectService,
-    MyClientService
+    MyClientService,
+    MyWBIService,
+    MyTimeslipService
    ]
 })
 export class AppComponent {

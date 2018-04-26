@@ -8,17 +8,10 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
 export class TimeslipModel {
-    StartDate: {
-        year: String,
-        month: String,
-        day: String
-    };
-    EndDate: {
-        year: String,
-        month: String,
-        day: String
-    };
+    StartDate:string;
+    EndDate:string;
     Remarks: string;
+    WBIId : string;
     UserId: String;
     DayId: String;
 }
@@ -36,9 +29,10 @@ export class MyTimeslipService {
         let options = new RequestOptions({headers: headers});       
         let dataUrl = this.site + "Create";
         let TimeslipJson = {         
-            "StartDate": new Date(Number(_timeslip.StartDate.year), Number(_timeslip.StartDate.month),Number(_timeslip.StartDate.day)),
-            "EndDate": new Date(Number(_timeslip.EndDate.year), Number(_timeslip.EndDate.month),Number(_timeslip.EndDate.day)),
+            "StartTime": _timeslip.StartDate,
+            "EndTime": _timeslip.EndDate,
             "Remarks": _timeslip.Remarks,
+            "WBI_Id": _timeslip.WBIId,
             "UserId": _timeslip.UserId,
             "DayId": _timeslip.DayId,
         }
@@ -58,6 +52,15 @@ export class MyTimeslipService {
             .catch(this.handleError);
     }
 
+    getTimeSlipsByUserId(UserId : string):Observable<Comment[]>{
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({headers: headers});     
+        let dataUrl = this.site + "GetAllTimeslipsByUserId/" + UserId;
+        return this.http.get(dataUrl, options)
+        .map(this.extractData)
+        .catch(this.handleError);
+    }
+
     //get one Timeslip
     getOneTimeslip(TimeslipId : string): Observable<Comment[]>{
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
@@ -75,8 +78,8 @@ export class MyTimeslipService {
         let options = new RequestOptions({headers: headers});  
         let dataUrl = this.site + "Update";
         let TimeslipJson = {         
-            "StartDate": new Date(Number(_timeslip.StartDate.year), Number(_timeslip.StartDate.month),Number(_timeslip.StartDate.day)),
-            "EndDate": new Date(Number(_timeslip.EndDate.year), Number(_timeslip.EndDate.month),Number(_timeslip.EndDate.day)),
+            "StartDate": _timeslip.StartDate,
+            "EndDate": _timeslip.EndDate,
             "Remarks": _timeslip.Remarks,
             "UserId": _timeslip.UserId,
             "DayId": _timeslip.DayId,

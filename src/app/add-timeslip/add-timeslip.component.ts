@@ -17,14 +17,18 @@ import {
   addHours
 } from 'date-fns';
 import { NgModel } from '@angular/forms';
-import { MyProjectService } from "../services/app.projectservice"
+import { MyProjectService } from "../services/app.projectservice";
+import { MyWBIService } from "../services/app.wbiservice";
+import { MyTimeslipService } from "../services/app.timeslipservice";
+import { TimeslipModel } from "../services/app.timeslipservice";
 import { Subject } from 'rxjs/Subject';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   CalendarEvent,
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
-  CalendarEventTitleFormatter
+  CalendarEventTitleFormatter,
+
 } from 'angular-calendar';
 
 //const
@@ -43,6 +47,7 @@ const colors: any = {
   }
 };
 
+
 @Component({
   selector: 'calendar-component',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,24 +57,6 @@ const colors: any = {
 
 export class AddTimeslipComponent{
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
-
-  projects = [
-    { value: 1, label: 'projects1' },
-    { value: 2, label: 'projects2' },
-    { value: 3, label: 'projects3' },
-    { value: 4, label: 'projects4' },
-    { value: 5, label: 'projects5' },
-    { value: 6, label: 'projects6' }
-  ];
-
-  wbis = [
-    { value: 1, label: 'wbis1' },
-    { value: 2, label: 'wbis2' },
-    { value: 3, label: 'wbis3' },
-    { value: 4, label: 'wbis4' },
-    { value: 5, label: 'wbis5' },
-    { value: 6, label: 'wbis6' }
-  ];
 
   view: string = 'month';
 
@@ -98,18 +85,7 @@ export class AddTimeslipComponent{
 
   refresh: Subject<any> = new Subject();
 
-  events: CalendarEvent[] = [
-    // {
-    //   start: subDays(startOfDay(new Date()), 1),
-    //   end: addDays(new Date(), 1),
-    //   title: 'title',
-    //   project: 'Atlanta',
-    //   wbi: 'Projects',
-    //   description: 'Worked on projects',
-    //   color: colors.red,
-    //   actions: this.actions
-    // }
-  ];
+
 
       // exclude weekends
       excludeDays: number[] = [0, 6];
@@ -128,22 +104,44 @@ export class AddTimeslipComponent{
         }
       }
 
+
+
 //variables 
   activeDayIsOpen: boolean = true;
   projectService : MyProjectService;
+  wbiService : MyWBIService;
+  timeSlipService : MyTimeslipService;
   projectList : any;
+  wbiList : any;
   selectedProject : string;
+  selectedWBI : string;
   newEventForm :boolean = false;
   newEvent : CalendarEvent[]= [];
+  events: CalendarEvent[] = [
+    // {
+    //   start: subDays(startOfDay(new Date()), 1),
+    //   end: addDays(new Date(), 1),
+    //   title: 'title',
+    //   project: 'Atlanta',
+    //   wbi: 'Projects',
+    //   description: 'Worked on projects',
+    //   color: colors.red,
+    //   actions: this.actions
+    // }
+  ];
+  timeslipModel: TimeslipModel;
+  userId : string = "484573aa-6ca1-4096-a2b2-4795cc9f2917";
+  allTimeSlips :any;
   
-
-  
-  constructor(private modal: NgbModal,_projectService:MyProjectService) {
+  constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService) {
     this.projectService = _projectService;
+    this.wbiService = _wbiService;
+    this.timeSlipService = _timeslipService;
   }
 
   ngOnInit() {
     this.showProjectList();
+    this.getAllTimeSlips();
   }
 
   showProjectList(){
@@ -156,6 +154,44 @@ export class AddTimeslipComponent{
       alert(error);
     }
   )
+  }
+
+  getAllTimeSlips(){
+    this.events = [];
+    this.timeSlipService.getTimeSlipsByUserId(this.userId).subscribe(
+      data=> {
+        console.log(data);
+        this.allTimeSlips = data;
+        this.showInCalendar();
+      },
+    error => {
+      alert(error);
+    }
+  )
+  }
+
+  showInCalendar(){
+    for (let oneTimeSlip of this.allTimeSlips){
+      this.addNewEvent(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask);
+    }
+  }
+
+  addNewEvent(title,start,end){
+    console.log(start);
+      this.events.push({
+      title: title,
+      start: new Date(start),
+      end: new Date(end),
+      color: colors.red,
+      draggable: true,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true
+      },
+      actions: this.actions
+    });
+    this.refresh.next(); 
+    console.log(this.events);
   }
 
   // handler for clicking each day.
@@ -211,9 +247,9 @@ export class AddTimeslipComponent{
 
   addEvent(): void {
     this.events.push({
-      title: 'myTest',
-      start: startOfDay(new Date()),
-      end: endOfDay(new Date()),
+      title: this.newEvent[0].title,
+      start: this.newEvent[0].start,
+      end: this.newEvent[0].end,
       color: colors.red,
       draggable: true,
       resizable: {
@@ -225,9 +261,50 @@ export class AddTimeslipComponent{
     this.refresh.next();
   }
 
-  changeProject(){
-    
+  confirmAddEvent(){
+    console.log(this.newEvent[0].start.toISOString());
+    let newTimeSlip: TimeslipModel  = {
+      StartDate : this.newEvent[0].start.toISOString(),
+      EndDate : this.newEvent[0].end.toISOString(),
+      Remarks : this.newEvent[0].title,
+      WBIId :this.selectedWBI,
+      // this uerId need to be changed each time push/pull from github
+      UserId : "484573aa-6ca1-4096-a2b2-4795cc9f2917",
+      DayId : "wokaerhenshen"
+    }
+    this.timeslipModel = newTimeSlip; 
+    this.timeSlipService.postTimeslip(this.timeslipModel).subscribe(
+      data=> {
+        console.log(this.timeslipModel)
+        console.log(data);
+        //this.addEvent()
+        this.getAllTimeSlips();
+        this.newEvent = [];
+        this.newEventForm = false;
+      },error =>{
+        alert(error);
+      }
+    )    
   }
 
+  cancelAddEvent(){
+    this.newEvent = [];
+    this.newEventForm = false;
+  }
 
+  changeProject(){
+    console.log("hello");
+    this.selectedWBI = "";
+    if (this.selectedProject == ""){
+        return ;
+    }else {
+      this.wbiService.GetAllWBIsByProjectId(this.selectedProject).subscribe(data=>{
+
+        console.log(data);
+        this.wbiList = data;
+      },error=>{
+        alert(error);
+      })
+    }
+  }
 }

@@ -20,42 +20,23 @@
               <!-- <tr *ngFor="let event of events; let index = index"> -->
                 <td> 
                   <label for="project" class="col-2 col-form-label">Project</label>
-                  <div class="col-10">
-                      <!-- <select  name="cat_num" class="form-control" [(ngModel)]="selectedProject" onchange="changeProject()">
-                          <option *ngFor="let project of projectList" value="{{project.newProjectId}}"  >{{project.newName}}</option>                       
-                      </select> -->
+                  <div class="col-12">
                       <ng-select [items]="projectList"
                       bindLabel="newName"
                       bindValue="newProjectId"
                       [(ngModel)]="selectedProject"
-                      onchange="changeProject()">
+                      (click)="changeProject()">
                       </ng-select>
                   </div>
                   <label for="wbi" class="col-2 col-form-label">WBI</label>
-                  <div class="col-10">
-
-                    <input  class="form-control" type="text"  id="wbi" value="{{selectedProject}}">
+                  <div class="col-12">
+                      <ng-select [items]="wbiList"
+                      bindLabel="newRemarks"
+                      bindValue="newChangeRequestId"
+                      [(ngModel)]="selectedWBI">
+                      </ng-select>
+                    <input  class="form-control" type="text"  id="wbi" value="{{selectedProject}}" disabled="disabled">
                   </div>
-                  <!-- <ng-select [dropdownPosition]="'down'"
-                  class="form-control"
-                  [(ngModel)]="event.project"
-                  (ngModelChange)="refresh.next()"
-                  id="projects"
-                  [searchable]="true"
-                  [items]="projects"
-                  bindlabel="label"
-                  bindvalue="value">
-                  </ng-select> -->
-                  <!-- <ng-select [dropdownPosition]="'down'"
-                  class="form-control"
-                  [(ngModel)]="event.wbi"
-                  (ngModelChange)="refresh.next()"
-                  id="wbis"
-                  [searchable]="true"
-                  [items]="wbis"
-                  bindlabel="label"
-                  bindvalue="value">
-                  </ng-select> -->
                 </td>
                 <td>
                   <div class="form-group">
@@ -63,7 +44,7 @@
                     class="form-control" 
                     rows="5" 
                     id="description"
-                   
+                    [(ngModel)]="newEvent[0].title"
                     (keyup)="refresh.next()"
                     ></textarea>
                   </div>   
@@ -83,9 +64,15 @@
                   </calendar-utils-date-time-picker>
                 </td>
                 <td>
+                    <button
+                    class="btn btn-success"
+                    (click)="confirmAddEvent(); refresh.next()">
+                    Confirm
+                  </button>
+                  <br> <br> <br> <br>
                   <button
                     class="btn btn-danger"
-                    (click)="newEvent.splice(index, 1); refresh.next()">
+                    (click)="cancelAddEvent()">
                     Delete
                   </button>
                 </td>
@@ -181,7 +168,6 @@
           *ngSwitchCase="'month'"
           [viewDate]="viewDate"
           [events]="events"
-         
           [refresh]="refresh"
           [activeDayIsOpen]="activeDayIsOpen"
           (dayClicked)="dayClicked($event.day)"
@@ -208,6 +194,9 @@
         </mwl-calendar-day-view>
       </div>
     </div>   
+  </div>
+  <div class="row">
+
   </div>
 </div>
 
