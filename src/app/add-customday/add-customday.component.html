@@ -1,0 +1,107 @@
+<div class="container">
+  <div class="row">
+    <nav class="navigation navbar navbar-light bg-light">
+        <form class="form-inline my-2 my-lg-0 float-right">
+          <button
+          class="add_timeslip_btn btn btn-outline-success my-2 my-sm-0"
+          (click)="showNewEvent()">
+          Add New TimeSlip
+          </button>
+        </form>
+    </nav>
+  </div>  
+
+  <div class="row" *ngIf="newEventForm">
+    <div class="col-12 main-content">
+        <table class="table table-bordered">
+            <tbody>
+              <tr>
+              <!-- <tr *ngFor="let event of events; let index = index"> -->
+                <td> 
+                  <label for="project" class="col-2 col-form-label">Project</label>
+                  <div class="col-12">
+                      <ng-select [items]="projectList"
+                      bindLabel="newName"
+                      bindValue="newProjectId"
+                      [(ngModel)]="selectedProject"
+                      (click)="changeProject()">
+                      </ng-select>
+                  </div>
+                  <label for="wbi" class="col-2 col-form-label">WBI</label>
+                  <div class="col-12">
+                      <ng-select [items]="wbiList"
+                      bindLabel="newRemarks"
+                      bindValue="newChangeRequestId"
+                      [(ngModel)]="selectedWBI">
+                      </ng-select>
+                    <input  class="form-control" type="text"  id="wbi" value="{{selectedProject}}" disabled="disabled">
+                  </div>
+                </td>
+                <td>
+                  <div class="form-group">
+                    <textarea 
+                    class="form-control" 
+                    rows="5" 
+                    id="description"
+                    [(ngModel)]="newEvent[0].title"
+                    (keyup)="refresh.next()"
+                    ></textarea>
+                  </div>   
+                </td>
+                <td>
+                  <calendar-utils-date-time-picker
+                    [(ngModel)]="newEvent[0].start"
+                    (ngModelChange)="refresh.next()"
+                    placeholder="Not set">
+                  </calendar-utils-date-time-picker>
+                </td>
+                <td>
+                  <calendar-utils-date-time-picker
+                    [(ngModel)]="newEvent[0].end"
+                    (ngModelChange)="refresh.next()"
+                    placeholder="Not set">
+                  </calendar-utils-date-time-picker>
+                </td>
+                <td>
+                    <button
+                    class="btn btn-success"
+                    (click)="confirmAddEvent(); refresh.next()">
+                    Confirm
+                  </button>
+                  <br> <br> <br> <br>
+                  <button
+                    class="btn btn-danger"
+                    (click)="cancelAddEvent()">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+    </div>   
+  </div>
+
+
+<p>
+  add-customday works!
+</p>
+<div>
+  <button
+  class="btn btn-success"
+  (click)="addToCustomDay(); refresh.next()">
+  Finish
+</button>
+<br>
+<hr>
+</div>
+<div [ngSwitch]="view">
+  <mwl-calendar-day-view
+    *ngSwitchCase="'day'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    (eventClicked)="handleEvent('Clicked', $event.event)"
+    (eventTimesChanged)="eventTimesChanged($event)">
+  </mwl-calendar-day-view>
+</div>
+</div>

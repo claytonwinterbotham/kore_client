@@ -7,6 +7,10 @@ import {
   TemplateRef
 } from '@angular/core';
 import {
+  getMonth,
+  startOfMonth,
+  startOfWeek,  
+  endOfWeek,
   startOfDay,
   endOfDay,
   subDays,
@@ -16,6 +20,7 @@ import {
   isSameMonth,
   addHours
 } from 'date-fns';
+import {RRule} from 'rrule';
 import { NgModel } from '@angular/forms';
 import { MyProjectService } from "../services/app.projectservice";
 import { MyWBIService } from "../services/app.wbiservice";
@@ -30,6 +35,7 @@ import {
   CalendarEventTitleFormatter,
 
 } from 'angular-calendar';
+
 
 //const
 const colors: any = {
@@ -46,6 +52,19 @@ const colors: any = {
     secondary: '#FDF1BA'
   }
 };
+
+interface RecurringEvent {
+  title: string;
+  color: any;
+  
+  
+  rrule?: {
+    freq: RRule.Frequency;
+    bymonth?: number;
+    bymonthday?: number;
+    byweekday?: RRule.Weekday[];
+  };
+}
 
 
 @Component({
@@ -85,6 +104,35 @@ export class AddTimeslipComponent{
 
   refresh: Subject<any> = new Subject();
 
+  //recurringEvents
+    recurringEvents: RecurringEvent[] = [
+    {
+      title: 'Recurs on the 5th of each month',
+      color: colors.yellow,
+      rrule: {
+        freq: RRule.MONTHLY,
+        bymonthday: 5
+      }
+    },
+    {
+      title: 'Recurs yearly on the 10th of the current month',
+      color: colors.blue,
+      rrule: {
+        freq: RRule.YEARLY,
+        bymonth: getMonth(new Date()) + 1,
+        bymonthday: 10,
+        
+      }
+    },
+    {
+      title: 'Recurs weekly on mondays',
+      color: colors.red,
+      rrule: {
+        freq: RRule.WEEKLY,
+        byweekday: [RRule.MO]
+      }
+    }
+  ];
 
 
       // exclude weekends
@@ -106,7 +154,7 @@ export class AddTimeslipComponent{
 
 
 
-//variables 
+  //variables 
   activeDayIsOpen: boolean = true;
   projectService : MyProjectService;
   wbiService : MyWBIService;
