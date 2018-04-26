@@ -5,6 +5,7 @@ import { MyClientService } from "../services/app.clientservice";
 import  {ClientModel} from "../services/app.clientservice";
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+
 @Component({
   selector: 'app-view-projects',
   templateUrl: './view-projects.component.html',

@@ -22,7 +22,7 @@ export class MyWBIService {
      }
 
     //add a wbi
-    postProject(_wbi: WBIModel): Observable<Comment[]> {
+    postWBI(_wbi: WBIModel): Observable<Comment[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({headers: headers});       
         let dataUrl = this.site + "Create";
@@ -101,9 +101,7 @@ export class MyWBIService {
             .catch(this.handleError);
             
     }
-
-
-    
+ 
     private extractData(res: Response) {
         let body = res.json();
         return body;

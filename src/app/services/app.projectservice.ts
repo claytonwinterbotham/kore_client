@@ -78,7 +78,8 @@ export class MyProjectService {
             "ProjectId": _project.newProjectId,    
             "ProjectName": _project.newName,
             "StartDate": _project.newStartDate,
-            "EndDate": _project.newEndDate
+            "EndDate": _project.newEndDate,
+            "ClientId": _project.newClient
             // "ProjectType": _project.ProjectType,    
         };
         return this.http.put(dataUrl,ProjectJson, options)

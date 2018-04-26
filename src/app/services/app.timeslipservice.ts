@@ -24,7 +24,7 @@ export class MyTimeslipService {
      }
 
     //add a Timeslip
-    postTimeslip(_timeslip: TimeslipModel): Observable<Comment[]> {
+    postTimeslip(_timeslip: any): Observable<Comment[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({headers: headers});       
         let dataUrl = this.site + "Create";
