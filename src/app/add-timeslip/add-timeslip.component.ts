@@ -178,7 +178,7 @@ export class AddTimeslipComponent{
     // }
   ];
   timeslipModel: TimeslipModel;
-  userId : string = "484573aa-6ca1-4096-a2b2-4795cc9f2917";
+  userId : string = "ea76c045-d256-4974-a9e5-1d3f9eb607f4";
   allTimeSlips :any;
   
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService) {
@@ -317,8 +317,8 @@ export class AddTimeslipComponent{
       Remarks : this.newEvent[0].title,
       WBIId :this.selectedWBI,
       // this uerId need to be changed each time push/pull from github
-      UserId : "484573aa-6ca1-4096-a2b2-4795cc9f2917",
-      DayId : "wokaerhenshen"
+      UserId : "ea76c045-d256-4974-a9e5-1d3f9eb607f4",
+      DayId : "aosidjf"
     }
     this.timeslipModel = newTimeSlip; 
     this.timeSlipService.postTimeslip(this.timeslipModel).subscribe(

@@ -4,7 +4,8 @@ import { SideBarComponent } from './side-bar/side-bar.component';
 import {MyProjectService} from "./services/app.projectservice";
 import {MyClientService} from "./services/app.clientservice";
 import {MyWBIService} from "./services/app.wbiservice";
-import {MyTimeslipService} from "./services/app.timeslipservice"
+import {MyTimeslipService} from "./services/app.timeslipservice";
+import {MyCustomDayService} from "./services/app.customdayservice"
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,8 @@ import {MyTimeslipService} from "./services/app.timeslipservice"
     MyProjectService,
     MyClientService,
     MyWBIService,
-    MyTimeslipService
+    MyTimeslipService,
+    MyCustomDayService
    ]
 })
 export class AppComponent {

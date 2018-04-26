@@ -65,8 +65,8 @@
                 <td>
                     <button
                     class="btn btn-success"
-                    (click)="confirmAddEvent(); refresh.next()">
-                    Confirm
+                    (click)="AddToEvent(); refresh.next()">
+                    Add
                   </button>
                   <br> <br> <br> <br>
                   <button
@@ -85,10 +85,26 @@
 <p>
   add-customday works!
 </p>
+<p>customDay NAME</p>
+<input
+id="customDayName"
+[(ngModel)]="customDayName"
+(keyup)="refresh.next()"
+>
+<br>
+<hr>
+<p>customday description</p>
+<input 
+id="customDayDescription"
+[(ngModel)]="customDayDescription"
+(keyup)="refresh.next()"
+>
+<hr>
+
 <div>
   <button
   class="btn btn-success"
-  (click)="addToCustomDay(); refresh.next()">
+  (click)="confirmAndReturn(); refresh.next()">
   Finish
 </button>
 <br>
