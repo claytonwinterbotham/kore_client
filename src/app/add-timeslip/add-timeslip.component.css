@@ -15,3 +15,46 @@
 
 }
 
+.timeslip_text_input{
+    position: fixed;
+    top: .4em;
+    left: 18em;
+}
+
+.timeslip_text_input_box{
+    min-width: 300px;
+}
+
+.add_timeslip_folder{
+    position: fixed;
+    top: .4em;
+    left: 20em;
+ 
+ }
+
+.add_timeslip_stickynote{
+    position: fixed;
+    top: .4em;
+    left: 22em;
+
+} 
+
+.add_timeslip_datepicker{
+    position: fixed;
+    top: .4em;
+    left: 50em;
+}
+
+.add_timeslip_starttime{
+    position: fixed;
+    top: .4em;
+    right: 20em;
+}
+.calender_input_box{
+    max-width: 60px;
+}
+.fa-check{
+    color: #1282c5
+}
+
+
