@@ -110,17 +110,13 @@ export class MyTimeslipService {
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
         console.log("Timeslip id:" + id);
-        let dataUrl = this.site + "Delete";
-        let idJson = {
-            "id": id
-        };
-        return this.http.post(dataUrl,idJson,options)
+        let dataUrl = this.site + "Delete/" + id;
+      
+        return this.http.delete(dataUrl,options)
             .map(this.extractData)
             .catch(this.handleError);
             
     }
-
-
     
     private extractData(res: Response) {
         let body = res.json();

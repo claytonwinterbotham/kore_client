@@ -20,6 +20,9 @@ import { ViewWmbsComponent } from './view-wmbs/view-wmbs.component';
 import { NgbdDatepickerPopup } from './widgets/datepicker-popup/datepicker-popup';
 import { NgbdTimepickerMeridian } from './widgets/timepicker/timepicker';
 import { AddCustomdayComponent } from './add-customday/add-customday.component';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+import { HomeComponent } from './home/home.component';
 
 
 
@@ -35,6 +38,9 @@ import { AddCustomdayComponent } from './add-customday/add-customday.component';
     NgbdDatepickerPopup,
     NgbdTimepickerMeridian,
     AddCustomdayComponent,
+    RegisterComponent,
+    LoginComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
