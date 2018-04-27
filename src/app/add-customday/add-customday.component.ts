@@ -71,6 +71,7 @@ export class AddCustomdayComponent implements OnInit {
   wbiList : any;
   selectedProject : string;
   selectedWBI : string;
+  
   newEventForm :boolean = false;
   newEvent : CalendarEvent[]= [];
   events: CalendarEvent[] = [
@@ -86,7 +87,7 @@ export class AddCustomdayComponent implements OnInit {
     // }
   ];
   timeslipModel: TimeslipModel;
-  userId : string = "da1a0176-805e-42ff-a2cf-dde498344349";
+  userId : string = "ae86f253-1c34-4ee8-9c6b-36c6dc8a3646";
   allTimeSlips :any;
   mySecretDay: Date = new Date(this.randomDate(new Date(1, 1, 1),new Date(2000, 1, 1)));
   viewDate: Date = this.mySecretDay;
@@ -114,7 +115,7 @@ export class AddCustomdayComponent implements OnInit {
   refresh: Subject<any> = new Subject();
   customDayName :string;
   customDayDescription : string;
-  myTimeSlips :TimeslipModel[];
+  myTimeSlips :TimeslipBackEndModel[] = [];
 
 
 
@@ -255,44 +256,17 @@ export class AddCustomdayComponent implements OnInit {
     this.refresh.next(); 
   }
 
-  confirmAddEvent(){
-    console.log(this.newEvent[0].start.toISOString());
-    let newTimeSlip: TimeslipModel  = {
-      StartDate : this.newEvent[0].start.toISOString(),
-      EndDate : this.newEvent[0].end.toISOString(),
-      Remarks : this.newEvent[0].title,
-      WBIId :this.selectedWBI,
-      // this uerId need to be changed each time push/pull from github
-      UserId : "da1a0176-805e-42ff-a2cf-dde498344349",
-      DayId : "wokaerhenshen"
-    }
-    this.timeslipModel = newTimeSlip; 
-    this.timeSlipService.postTimeslip(this.timeslipModel).subscribe(
-      data=> {
-        console.log(this.timeslipModel)
-        console.log(data);
-        //this.addEvent()
-        //this.getAllTimeSlips();
-        this.newEvent = [];
-        this.newEventForm = false;
-      },error =>{
-        alert(error);
-      }
-    )    
-  }
-
   confirmAndReturn(){ 
    // console.log(this.events.length);
     for (let oneEvent of this.events){
-     // console.log(oneEvent.start);
+       console.log(oneEvent.start);
         this.myTimeSlips.push({
-        StartDate : oneEvent.start.toISOString(),
-        EndDate : oneEvent.end.toISOString(),
+        StartTime : oneEvent.start.toISOString(),
+        EndTime : oneEvent.end.toISOString(),
         Remarks : oneEvent.title,
-        WBIId :this.selectedWBI,
+        WBI_Id :this.selectedWBI,
         // this uerId need to be changed each time push/pull from github
-        UserId : "da1a0176-805e-42ff-a2cf-dde498344349",
-        DayId : "wokaerhenshen"
+        UserId : "ae86f253-1c34-4ee8-9c6b-36c6dc8a3646"
       });
       this.refresh.next(); 
       //console.log(newTimeSlip);
@@ -303,23 +277,26 @@ export class AddCustomdayComponent implements OnInit {
     let newCustomDayTimeSlips :CustomDayVM = {
       Name :this.customDayName,
       Description : this.customDayDescription,
+      UserId : "ae86f253-1c34-4ee8-9c6b-36c6dc8a3646",
       TimeSlip : this.myTimeSlips
     }
+    console.log(newCustomDayTimeSlips);
 
     this.mycustomdayService.create(newCustomDayTimeSlips).subscribe(
       data=> {
         console.log(data);
+        //navigate to calendar page
+        let navigationExtras: NavigationExtras = {
+          queryParamsHandling: 'preserve',
+          preserveFragment: true
+        };
+        this.router.navigate(['addtimeslip'],navigationExtras);        
       },error => {
         alert(error);
       }
     )
 
-    //navigate to calendar page
-    // let navigationExtras: NavigationExtras = {
-    //   queryParamsHandling: 'preserve',
-    //   preserveFragment: true
-    // };
-    // this.router.navigate(['addtimeslip'],navigationExtras);
+
   }
 
   cancelAddEvent(){
@@ -343,5 +320,15 @@ export class AddCustomdayComponent implements OnInit {
 export class CustomDayVM{
   Name : string;
   Description : string;
-  TimeSlip :TimeslipModel[];
+  UserId : string;
+  TimeSlip :TimeslipBackEndModel[];
+}
+
+export class TimeslipBackEndModel {
+  StartTime:string;
+  EndTime:string;
+  Remarks: string;
+  WBI_Id : string;
+  UserId: String;
+  
 }

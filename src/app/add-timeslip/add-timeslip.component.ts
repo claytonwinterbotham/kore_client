@@ -20,11 +20,12 @@ import {
   isSameMonth,
   addHours
 } from 'date-fns';
-import {RRule} from 'rrule';
+import { RRule} from 'rrule';
 import { NgModel } from '@angular/forms';
 import { MyProjectService } from "../services/app.projectservice";
 import { MyWBIService } from "../services/app.wbiservice";
 import { MyTimeslipService } from "../services/app.timeslipservice";
+import { MyCustomDayService } from "../services/app.customdayservice";
 import { TimeslipModel } from "../services/app.timeslipservice";
 import { Subject } from 'rxjs/Subject';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -32,8 +33,7 @@ import {
   CalendarEvent,
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
-  CalendarEventTitleFormatter,
-
+  CalendarEventTitleFormatter
 } from 'angular-calendar';
 
 
@@ -80,6 +80,8 @@ export class AddTimeslipComponent{
   view: string = 'month';
 
   viewDate: Date = new Date();
+
+  
 
   modalData: {
     action: string;
@@ -159,39 +161,39 @@ export class AddTimeslipComponent{
   projectService : MyProjectService;
   wbiService : MyWBIService;
   timeSlipService : MyTimeslipService;
+  customdayService : MyCustomDayService;
   projectList : any;
   wbiList : any;
+  customdayList :any;
   selectedProject : string;
   selectedWBI : string;
+  selectedCustomday : string;
   newEventForm :boolean = false;
   newEvent : CalendarEvent[]= [];
-  events: CalendarEvent[] = [
-    // {
-    //   start: subDays(startOfDay(new Date()), 1),
-    //   end: addDays(new Date(), 1),
-    //   title: 'title',
-    //   project: 'Atlanta',
-    //   wbi: 'Projects',
-    //   description: 'Worked on projects',
-    //   color: colors.red,
-    //   actions: this.actions
-    // }
-  ];
+  events: CalendarEvent[] = [];
   timeslipModel: TimeslipModel;
-  userId : string = "ea76c045-d256-4974-a9e5-1d3f9eb607f4";
+  userId : string = "ae86f253-1c34-4ee8-9c6b-36c6dc8a3646";
   allTimeSlips :any;
-  
-  constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService) {
+  clickedDate : Date;
+  //chooseCustomday : boolean;
+
+  //constructor 
+  constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
+  _customdayService : MyCustomDayService) {
     this.projectService = _projectService;
     this.wbiService = _wbiService;
     this.timeSlipService = _timeslipService;
+    this.customdayService = _customdayService;
   }
 
+  // init fucntion
   ngOnInit() {
     this.showProjectList();
     this.getAllTimeSlips();
+    this.getAllCustomDays();
   }
 
+  // all the functions below
   showProjectList(){
     this.projectService.getProjects().subscribe(
       data=> {
@@ -216,6 +218,18 @@ export class AddTimeslipComponent{
       alert(error);
     }
   )
+  }
+
+  getAllCustomDays(){
+    this.customdayService.getCustomdays("ae86f253-1c34-4ee8-9c6b-36c6dc8a3646").subscribe(
+      data=> {
+      console.log(data);
+      this.customdayList = data;
+      },
+      error => {
+        alert(error);
+      }
+    )
   }
 
   showInCalendar(){
@@ -255,6 +269,7 @@ export class AddTimeslipComponent{
         this.viewDate = date;
       }
     }
+    this.clickedDate = date;
   }
 
   //hander for the change of time of events
@@ -317,8 +332,8 @@ export class AddTimeslipComponent{
       Remarks : this.newEvent[0].title,
       WBIId :this.selectedWBI,
       // this uerId need to be changed each time push/pull from github
-      UserId : "ea76c045-d256-4974-a9e5-1d3f9eb607f4",
-      DayId : "aosidjf"
+      UserId : "ae86f253-1c34-4ee8-9c6b-36c6dc8a3646",
+      DayId : ""
     }
     this.timeslipModel = newTimeSlip; 
     this.timeSlipService.postTimeslip(this.timeslipModel).subscribe(
@@ -333,6 +348,25 @@ export class AddTimeslipComponent{
         alert(error);
       }
     )    
+  }
+
+  confirmAddCustomDay(){
+    console.log(this.selectedCustomday);
+     
+    //console.log(this.clickedDate.getFullYear()+"-"+this.clickedDate.getMonth()+"-"+this.clickedDate.getDay()+"" );
+    console.log(this.clickedDate.toISOString());
+    let CustomdayTimeslip : customdayTimeslip = {
+      CustomdayId :this.selectedCustomday,
+      Date :this.clickedDate.toISOString()
+    }
+    this.timeSlipService.createTimeslipByCustomday(CustomdayTimeslip).subscribe(
+      data=> {
+        console.log(data);
+        this.getAllTimeSlips();
+      },error =>{
+        alert(error);
+      }
+    )
   }
 
   cancelAddEvent(){
@@ -355,4 +389,11 @@ export class AddTimeslipComponent{
       })
     }
   }
+
+  
+}
+
+export class customdayTimeslip {
+  CustomdayId:string;
+  Date :string;
 }

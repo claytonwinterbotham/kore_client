@@ -42,6 +42,19 @@ export class MyTimeslipService {
             .catch(this.handleError); 
     } 
 
+    createTimeslipByCustomday(_customdayTimeslipVM : any): Observable<Comment[]>{
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({headers: headers});    
+        let dataUrl = this.site + "CreateByCustomday";    
+        let TimeslipByCustomday = {
+            "CustomdayId":  _customdayTimeslipVM.CustomdayId,
+            "Date": _customdayTimeslipVM.Date
+        }
+        return this.http.post(dataUrl, TimeslipByCustomday,options)
+        .map(this.extractData) 
+        .catch(this.handleError);        
+    }
+
     //get all Timeslips
     getTimeslips(): Observable<Comment[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' }); 

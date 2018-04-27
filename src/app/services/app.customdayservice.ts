@@ -21,9 +21,20 @@ export class MyCustomDayService {
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
         let dataUrl = this.site + "Create";
+        console.log(_customday);
         return this.http.post(dataUrl,_customday, options)
             .map(this.extractData)
             .catch(this.handleError);
+    }
+
+    //get all customdays by this user
+    getCustomdays(id : string) :Observable<Comment[]>{
+        let headers = new Headers({ 'Content-Type': 'application/json' }); 
+        let options = new RequestOptions({headers: headers});
+        let dataUrl = this.site + "GetOneUserCustomDays/" + id ;
+        return this.http.get(dataUrl,options)  
+            .map(this.extractData)
+            .catch(this.handleError); 
     }
     
     private extractData(res: Response) {

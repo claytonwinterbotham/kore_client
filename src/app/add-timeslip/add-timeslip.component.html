@@ -164,6 +164,25 @@
       </div>
       <br>
       <div [ngSwitch]="view">
+      <div class="alert alert-info">
+        <strong *ngIf="clickedDate">You clicked on this day: {{ clickedDate | date:'mediumDate' }}
+            <p>Use Customday:             
+                    <ng-select [items]="customdayList"
+                    bindLabel="name"
+                    bindValue="customDayId"
+                    [(ngModel)]="selectedCustomday"
+                    >
+                    </ng-select>                           
+            </p>
+            <button *ngIf="selectedCustomday"
+            class="btn btn-success"
+            (click)="confirmAddCustomDay(); refresh.next()">
+            Confirm
+          </button>            
+        </strong>
+        
+      </div>
+        
         <mwl-calendar-month-view
           *ngSwitchCase="'month'"
           [viewDate]="viewDate"
