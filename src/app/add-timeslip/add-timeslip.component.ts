@@ -1,4 +1,5 @@
 //all the imports
+//import "../layui/layui/layui.js";
 import {
   Component,
   OnInit, 
@@ -35,7 +36,7 @@ import {
   CalendarEventTimesChangedEvent,
   CalendarEventTitleFormatter
 } from 'angular-calendar';
-
+// import {layui} from "layui-src"
 
 //const
 const colors: any = {
@@ -191,6 +192,8 @@ export class AddTimeslipComponent{
     this.showProjectList();
     this.getAllTimeSlips();
     this.getAllCustomDays();
+    
+
   }
 
   // all the functions below
@@ -345,7 +348,7 @@ export class AddTimeslipComponent{
         this.newEvent = [];
         this.newEventForm = false;
       },error =>{
-        
+
         alert(error);
       }
     )    
