@@ -15,7 +15,10 @@ export class ClientModel {
 export class MyClientService {
     public site:string;
     constructor(private http: Http) {
-        this.site = 'http://localhost:64779/client/';
+        // for aws:
+        this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/client/';
+        // for local host:
+        // this.site = "http://localhost:64779/client/"        
      }
 
     //get all clients

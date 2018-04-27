@@ -87,7 +87,7 @@ export class AddCustomdayComponent implements OnInit {
     // }
   ];
   timeslipModel: TimeslipModel;
-  userId : string = "ae86f253-1c34-4ee8-9c6b-36c6dc8a3646";
+  userId : string = "47135933-9179-4E48-AE65-C981E1E22344";
   allTimeSlips :any;
   mySecretDay: Date = new Date(this.randomDate(new Date(1, 1, 1),new Date(2000, 1, 1)));
   viewDate: Date = this.mySecretDay;
@@ -266,7 +266,7 @@ export class AddCustomdayComponent implements OnInit {
         Remarks : oneEvent.title,
         WBI_Id :this.selectedWBI,
         // this uerId need to be changed each time push/pull from github
-        UserId : "ae86f253-1c34-4ee8-9c6b-36c6dc8a3646"
+        UserId : "47135933-9179-4E48-AE65-C981E1E22344"
       });
       this.refresh.next(); 
       //console.log(newTimeSlip);
@@ -277,7 +277,7 @@ export class AddCustomdayComponent implements OnInit {
     let newCustomDayTimeSlips :CustomDayVM = {
       Name :this.customDayName,
       Description : this.customDayDescription,
-      UserId : "ae86f253-1c34-4ee8-9c6b-36c6dc8a3646",
+      UserId : "47135933-9179-4E48-AE65-C981E1E22344",
       TimeSlip : this.myTimeSlips
     }
     console.log(newCustomDayTimeSlips);

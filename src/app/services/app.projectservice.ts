@@ -27,7 +27,10 @@ export class ProjectModel {
 export class MyProjectService {
     public site:string;
     constructor(private http: Http) {
-        this.site = 'http://localhost:64779/project/';
+        // for aws:
+        this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/project/';
+        // for local host:
+        // this.site = "http://localhost:64779/project/"
      }
 
     //add a project

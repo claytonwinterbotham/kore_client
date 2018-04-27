@@ -18,7 +18,10 @@ export class WBIModel {
 export class MyWBIService {
     public site:string;
     constructor(private http: Http) {
-        this.site = 'http://localhost:64779/wbi/';
+        // for aws:
+        this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/wbi/';
+        // for local host:
+        // this.site = "http://localhost:64779/wbi/"
      }
 
     //add a wbi

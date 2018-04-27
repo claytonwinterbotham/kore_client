@@ -172,7 +172,7 @@ export class AddTimeslipComponent{
   newEvent : CalendarEvent[]= [];
   events: CalendarEvent[] = [];
   timeslipModel: TimeslipModel;
-  userId : string = "ae86f253-1c34-4ee8-9c6b-36c6dc8a3646";
+  userId : string = "47135933-9179-4E48-AE65-C981E1E22344";
   allTimeSlips :any;
   clickedDate : Date;
   //chooseCustomday : boolean;
@@ -221,7 +221,7 @@ export class AddTimeslipComponent{
   }
 
   getAllCustomDays(){
-    this.customdayService.getCustomdays("ae86f253-1c34-4ee8-9c6b-36c6dc8a3646").subscribe(
+    this.customdayService.getCustomdays("47135933-9179-4E48-AE65-C981E1E22344").subscribe(
       data=> {
       console.log(data);
       this.customdayList = data;
@@ -332,7 +332,7 @@ export class AddTimeslipComponent{
       Remarks : this.newEvent[0].title,
       WBIId :this.selectedWBI,
       // this uerId need to be changed each time push/pull from github
-      UserId : "ae86f253-1c34-4ee8-9c6b-36c6dc8a3646",
+      UserId : "47135933-9179-4E48-AE65-C981E1E22344",
       DayId : ""
     }
     this.timeslipModel = newTimeSlip; 
@@ -345,6 +345,7 @@ export class AddTimeslipComponent{
         this.newEvent = [];
         this.newEventForm = false;
       },error =>{
+        
         alert(error);
       }
     )    
