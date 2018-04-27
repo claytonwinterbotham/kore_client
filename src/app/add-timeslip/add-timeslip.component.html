@@ -2,11 +2,57 @@
   <div class="row">
     <nav class="navigation navbar navbar-light bg-light">
         <form class="form-inline my-2 my-lg-0 float-right">
-          <button
-          class="add_timeslip_btn btn btn-outline-success my-2 my-sm-0"
+          <div class="form-group timeslip_text_input">
+              <input
+              placeholder="Please enter your remarks"
+              type="text"
+              class="form-control  timeslip_text_input_box" 
+              rows="10" 
+              >
+          </div> 
+          <i
+          class="add_timeslip_folder fa fa-folder my-2 my-sm-0"
+          aria-hidden="true"
+          style="font-size:2em;color:#1282c5;">
+          </i>
+          <i
+          class="add_timeslip_stickynote fa fa-sticky-note my-2 my-sm-0"
+          aria-hidden="true"
+          style="font-size:2em;color:#1282c5;">
+          </i>
+          <div class="form-group add_timeslip_datepicker">
+            <div class="input-group ">
+                <input class="form-control calender_input_box" placeholder=""
+                      name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                    <img src="../../assets/img/calendar_blue.svg" style="width: 3rem; height: 2rem; cursor: pointer;"/>
+                  </button>
+                </div>
+            </div>
+          </div>
+          <div class="form-group add_timeslip_starttime">
+              <div class="input-group date" id="starttime" data-target-input="nearest">
+                  <input type="text" class="form-control datetimepicker-input" data-target="#starttime"/>
+                  <div class="input-group-append" data-target="#starttime" data-toggle="datetimepicker">
+                      <div class="input-group-text"><i class="fa fa-clock-o"></i></div>
+                  </div>
+              </div>
+          </div>
+          <div class="form-group add_timeslip_endtime">
+              <div class="input-group date" id="endtime" data-target-input="nearest">
+                  <input type="text" class="form-control datetimepicker-input" data-target="#endtime"/>
+                  <div class="input-group-append" data-target="#endtime" data-toggle="datetimepicker">
+                      <div class="input-group-text"><i class="fa fa-clock-o"></i></div>
+                  </div>
+              </div>
+          </div>      
+          <i
+          class="add_timeslip_btn fa fa-check-square my-2 my-sm-0"
+          aria-hidden="true"
+          style="font-size:2em;color:#1282c5;"
           (click)="showNewEvent()">
-          Add New TimeSlip
-          </button>
+        </i>
         </form>
     </nav>
   </div>  
