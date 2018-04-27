@@ -1,3 +1,14 @@
-<p>
-  register works!
-</p>
+<form>
+  <label for="username">Email</label>
+  <input class="form-control" type="text" id="email" name="email" [(ngModel)]="email"/><br>
+  <label for="password">Password</label>
+  <input class="form-control" type="text" id="password" name="password" [(ngModel)]="password"/><br><br>
+  <label for="confirmPassword">Confirm Password</label>
+  <input class="form-control" type="text" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword"/><br><br>
+  <label for="password">First Name</label>
+  <input class="form-control" type="text" id="firstName" name="firstName" [(ngModel)]="firstName"/><br><br>
+  <label for="password">Last Name</label>
+  <input class="form-control" type="text" id="lastName" name="lastName" [(ngModel)]="lastName"/><br><br>
+  <button class="btn" type="submit" (click)="register()">Register</button>
+</form>
+
