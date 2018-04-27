@@ -37,6 +37,19 @@ export class MyCustomDayService {
             .catch(this.handleError); 
     }
     
+    //delete a custom day
+    deleteCustomDay(id: String): Observable<Comment[]> {
+        let headers = new Headers({ 'Content-Type': 'application/json' }); 
+        let options = new RequestOptions({headers: headers});
+        console.log("Custom day id:" + id);
+        let dataUrl = this.site + "Delete/" + id;
+       
+        return this.http.delete(dataUrl,options)
+            .map(this.extractData)
+            .catch(this.handleError);
+            
+    }
+
     private extractData(res: Response) {
         let body = res.json();
         return body;
@@ -52,4 +65,5 @@ export class MyCustomDayService {
         // console.error(errMsg); // log to console instead
         return Observable.throw(errMsg);
     }
+
 }
