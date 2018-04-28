@@ -48,8 +48,16 @@
 .add_timeslip_starttime{
     position: fixed;
     top: .4em;
-    right: 20em;
+    right : 380px;
 }
+
+.add_timeslip_endtime{
+    position: fixed;
+    top: .4em;
+    right : 180px;
+   
+}
+
 .calender_input_box{
     max-width: 60px;
 }
@@ -57,4 +65,17 @@
     color: #1282c5
 }
 
+.startTime{
+    position: absolute;
+    top: 30px;
+    right: 10px;
+    
+}
 
+.endTime{
+    position: fixed;
+    top: 30px;
+    right: 10px;
+    z-index: 2147483647;
+    
+}

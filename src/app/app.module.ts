@@ -23,7 +23,7 @@ import { AddCustomdayComponent } from './add-customday/add-customday.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
-
+import { ClickOutsideModule } from 'ng-click-outside';
 
 
 
@@ -53,7 +53,8 @@ import { HomeComponent } from './home/home.component';
     NgbModalModule.forRoot(),
     CalendarUtilsModule,
     HttpModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ClickOutsideModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -19,12 +19,19 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+
+        "../node_modules/bootstrap/dist/css/bootstrap.css",
         "../node_modules/@ng-select/ng-select/themes/default.theme.css",
-        "../node_modules/angular-calendar/css/angular-calendar.css",
+        "../node_modules/angular-calendar/css/angular-calendar.css", 
+        "../src/app/layui/layui/css/layui.css",
         "styles.css"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/jquery/dist/jquery.js",
+        "../node_modules/moment/moment.js",
+        "../node_modules/bootstrap/dist/js/bootstrap.js",
+        "../src/app/layui/layui/layui.js" 
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

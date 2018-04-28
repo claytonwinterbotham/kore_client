@@ -37,6 +37,8 @@ import {
   CalendarEventTitleFormatter
 } from 'angular-calendar';
 // import {layui} from "layui-src"
+import { ClickOutsideModule } from 'ng-click-outside';
+import * as $ from "jquery";
 
 //const
 const colors: any = {
@@ -81,8 +83,6 @@ export class AddTimeslipComponent{
   view: string = 'month';
 
   viewDate: Date = new Date();
-
-  
 
   modalData: {
     action: string;
@@ -177,6 +177,16 @@ export class AddTimeslipComponent{
   allTimeSlips :any;
   clickedDate : Date;
   //chooseCustomday : boolean;
+  projectDropdown: boolean = false;
+  WBIDropdown : boolean = false;
+  startTime : any = {hour: 9, minute: 30};
+  endTime :any = {hour: 13, minute: 30};
+  startTimeDropdown : boolean = false;
+  endTimeDropdown : boolean = false;
+  meridian = true;
+  quickRemarks : any;
+  quickAddDate : any;
+
 
   //constructor 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
@@ -207,6 +217,28 @@ export class AddTimeslipComponent{
       alert(error);
     }
   )
+  }
+
+  showProjectDropdown(){
+    console.log("karl");
+    this.projectDropdown = !this.projectDropdown;
+  }
+
+  showWBIDropdown(){
+    this.WBIDropdown = !this.WBIDropdown;
+  }
+
+  showStartTime(){
+    this.startTimeDropdown = !this.startTimeDropdown;
+  }
+
+  showEndTime(){
+    this.endTimeDropdown = !this.endTimeDropdown;
+  }
+
+  onClickedOutsideProject(e: Event){
+    
+    this.projectDropdown = false;
   }
 
   getAllTimeSlips(){
@@ -354,6 +386,39 @@ export class AddTimeslipComponent{
     )    
   }
 
+  confirmQuickAddts(){
+    console.log(this.selectedProject);
+    console.log(this.selectedWBI);
+    console.log(this.quickRemarks);
+    console.log(this.quickAddDate);
+    console.log(this.startTime);
+    console.log(this.endTime);
+    let newTimeSlip: TimeslipModel  = {
+      StartDate : this.quickAddDate.year + "/" + this.quickAddDate.month + "/" + this.quickAddDate.day +" "+ this.startTime.hour+ ":"+this.startTime.minute ,
+      EndDate : this.quickAddDate.year + "/" + this.quickAddDate.month + "/" + this.quickAddDate.day+" "+ this.endTime.hour+ ":"+this.endTime.minute,
+      Remarks : this.quickRemarks,
+      WBIId :this.selectedWBI,
+      // this uerId need to be changed each time push/pull from github
+      UserId : "47135933-9179-4E48-AE65-C981E1E22344",
+      DayId : ""
+    }
+    this.timeslipModel = newTimeSlip; 
+    this.timeSlipService.postTimeslip(this.timeslipModel).subscribe(
+      data=> {
+        console.log(this.timeslipModel)
+        console.log(data);
+        //this.addEvent()
+        this.getAllTimeSlips();
+        this.newEvent = [];
+        this.newEventForm = false;
+      },error =>{
+
+        alert(error);
+      }
+    ) 
+
+  }
+
   confirmAddCustomDay(){
     console.log(this.selectedCustomday);
      
@@ -380,6 +445,7 @@ export class AddTimeslipComponent{
 
   changeProject(){
     console.log("hello");
+    
     this.selectedWBI = "";
     if (this.selectedProject == ""){
         return ;
@@ -387,14 +453,15 @@ export class AddTimeslipComponent{
       this.wbiService.GetAllWBIsByProjectId(this.selectedProject).subscribe(data=>{
 
         console.log(data);
+        this.projectDropdown = false;
         this.wbiList = data;
+        
       },error=>{
         alert(error);
       })
     }
-  }
-
-  
+   
+  }  
 }
 
 export class customdayTimeslip {
