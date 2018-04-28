@@ -1,3 +1,9 @@
-<p>
-  login works!
-</p>
+<form>
+  <label for="username">Email</label>
+  <input class="form-control" type="text" id="email" name="email" [(ngModel)]="email"/><br>
+  <label for="password">Password</label>
+  <input class="form-control" type="text" id="password" name="password" [(ngModel)]="password"/><br><br>
+  <button class="btn" type="submit" (click)="login()">Log In</button>
+</form>
+<br>
+<a href="./../register" class="btn btn-success">Register</a>
