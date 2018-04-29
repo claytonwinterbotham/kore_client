@@ -55,7 +55,8 @@ const colors: any = {
 @Component({
   selector: 'app-add-customday',
   templateUrl: './add-customday.component.html',
-  styleUrls: ['./add-customday.component.css']
+  styleUrls: [
+    './add-customday.component.css'],
 })
 export class AddCustomdayComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
@@ -210,8 +211,8 @@ export class AddCustomdayComponent implements OnInit {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
-    this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
+    //this.modalData = { event, action };
+    //this.modal.open(this.modalContent, { size: 'lg' });
   }
 
   showNewEvent(): void  {

@@ -82,42 +82,69 @@
   </div>
 
 
-<p>
-  add-customday works!
-</p>
-<p>customDay NAME</p>
-<input
-id="customDayName"
-[(ngModel)]="customDayName"
-(keyup)="refresh.next()"
->
-<br>
-<hr>
-<p>customday description</p>
-<input 
-id="customDayDescription"
-[(ngModel)]="customDayDescription"
-(keyup)="refresh.next()"
->
-<hr>
+  <div class="row">
+    <div class="col-md-6">
+        <div [ngSwitch]="view">
+          <mwl-calendar-day-view
+            id="custom_day"
+            *ngSwitchCase="'day'"
+            [viewDate]="viewDate"
+            [events]="events"
+            [refresh]="refresh"
+            (eventClicked)="handleEvent('Clicked', $event.event)"
+            (eventTimesChanged)="eventTimesChanged($event)">
+          </mwl-calendar-day-view>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <p>customDay NAME</p>
+        <input
+        id="customDayName"
+        [(ngModel)]="customDayName"
+        (keyup)="refresh.next()"
+        >
+        <p>customday description</p>
+        <input 
+        id="customDayDescription"
+        [(ngModel)]="customDayDescription"
+        (keyup)="refresh.next()"
+        >
+        <form>
+          <div class="form-group">
+              <label for="remark">Remark:</label>
+              <input type="text" class="form-control" id="" placeholder="Enter remarks"
+              name="remark"
+              >
+          </div>
+          <div class="form-group">
+            <label for="project">Project:</label>
+              <select  name="project" class="form-control" >
+                  <option  value=""></option>                       
+              </select>
+          </div>
+          <div class="form-group">
+            <label for="wbi">WBI:</label>
+              <select  name="wbi" class="form-control" >
+                  <option  value=""></option>                       
+              </select>
+          </div>
 
-<div>
-  <button
-  class="btn btn-success"
-  (click)="confirmAndReturn(); refresh.next()">
-  Finish
-</button>
-<br>
-<hr>
-</div>
-<div [ngSwitch]="view">
-  <mwl-calendar-day-view
-    *ngSwitchCase="'day'"
-    [viewDate]="viewDate"
-    [events]="events"
-    [refresh]="refresh"
-    (eventClicked)="handleEvent('Clicked', $event.event)"
-    (eventTimesChanged)="eventTimesChanged($event)">
-  </mwl-calendar-day-view>
-</div>
+          <div class="form-group">
+              <label for="start_time">Start Time:</label>
+              <ngb-timepicker ></ngb-timepicker>
+          </div>
+
+          <div class="form-group">
+              <label for="end_time">End Time:</label>
+              <ngb-timepicker ></ngb-timepicker>
+          </div>
+
+          <button
+          class="btn btn-success"
+          (click)="confirmAndReturn(); refresh.next()">
+          Finish
+          </button>
+          <button type="button" class="btn btn-outline-info">Clear</button>
+        </form>
+    </div>
 </div>
