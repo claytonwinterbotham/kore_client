@@ -31,8 +31,8 @@ export class MyTimeslipService {
     postTimeslip(_timeslip: any): Observable<Comment[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({headers: headers});
-        headers.append( 'Authorization', 'Bearer ' 
-        + sessionStorage.getItem('token'));       
+        // headers.append( 'Authorization', 'Bearer ' 
+        // + sessionStorage.getItem('token'));       
         let dataUrl = this.site + "Create";
         let TimeslipJson = {         
             "StartTime": _timeslip.StartDate,
@@ -51,8 +51,8 @@ export class MyTimeslipService {
     createTimeslipByCustomday(_customdayTimeslipVM : any): Observable<Comment[]>{
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({headers: headers});
-        headers.append( 'Authorization', 'Bearer ' 
-        + sessionStorage.getItem('token'));    
+        // headers.append( 'Authorization', 'Bearer ' 
+        // + sessionStorage.getItem('token'));    
         let dataUrl = this.site + "CreateByCustomday";    
         let TimeslipByCustomday = {
             "CustomdayId":  _customdayTimeslipVM.CustomdayId,
@@ -67,8 +67,8 @@ export class MyTimeslipService {
     getTimeslips(): Observable<Comment[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
-        headers.append( 'Authorization', 'Bearer ' 
-        + sessionStorage.getItem('token'));
+        // headers.append( 'Authorization', 'Bearer ' 
+        // + sessionStorage.getItem('token'));
         let dataUrl = this.site + "List";
         return this.http.get(dataUrl, options)
             .map(this.extractData)
@@ -79,8 +79,8 @@ export class MyTimeslipService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({headers: headers});     
         let dataUrl = this.site + "GetAllTimeslipsByUserId/" + UserId;
-        headers.append( 'Authorization', 'Bearer ' 
-        + sessionStorage.getItem('token'));
+        // headers.append( 'Authorization', 'Bearer ' 
+        // + sessionStorage.getItem('token'));
         return this.http.get(dataUrl, options)
         .map(this.extractData)
         .catch(this.handleError);
@@ -90,8 +90,8 @@ export class MyTimeslipService {
     getOneTimeslip(TimeslipId : string): Observable<Comment[]>{
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
-        headers.append( 'Authorization', 'Bearer ' 
-        + sessionStorage.getItem('token'));
+        // headers.append( 'Authorization', 'Bearer ' 
+        // + sessionStorage.getItem('token'));
         let dataUrl = this.site + "GetOneTimeslip/" + TimeslipId;
         return this.http.get(dataUrl, options)
                 .map(this.extractData)
@@ -103,8 +103,8 @@ export class MyTimeslipService {
     updateTimeslip(_timeslip : any): Observable<Comment[]>{
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({headers: headers});
-        headers.append( 'Authorization', 'Bearer ' 
-        + sessionStorage.getItem('token'));  
+        // headers.append( 'Authorization', 'Bearer ' 
+        // + sessionStorage.getItem('token'));  
         let dataUrl = this.site + "Edit";
         let TimeslipJson = {  
             "TimeslipId":_timeslip.TimeSlipId,       
@@ -123,8 +123,8 @@ export class MyTimeslipService {
     deleteTimeslip(id: String): Observable<Comment[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
-        headers.append( 'Authorization', 'Bearer ' 
-        + sessionStorage.getItem('token'));
+        // headers.append( 'Authorization', 'Bearer ' 
+        // + sessionStorage.getItem('token'));
         id = id.toUpperCase();
         console.log("Timeslip id:" + id);
         let timeslipVM = {
