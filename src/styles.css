@@ -10,10 +10,14 @@ body{
 
 .add_timeslip_day_view_container{
     height: 800px;
-    width: 50%;
+    width: 100%;
     overflow-x: scroll;
 }
 
+.add_timeslip_day_form{
+    height: 800px;
+    width: 100%;
+}
 .custom_day_view_container{
     height: 800px;
     width: 100%;
