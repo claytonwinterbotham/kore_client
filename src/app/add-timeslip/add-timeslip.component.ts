@@ -29,7 +29,7 @@ import { MyTimeslipService } from "../services/app.timeslipservice";
 import { MyCustomDayService } from "../services/app.customdayservice";
 import { TimeslipModel } from "../services/app.timeslipservice";
 import { Subject } from 'rxjs/Subject';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {
   CalendarEvent,
   CalendarEventAction,
@@ -99,8 +99,8 @@ export class AddTimeslipComponent{
     },
     {
       label: '<i class="fa fa-fw fa-times"></i>',
-      onClick: ( timeSlipService ): void => {
-        this.timeSlipService.deleteTimeslip(this.timeslipId).subscribe(
+      onClick: ( { event }: { event: CalendarEvent } ): void => {
+        this.timeSlipService.deleteTimeslip(event.meta.timeSlipId).subscribe(
           data=> {
             console.log(data);
             this.getAllTimeSlips();
@@ -178,7 +178,7 @@ export class AddTimeslipComponent{
   selectedCustomday : string;
   newEventForm :boolean = false;
   newEvent : CalendarEvent[]= [];
-  events: CalendarEvent[] = [];
+  events: Array<CalendarEvent<{ timeSlipId: string,WBIId : string }>> = [];
   timeslipModel: TimeslipModel;
   //userId : string = "47135933-9179-4E48-AE65-C981E1E22344";
   timeslipId : string;
@@ -195,7 +195,15 @@ export class AddTimeslipComponent{
   meridian = true;
   quickRemarks : any;
   quickAddDate : any;
-
+  EditRemark : string;
+  EditProjectName : string;
+  EditWBIName : string;
+  EditStartTime : any;
+  EditEndTime : any;
+  EditTimeSlipId : string;
+  EditStartDate : Date;
+  EditEndDate : Date;
+  //mr: NgbModalRef;
 
   //constructor 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
@@ -276,17 +284,21 @@ export class AddTimeslipComponent{
 
   showInCalendar(){
     for (let oneTimeSlip of this.allTimeSlips){
-      this.addNewEvent(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask);
+      this.addNewEvent(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask,oneTimeSlip.newTimesheetEntryId,oneTimeSlip.newChangeRequestId);
     }
     console.log(this.events);
   }
 
-  addNewEvent(title,start,end){
+  addNewEvent(title,start,end,timeSlipId,WBIId){
     console.log(start);
       this.events.push({
       title: title,
       start: new Date(start),
       end: new Date(end),
+      meta:{
+        timeSlipId :timeSlipId,
+        WBIId :WBIId
+      },
       color: colors.red,
       draggable: true,
       resizable: {
@@ -330,8 +342,43 @@ export class AddTimeslipComponent{
   handleEvent(action: string, event: CalendarEvent): void {
     console.log(action);
     console.log(event);
+    this.getProjectName(event.meta.WBIId);
+    this.getWBIName(event.meta.WBIId);
+    this.EditTimeSlipId = event.meta.timeSlipId;
+    this.EditRemark = event.title;
+    this.EditStartDate = event.start;
+    this.EditEndDate = event.end;
+    this.EditStartTime = {hour: event.start.getHours(),minute: event.start.getMinutes()};
+    this.EditEndTime = {hour: event.end.getHours(),minute: event.end.getMinutes()};
     this.modalData = { event, action };
     this.modal.open(this.modalContent, { size: 'lg' });
+  }
+
+  getProjectName(WBIId : string){
+    this.projectService.getOneProjectByWBIId(WBIId).subscribe(
+      data=>{
+        console.log(data);
+        this.EditProjectName = data["newName"];
+      },
+      error=>{
+        alert(error);
+        
+      }
+      
+    )
+  }
+
+  getWBIName(WBIId : string) {
+    console.log("I want to get WBI Name!")
+    this.wbiService.getOneWBI(WBIId).subscribe(
+      data=> {
+        console.log(data);
+        this.EditWBIName = data["newRemarks"];
+      },
+      error =>{
+        alert (error);
+      }
+    )
   }
 
   showNewEvent(): void  {
@@ -444,6 +491,28 @@ export class AddTimeslipComponent{
       data=> {
         console.log(data);
         this.getAllTimeSlips();
+      },error =>{
+        alert(error);
+      }
+    )
+  }
+
+  confirmEdit(){
+    let newTimeSlip: TimeslipModel = {
+      TimeSlipId : this.EditTimeSlipId,
+      StartDate : this.EditStartDate.toDateString(),
+      EndDate : this.EditEndDate.toDateString(),
+      Remarks : this.EditRemark,
+      //WBIId :this.selectedWBI,
+      // this uerId need to be changed each time push/pull from github
+      UserId : sessionStorage.getItem('userId'),
+      DayId : ""      
+    }
+    this.timeSlipService.updateTimeslip(newTimeSlip).subscribe(
+      data=>{
+        console.log(data);
+        this.getAllTimeSlips();
+        //this.mr.close();
       },error =>{
         alert(error);
       }

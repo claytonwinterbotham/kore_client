@@ -77,6 +77,17 @@ export class MyProjectService {
                 .catch(this.handleError);
     }
 
+    getOneProjectByWBIId(WBIId : string): Observable<Comment[]>{
+        let headers = new Headers({ 'Content-Type': 'application/json' }); 
+        let options = new RequestOptions({headers: headers});
+        headers.append( 'Authorization', 'Bearer ' 
+        + sessionStorage.getItem('token'));
+        let dataUrl = this.site + "GetOneProjectByWBIId/" + WBIId;
+        return this.http.get(dataUrl, options)
+                .map(this.extractData)
+                .catch(this.handleError);
+    }
+
 
     //update one project
     updateProject(_project : any): Observable<Comment[]>{

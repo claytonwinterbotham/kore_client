@@ -70,12 +70,14 @@ export class MyWBIService {
     }
 
     //get one wbi
-    getOneProject(wbiId : string): Observable<Comment[]>{
+    getOneWBI(wbiId : string): Observable<Comment[]>{
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
         headers.append( 'Authorization', 'Bearer ' 
         + sessionStorage.getItem('token'));
-        let dataUrl = this.site + "GetOneProject/" + wbiId;
+        wbiId = wbiId.toUpperCase();
+        console.log("WBI ID is "+ wbiId);
+        let dataUrl = this.site + "GetOneWBI/" + wbiId;
         return this.http.get(dataUrl, options)
                 .map(this.extractData)
                 .catch(this.handleError);
@@ -83,7 +85,7 @@ export class MyWBIService {
 
 
     //update one wbi
-    updateProject(_wbi : any): Observable<Comment[]>{
+    updateWBI(_wbi : any): Observable<Comment[]>{
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({headers: headers});
         headers.append( 'Authorization', 'Bearer ' 
@@ -100,7 +102,7 @@ export class MyWBIService {
         .catch(this.handleError);
     }
 
-    //delete a project
+    //delete a WBI
     deleteWBI(id: String): Observable<Comment[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});

@@ -8,10 +8,11 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
 export class TimeslipModel {
+    TimeSlipId? : string
     StartDate:string;
     EndDate:string;
     Remarks: string;
-    WBIId : string;
+    WBIId? : string;
     UserId: String;
     DayId: String;
 }
@@ -21,9 +22,9 @@ export class MyTimeslipService {
     public site:string;
     constructor(private http: Http) {
         // for aws:
-        //this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/timeslip/';
+        this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/timeslip/';
         // for local host:
-         this.site = "http://localhost:64779/timeslip/"
+        // this.site = "http://localhost:64779/timeslip/"
      }
 
     //add a Timeslip
@@ -104,10 +105,11 @@ export class MyTimeslipService {
         let options = new RequestOptions({headers: headers});
         headers.append( 'Authorization', 'Bearer ' 
         + sessionStorage.getItem('token'));  
-        let dataUrl = this.site + "Update";
-        let TimeslipJson = {         
-            "StartDate": _timeslip.StartDate,
-            "EndDate": _timeslip.EndDate,
+        let dataUrl = this.site + "Edit";
+        let TimeslipJson = {  
+            "TimeslipId":_timeslip.TimeSlipId,       
+            "StartTime": _timeslip.StartDate,
+            "EndTime": _timeslip.EndDate,
             "Remarks": _timeslip.Remarks,
             "UserId": _timeslip.UserId,
             "DayId": _timeslip.DayId,
@@ -123,13 +125,15 @@ export class MyTimeslipService {
         let options = new RequestOptions({headers: headers});
         headers.append( 'Authorization', 'Bearer ' 
         + sessionStorage.getItem('token'));
+        id = id.toUpperCase();
         console.log("Timeslip id:" + id);
-        let dataUrl = this.site + "Delete/" + id;
-      
-        return this.http.delete(dataUrl,options)
+        let timeslipVM = {
+            "TimeSlipId" : id
+        };
+        let dataUrl = this.site + "Delete";
+        return this.http.post(dataUrl,timeslipVM,options)
             .map(this.extractData)
-            .catch(this.handleError);
-            
+            .catch(this.handleError);            
     }
     
     private extractData(res: Response) {
@@ -148,3 +152,4 @@ export class MyTimeslipService {
         return Observable.throw(errMsg);
     }
 }
+
