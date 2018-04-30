@@ -7,7 +7,7 @@
               <input type="text" class="form-control" id="wbi" placeholder="">
             </div>
 
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for="projects">Project:</label>
                 <ng-select [dropdownPosition]="'down'"
                   id="projects"
@@ -16,8 +16,17 @@
                   bindlabel="label"
                   bindvalue="value">
                 </ng-select>
+            </div> -->
+            <div class="form-group">
+              <label for="project">Project:</label>
+              <ng-select [items]="projectList"
+              bindLabel="newName"
+              bindValue="newProjectId"
+              [(ngModel)]="selectedProject"
+            
+              name = "projectList">
+              </ng-select>
             </div>
-
             <div class="form-group">
                 <label for="description">Description:</label>
                 <textarea 
