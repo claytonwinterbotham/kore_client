@@ -7,7 +7,6 @@ import {MyWBIService} from "./services/app.wbiservice";
 import {MyTimeslipService} from "./services/app.timeslipservice";
 import {MyCustomDayService} from "./services/app.customdayservice";
 import { NgbModal,NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -17,7 +16,7 @@ import { NgbModal,NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     MyClientService,
     MyWBIService,
     MyTimeslipService,
-    MyCustomDayService
+    MyCustomDayService,
    ]
 })
 export class AppComponent {
