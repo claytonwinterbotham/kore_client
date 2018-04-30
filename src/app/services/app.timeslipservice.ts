@@ -21,9 +21,9 @@ export class MyTimeslipService {
     public site:string;
     constructor(private http: Http) {
         // for aws:
-        this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/timeslip/';
+        //this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/timeslip/';
         // for local host:
-        // this.site = "http://localhost:64779/timeslip/"
+         this.site = "http://localhost:64779/timeslip/"
      }
 
     //add a Timeslip
