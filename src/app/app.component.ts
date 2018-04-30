@@ -5,7 +5,8 @@ import {MyProjectService} from "./services/app.projectservice";
 import {MyClientService} from "./services/app.clientservice";
 import {MyWBIService} from "./services/app.wbiservice";
 import {MyTimeslipService} from "./services/app.timeslipservice";
-import {MyCustomDayService} from "./services/app.customdayservice"
+import {MyCustomDayService} from "./services/app.customdayservice";
+import { NgbModal,NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-root',

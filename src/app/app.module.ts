@@ -5,7 +5,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'angular-calendar';
 import { CommonModule } from '@angular/common';
-import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalModule,NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarUtilsModule } from './calendar-utils/module';
 import { HttpModule }    from '@angular/http';
 
@@ -23,7 +23,7 @@ import { AddCustomdayComponent } from './add-customday/add-customday.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
-
+import { ClickOutsideModule } from 'ng-click-outside';
 
 
 
@@ -53,9 +53,11 @@ import { HomeComponent } from './home/home.component';
     NgbModalModule.forRoot(),
     CalendarUtilsModule,
     HttpModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ClickOutsideModule
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -36,7 +36,9 @@ export class MyProjectService {
     //add a project
     postProject(_project: ProjectModel): Observable<Comment[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
-        let options = new RequestOptions({headers: headers});       
+        let options = new RequestOptions({headers: headers});
+        headers.append( 'Authorization', 'Bearer ' 
+        + sessionStorage.getItem('token'));       
         let dataUrl = this.site + "Create";
         let ProjectJson = {         
             "ProjectName": _project.Name,
@@ -55,6 +57,8 @@ export class MyProjectService {
     getProjects(): Observable<Comment[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
+        headers.append( 'Authorization', 'Bearer ' 
+        + sessionStorage.getItem('token'));
         let dataUrl = this.site + "List";
         return this.http.get(dataUrl, options)
             .map(this.extractData)
@@ -65,7 +69,20 @@ export class MyProjectService {
     getOneProject(projectId : string): Observable<Comment[]>{
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
+        headers.append( 'Authorization', 'Bearer ' 
+        + sessionStorage.getItem('token'));
         let dataUrl = this.site + "GetOneProject/" + projectId;
+        return this.http.get(dataUrl, options)
+                .map(this.extractData)
+                .catch(this.handleError);
+    }
+
+    getOneProjectByWBIId(WBIId : string): Observable<Comment[]>{
+        let headers = new Headers({ 'Content-Type': 'application/json' }); 
+        let options = new RequestOptions({headers: headers});
+        headers.append( 'Authorization', 'Bearer ' 
+        + sessionStorage.getItem('token'));
+        let dataUrl = this.site + "GetOneProjectByWBIId/" + WBIId;
         return this.http.get(dataUrl, options)
                 .map(this.extractData)
                 .catch(this.handleError);

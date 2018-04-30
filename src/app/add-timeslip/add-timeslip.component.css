@@ -8,6 +8,10 @@
     z-index: 1;
 }
 
+.main-content{
+    margin-top: 6em;
+}
+
 .add_timeslip_btn{
    position: fixed;
    top: .4em;
@@ -18,7 +22,7 @@
 .timeslip_text_input{
     position: fixed;
     top: .4em;
-    left: 18em;
+    left: 15em;
 }
 
 .timeslip_text_input_box{
@@ -28,33 +32,55 @@
 .add_timeslip_folder{
     position: fixed;
     top: .4em;
-    left: 20em;
+    left: 19em;
  
  }
 
 .add_timeslip_stickynote{
     position: fixed;
     top: .4em;
-    left: 22em;
+    left: 21em;
 
 } 
 
 .add_timeslip_datepicker{
     position: fixed;
     top: .4em;
-    left: 50em;
+    right: 25em;
+}
+
+.calender_input_box{
+    width: 110px;
 }
 
 .add_timeslip_starttime{
     position: fixed;
     top: .4em;
-    right: 20em;
+    right : 16em;
 }
-.calender_input_box{
-    max-width: 60px;
+
+.add_timeslip_endtime{
+    position: fixed;
+    top: .4em;
+    right : 7em;
+   
 }
+
 .fa-check{
     color: #1282c5
 }
 
+.startTime{
+    position: absolute;
+    top: 30px;
+    right: 10px;
+    
+}
 
+.endTime{
+    position: fixed;
+    top: 30px;
+    right: 10px;
+    z-index: 2147483647;
+    
+}

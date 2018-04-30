@@ -1,39 +1,44 @@
-<!-- <link rel="stylesheet" href="./layui/layui/css/layui.css">
-<script src="./layui/layui/layui.js"></script>
+
 <script>
-    layui.use(['layer', 'form'], function(){
-      var layer = layui.layer
-      ,form = layui.form;
-      
-      layer.msg('Hello World');
-    });
-</script> -->
+layer.msg("hello")
+alert("hello")
+</script>
+
 <div class="container">
   <div class="row">
     <nav class="navigation navbar navbar-light bg-light">
         <form class="form-inline my-2 my-lg-0 float-right">
+          <!-- remarks -->
           <div class="form-group timeslip_text_input">
               <input
+              name = "quickRemarks"
               placeholder="Please enter your remarks"
               type="text"
               class="form-control  timeslip_text_input_box" 
               rows="10" 
+              [(ngModel)]="quickRemarks"
               >
           </div> 
+          <!-- projects icon -->
           <i
           class="add_timeslip_folder fa fa-folder my-2 my-sm-0"
+          
           aria-hidden="true"
-          style="font-size:2em;color:#1282c5;">
+          style="font-size:2em;color:#1282c5;"
+          (click)="showProjectDropdown()">
           </i>
+          <!-- wbis icon -->
           <i
           class="add_timeslip_stickynote fa fa-sticky-note my-2 my-sm-0"
           aria-hidden="true"
-          style="font-size:2em;color:#1282c5;">
+          style="font-size:2em;color:#1282c5;"
+          (click)="showWBIDropdown()">
           </i>
+          <!-- date picker -->
           <div class="form-group add_timeslip_datepicker">
             <div class="input-group ">
                 <input class="form-control calender_input_box" placeholder=""
-                      name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+                      name="dp" [(ngModel)]="quickAddDate" ngbDatepicker #d="ngbDatepicker">
                 <div class="input-group-append">
                   <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                     <img src="../../assets/img/calendar_blue.svg" style="width: 3rem; height: 2rem; cursor: pointer;"/>
@@ -41,35 +46,68 @@
                 </div>
             </div>
           </div>
+          <!-- time picker -->
+          <br>
           <div class="form-group add_timeslip_starttime">
-              <div class="input-group date" id="starttime" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#starttime"/>
-                  <div class="input-group-append" data-target="#starttime" data-toggle="datetimepicker">
-                      <div class="input-group-text"><i class="fa fa-clock-o"></i></div>
-                  </div>
-              </div>
+                  <button class="btn btn-success" (click)="showStartTime()">
+                  Start Time
+                  </button>                     
+                  <ngb-timepicker *ngIf="startTimeDropdown" name="startTime" [(ngModel)]="startTime" [meridian]="meridian" class="startTime"></ngb-timepicker>        
           </div>
+
           <div class="form-group add_timeslip_endtime">
-              <div class="input-group date" id="endtime" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#endtime"/>
-                  <div class="input-group-append" data-target="#endtime" data-toggle="datetimepicker">
-                      <div class="input-group-text"><i class="fa fa-clock-o"></i></div>
-                  </div>
-              </div>
-          </div>      
+              <button class="btn btn-success" (click)="showEndTime()">
+              End Time
+              </button>                     
+              <ngb-timepicker *ngIf="endTimeDropdown" name="endTime" [(ngModel)]="endTime" [meridian]="meridian" class="endTime"></ngb-timepicker>        
+           </div>          
+          
+          <!-- confirm button -->
           <i
           class="add_timeslip_btn fa fa-check-square my-2 my-sm-0"
           aria-hidden="true"
           style="font-size:2em;color:#1282c5;"
-          (click)="showNewEvent()">
+          (click)="confirmQuickAddts()">
         </i>
+    
         </form>
+        <button  (click)="logOut()">Logout</button>
     </nav>
   </div>  
+<div *ngIf="projectDropdown" >
+  <div >
+      <label for="project" class="col-4 col-form-label">Project</label>
+      <div class="col-6">
+          <ng-select [items]="projectList"
+          bindLabel="newName"
+          bindValue="newProjectId"
+          [(ngModel)]="selectedProject"
+          (change)="changeProject()">
+          <!-- the code up may need to be changed in the future -->
+          </ng-select>
+          <br>
+      </div>
+  </div>
+</div>
+
+<div *ngIf="WBIDropdown" >
+<label for="wbi" class="col-4 col-form-label">WBI</label>
+<div class="col-6">
+    <ng-select [items]="wbiList"
+    bindLabel="newRemarks"
+    bindValue="newChangeRequestId"
+    [(ngModel)]="selectedWBI"
+    (change)="showWBIDropdown()">
+    </ng-select>
+ 
+</div>
+</div>
 
 
-  <div class="row" *ngIf="newEventForm">
-    <div class="col-12 main-content">
+
+
+  <div class="row  main-content" *ngIf="newEventForm">
+    <div class="col-12">
         <table class="table table-bordered">
             <tbody>
               <tr>
@@ -137,6 +175,8 @@
           </table>
     </div>   
   </div>
+
+  <!-- Start Model -->
   <div class="row">
     <div class="col-12 main-content">
       <ng-template #modalContent let-close="close">
@@ -147,14 +187,39 @@
           </button>
         </div>
         <div class="modal-body">
-          <div>
-            Action:
-            <pre>{{ modalData?.action }}</pre>
-          </div>
-          <div>
-            Event:
-            <pre>{{ modalData?.event | json }}</pre>
-          </div>
+          <form>
+            <div class="form-group">
+                <label for="remark">Remark:</label>
+                <input type="text" class="form-control" id="" placeholder="Enter remarks"
+                name="remark" [(ngModel)]="EditRemark"
+                >
+            </div>
+            <div class="form-group">
+              <label for="project">Project:</label>
+              {{EditProjectName}}
+            </div>
+            <div class="form-group">
+              <label for="wbi">WBI:</label>
+              {{EditWBIName}}
+            </div>
+
+            <div class="form-group">
+                <label for="start_time">Start Time:</label>
+                <ngb-timepicker [(ngModel)]="EditStartTime" [meridian]="meridian" name="editStartTime"></ngb-timepicker>
+            </div>
+
+            <div class="form-group">
+                <label for="end_time">End Time:</label>
+                <ngb-timepicker [(ngModel)]="EditEndTime" [meridian]="meridian" name="editEndTime"></ngb-timepicker>
+            </div>
+
+            <button
+            class="btn btn-success"
+            (click)="confirmEdit(); refresh.next()">
+            Finish
+            </button>
+            <button type="button" class="btn btn-outline-info"(click)="close()" >Clear</button>
+          </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary" (click)="close()">OK</button>
@@ -275,3 +340,6 @@
   </div>
 </div>
 
+<script>
+
+</script>
