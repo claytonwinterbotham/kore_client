@@ -324,14 +324,17 @@ alert("hello")
           (eventTimesChanged)="eventTimesChanged($event)">
           <!-- [excludeDays]="excludeDays" -->
         </mwl-calendar-week-view>
-        <mwl-calendar-day-view
-          *ngSwitchCase="'day'"
-          [viewDate]="viewDate"
-          [events]="events"
-          [refresh]="refresh"
-          (eventClicked)="handleEvent('Clicked', $event.event)"
-          (eventTimesChanged)="eventTimesChanged($event)">
-        </mwl-calendar-day-view>
+        <div class="add_timeslip_day_view_container" id="day_view_scroll">
+            <mwl-calendar-day-view
+            id="add_timeslip"
+            *ngSwitchCase="'day'"
+            [viewDate]="viewDate"
+            [events]="events"
+            [refresh]="refresh"
+            (eventClicked)="handleEvent('Clicked', $event.event)"
+            (eventTimesChanged)="eventTimesChanged($event)">
+            </mwl-calendar-day-view>
+        </div>
       </div>
     </div>   
   </div>
@@ -339,7 +342,3 @@ alert("hello")
 
   </div>
 </div>
-
-<script>
-
-</script>

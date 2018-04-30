@@ -36,6 +36,9 @@ import {
   CalendarEventTitleFormatter,
 } from 'angular-calendar';
 import { Router, NavigationExtras } from '@angular/router';
+import { Inject} from "@angular/core";
+import { DOCUMENT } from '@angular/platform-browser';
+
 //const
 const colors: any = {
   red: {
@@ -121,10 +124,16 @@ export class AddCustomdayComponent implements OnInit {
   meridian = true;
   newEventTitle : string ;
   selectedWBIs : string[] = [];
-
+  showSelect : boolean = false;
+  showInput : boolean = true;
+  searchString : string;
+  ngselectProject : boolean = true;
+  fixedProject :boolean = false;
+  fixedProjectName : string;
+  searchWBIs :boolean = false;
 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
-    public router:Router,_customdayService:MyCustomDayService) { 
+    public router:Router,_customdayService:MyCustomDayService, @Inject(DOCUMENT) private document: Document) { 
     this.projectService = _projectService;
     this.wbiService = _wbiService;
     this.timeSlipService = _timeslipService;
@@ -149,6 +158,12 @@ export class AddCustomdayComponent implements OnInit {
    });
    this.refresh.next();
    this.selectedProject = "";
+   this.scrollTo()
+  }
+
+  scrollTo(){
+    var scrollContainer = document.getElementById("custom_day_scroll").scrollTop
+    scrollContainer += 250
   }
 
   showProjectList(){
@@ -161,6 +176,42 @@ export class AddCustomdayComponent implements OnInit {
       alert(error);
     }
   )
+  }
+
+  searchWBI(){
+    this.wbiService.searchWBI(this.searchString).subscribe(
+      data=> {
+        console.log(data);
+        this.wbiList = (data);
+        this.searchWBIs = true;
+      },
+      error =>{
+        alert(error);
+      }
+    )
+  }
+
+  locateProject(){
+    console.log("i want to locate project");
+    if (!this.searchWBIs){
+      return ;
+    }
+    this.projectService.getOneProjectByWBIId(this.selectedWBI).subscribe(
+      data=>{
+        console.log(data);
+        //this.fixedProject = true;
+        //this.ngselectProject = false;
+        this.selectedProject = data["newName"];
+        //this.selectedProject = data;
+        //let dataArray  = [];
+        //dataArray.push(data);
+        //ng-select only accept arrays, that's why i need to define an array here.
+        //this. = dataArray;
+      },
+      error =>{
+        alert(error);
+      }
+    )
   }
 
   // getAllTimeSlips(){
@@ -254,8 +305,11 @@ export class AddCustomdayComponent implements OnInit {
   // }
 
   changeProject(){
+    this.showSelect = true;
+    this.showInput = false;
     console.log("hello");
-    this.selectedWBI = "";
+
+    //this.selectedWBI = "";
     if (this.selectedProject == ""){
         return ;
     }else {
@@ -277,6 +331,7 @@ export class AddCustomdayComponent implements OnInit {
     //this.newEvent[0].title = this.newEventTitle;
     //console.log(this.newEvent[0].start.getFullYear().toString())
    // console.log(new Date(Date.parse(this.newEvent[0].start.getFullYear().toString() + "/" + this.newEvent[0].start.getMonth().toString() + "/" + this.newEvent[0].start.getDate().toString() + " " + this.TodaystartTime.hour + ":"+ this.TodayendTime.minute))  )
+    this.showProjectList();
     this.newEvent[0].start = new Date(new Date(Date.parse(this.newEvent[0].start.getFullYear().toString() + "/" + (this.newEvent[0].start.getMonth()+1).toString() + "/" + this.newEvent[0].start.getDate().toString() + " " + this.TodaystartTime.hour + ":"+ this.TodaystartTime.minute)));
     console.log(this.newEvent[0].start);
     this.newEvent[0].end = new Date(new Date(Date.parse(this.newEvent[0].start.getFullYear().toString() + "/" + (this.newEvent[0].start.getMonth()+1).toString() + "/" + this.newEvent[0].start.getDate().toString() + " " + this.TodayendTime.hour + ":"+ this.TodayendTime.minute))); 
@@ -291,6 +346,7 @@ export class AddCustomdayComponent implements OnInit {
     this.selectedWBI = "";
     this.TodaystartTime = "";
     this.TodayendTime = "";
+    this.searchWBIs = false;
 
     this.newEvent.push({
       title: '',

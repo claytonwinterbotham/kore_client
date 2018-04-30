@@ -40,6 +40,8 @@ import {
 import { ClickOutsideModule } from 'ng-click-outside';
 // import * as $ from "jquery";
 import { Router, NavigationExtras } from '@angular/router';
+import { Inject} from "@angular/core";
+import { DOCUMENT } from '@angular/platform-browser';
 
 //const
 const colors: any = {
@@ -207,7 +209,7 @@ export class AddTimeslipComponent{
 
   //constructor 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
-  _customdayService : MyCustomDayService,public router:Router) {
+  _customdayService : MyCustomDayService,public router:Router, @Inject(DOCUMENT) private document: Document) {
     this.projectService = _projectService;
     this.wbiService = _wbiService;
     this.timeSlipService = _timeslipService;
@@ -218,8 +220,9 @@ export class AddTimeslipComponent{
   ngOnInit() {
     this.showProjectList();
     this.getAllTimeSlips();
-    this.getAllCustomDays();
+    this.getAllCustomDays();     
   }
+
 
   // all the functions below
   showProjectList(){

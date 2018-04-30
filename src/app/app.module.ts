@@ -24,7 +24,7 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { ClickOutsideModule } from 'ng-click-outside';
-
+import {ScrollToModule} from 'ng2-scroll-to';
 
 
 @NgModule({
@@ -51,10 +51,11 @@ import { ClickOutsideModule } from 'ng-click-outside';
     CalendarModule.forRoot(),
     CommonModule,
     NgbModalModule.forRoot(),
+    ScrollToModule.forRoot(),
     CalendarUtilsModule,
     HttpModule,
     BrowserAnimationsModule,
-    ClickOutsideModule
+    ClickOutsideModule,
   ],
   providers: [
   ],
