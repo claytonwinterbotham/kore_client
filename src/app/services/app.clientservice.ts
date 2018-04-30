@@ -26,6 +26,8 @@ export class MyClientService {
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
         let dataUrl = this.site + "List";
+        headers.append( 'Authorization', 'Bearer ' 
+        + sessionStorage.getItem('token'));
         return this.http.get(dataUrl, options)
             .map(this.extractData)
             .catch(this.handleError);
