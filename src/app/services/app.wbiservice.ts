@@ -28,8 +28,8 @@ export class MyWBIService {
     postWBI(_wbi: WBIModel): Observable<Comment[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({headers: headers});
-        headers.append( 'Authorization', 'Bearer ' 
-        + sessionStorage.getItem('token'));       
+        // headers.append( 'Authorization', 'Bearer ' 
+        // + sessionStorage.getItem('token'));       
         let dataUrl = this.site + "Create";
         let WBIJson = {         
             "Description": _wbi.Description,
@@ -41,14 +41,24 @@ export class MyWBIService {
         return this.http.post(dataUrl, WBIJson,options)
             .map(this.extractData) 
             .catch(this.handleError); 
-    } 
+    }
+    
+    searchWBI(wbiString : string): Observable<Comment[]>{
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({headers: headers});
+        let dataUrl = this.site + "GetWBIBySearchString/" + wbiString;
+        return this.http.get(dataUrl, options)
+            .map(this.extractData)
+            .catch(this.handleError);
+
+    }
 
     //get all wbi
     getWBIs(): Observable<Comment[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
-        headers.append( 'Authorization', 'Bearer ' 
-        + sessionStorage.getItem('token'));
+        // headers.append( 'Authorization', 'Bearer ' 
+        // + sessionStorage.getItem('token'));
         let dataUrl = this.site + "List";
         return this.http.get(dataUrl, options)
             .map(this.extractData)
@@ -61,8 +71,8 @@ export class MyWBIService {
     GetAllWBIsByProjectId(projectId : string): Observable<Comment[]>{
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
-        headers.append( 'Authorization', 'Bearer ' 
-        + sessionStorage.getItem('token'));
+        // headers.append( 'Authorization', 'Bearer ' 
+        // + sessionStorage.getItem('token'));
         let dataUrl = this.site + "GetAllWBIsByProjectId/" + projectId;
         return this.http.get(dataUrl, options)
                 .map(this.extractData)
@@ -73,8 +83,8 @@ export class MyWBIService {
     getOneWBI(wbiId : string): Observable<Comment[]>{
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
-        headers.append( 'Authorization', 'Bearer ' 
-        + sessionStorage.getItem('token'));
+        // headers.append( 'Authorization', 'Bearer ' 
+        // + sessionStorage.getItem('token'));
         wbiId = wbiId.toUpperCase();
         console.log("WBI ID is "+ wbiId);
         let dataUrl = this.site + "GetOneWBI/" + wbiId;
@@ -88,8 +98,8 @@ export class MyWBIService {
     updateWBI(_wbi : any): Observable<Comment[]>{
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({headers: headers});
-        headers.append( 'Authorization', 'Bearer ' 
-        + sessionStorage.getItem('token'));  
+        // headers.append( 'Authorization', 'Bearer ' 
+        // + sessionStorage.getItem('token'));  
         let dataUrl = this.site + "Update";
         let WBIJson = {         
             "Description": _wbi.Description,
@@ -106,8 +116,8 @@ export class MyWBIService {
     deleteWBI(id: String): Observable<Comment[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
-        headers.append( 'Authorization', 'Bearer ' 
-        + sessionStorage.getItem('token'));
+        // headers.append( 'Authorization', 'Bearer ' 
+        // + sessionStorage.getItem('token'));
         console.log("WBI id:" + id);
         let dataUrl = this.site + "Delete/" + id;
         

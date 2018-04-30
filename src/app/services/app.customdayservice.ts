@@ -25,8 +25,8 @@ export class MyCustomDayService {
         console.log(_customday);
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
-        headers.append( 'Authorization', 'Bearer ' 
-        + sessionStorage.getItem('token'));
+        // headers.append( 'Authorization', 'Bearer ' 
+        // + sessionStorage.getItem('token'));
         let dataUrl = this.site + "Create";
        // console.log(_customday);
         return this.http.post(dataUrl,_customday, options)
@@ -38,8 +38,8 @@ export class MyCustomDayService {
     getCustomdays(id : string) :Observable<Comment[]>{
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
-        headers.append( 'Authorization', 'Bearer ' 
-        + sessionStorage.getItem('token'));
+        // headers.append( 'Authorization', 'Bearer ' 
+        // + sessionStorage.getItem('token'));
         let dataUrl = this.site + "GetOneUserCustomDays/" + id ;
         return this.http.get(dataUrl,options)  
             .map(this.extractData)
@@ -50,8 +50,8 @@ export class MyCustomDayService {
     deleteCustomDay(id: String): Observable<Comment[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
-        headers.append( 'Authorization', 'Bearer ' 
-        + sessionStorage.getItem('token'));
+        // headers.append( 'Authorization', 'Bearer ' 
+        // + sessionStorage.getItem('token'));
         console.log("Custom day id:" + id);
         let dataUrl = this.site + "Delete/" + id;
        
