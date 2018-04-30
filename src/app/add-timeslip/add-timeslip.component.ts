@@ -98,9 +98,15 @@ export class AddTimeslipComponent{
     },
     {
       label: '<i class="fa fa-fw fa-times"></i>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter(iEvent => iEvent !== event);
-        this.handleEvent('Deleted', event);
+      onClick: ( timeSlipService ): void => {
+        this.timeSlipService.deleteTimeslip(this.timeslipId).subscribe(
+          data=> {
+            console.log(data);
+            this.getAllTimeSlips();
+          },error =>{
+            alert(error);
+          }
+        )
       }
     }
   ];
@@ -174,6 +180,7 @@ export class AddTimeslipComponent{
   events: CalendarEvent[] = [];
   timeslipModel: TimeslipModel;
   userId : string = "47135933-9179-4E48-AE65-C981E1E22344";
+  timeslipId : string;
   allTimeSlips :any;
   clickedDate : Date;
   //chooseCustomday : boolean;
