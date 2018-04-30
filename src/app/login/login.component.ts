@@ -25,5 +25,6 @@ export class LoginComponent implements OnInit {
 
   login(){
     //add logic
+    
   }
 }
