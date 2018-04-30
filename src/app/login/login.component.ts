@@ -27,9 +27,6 @@ export class LoginComponent implements OnInit {
 
   login(){
     //add logic
-<<<<<<< HEAD
-    
-=======
     // Set our navigation extras object
     // that passes on our global query params and fragment
     let userInfo : LoginModel = {
@@ -54,6 +51,5 @@ export class LoginComponent implements OnInit {
       
     )
   
->>>>>>> 267f9cd6a2f9f5a5458a0aecfbac47bae4c1d5c1
   }
 }
