@@ -36,6 +36,9 @@ import {
   CalendarEventTitleFormatter,
 } from 'angular-calendar';
 import { Router, NavigationExtras } from '@angular/router';
+import { Inject} from "@angular/core";
+import { DOCUMENT } from '@angular/platform-browser';
+
 //const
 const colors: any = {
   red: {
@@ -124,7 +127,7 @@ export class AddCustomdayComponent implements OnInit {
 
 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
-    public router:Router,_customdayService:MyCustomDayService) { 
+    public router:Router,_customdayService:MyCustomDayService, @Inject(DOCUMENT) private document: Document) { 
     this.projectService = _projectService;
     this.wbiService = _wbiService;
     this.timeSlipService = _timeslipService;
@@ -149,6 +152,12 @@ export class AddCustomdayComponent implements OnInit {
    });
    this.refresh.next();
    this.selectedProject = "";
+   this.scrollTo()
+  }
+
+  scrollTo(){
+    var scrollContainer = document.getElementById("custom_day_scroll").scrollTop
+    scrollContainer += 250
   }
 
   showProjectList(){

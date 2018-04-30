@@ -84,18 +84,20 @@
 
 
   <div class="row">
-    <div class="col-md-8">
-        <div [ngSwitch]="view">
-
-            <mwl-calendar-day-view
-              *ngSwitchCase="'day'"
-              [viewDate]="viewDate"
-              [events]="events"
-              [refresh]="refresh"
-              (eventClicked)="handleEvent('Clicked', $event.event)"
-              (eventTimesChanged)="eventTimesChanged($event)">
-            </mwl-calendar-day-view>
+    <div class="col-md-6">
+      <div class="custom_day_view_container" id="custom_day_scroll">
+          <div [ngSwitch]="view">
+              <mwl-calendar-day-view
+                *ngSwitchCase="'day'"
+                [viewDate]="viewDate"
+                [events]="events"
+                [refresh]="refresh"
+                (eventClicked)="handleEvent('Clicked', $event.event)"
+                (eventTimesChanged)="eventTimesChanged($event)">
+              </mwl-calendar-day-view>
           </div>
+      </div>
+        
     </div>
     <div class="col-md-4">
         <form>
