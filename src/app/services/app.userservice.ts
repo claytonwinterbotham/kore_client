@@ -15,11 +15,30 @@ export class UserModel {
     LastName: string;
 }
 
+export class LoginModel {
+    Email : string;
+    Password : string;
+}
+
 @Injectable()
 export class MyUserService {
     public site:string;
     constructor(private http: Http) {
-        this.site = 'http://localhost:64779/user/';
+
+        //for asw:
+        this.site = "https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/user/"
+
+        //for localhost:
+        //this.site = 'http://localhost:64779/user/';
+     }
+
+     login(userInfo : LoginModel): Observable<Comment[]> {
+        let headers = new Headers({ 'Content-Type': 'application/json' }); 
+        let options = new RequestOptions({headers: headers});
+        let dataUrl = this.site + "Login";
+        return this.http.post(dataUrl,userInfo,options)
+                .map(this.extractData)
+                .catch(this.handleError);         
      }
 
     //get all users
@@ -86,7 +105,9 @@ deleteUser(id: String): Observable<Comment[]> {
         return this.http.post(dataUrl, UserJson,options)
             .map(this.extractData) 
             .catch(this.handleError); 
-    } 
+    }
+    
+    
     private extractData(res: Response) {
         let body = res.json();
         return body;

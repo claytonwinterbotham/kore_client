@@ -38,7 +38,8 @@ import {
 } from 'angular-calendar';
 // import {layui} from "layui-src"
 import { ClickOutsideModule } from 'ng-click-outside';
-import * as $ from "jquery";
+// import * as $ from "jquery";
+import { Router, NavigationExtras } from '@angular/router';
 
 //const
 const colors: any = {
@@ -179,8 +180,9 @@ export class AddTimeslipComponent{
   newEvent : CalendarEvent[]= [];
   events: CalendarEvent[] = [];
   timeslipModel: TimeslipModel;
-  userId : string = "47135933-9179-4E48-AE65-C981E1E22344";
+  //userId : string = "47135933-9179-4E48-AE65-C981E1E22344";
   timeslipId : string;
+  userId : string = sessionStorage.getItem('userId');
   allTimeSlips :any;
   clickedDate : Date;
   //chooseCustomday : boolean;
@@ -197,7 +199,7 @@ export class AddTimeslipComponent{
 
   //constructor 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
-  _customdayService : MyCustomDayService) {
+  _customdayService : MyCustomDayService,public router:Router) {
     this.projectService = _projectService;
     this.wbiService = _wbiService;
     this.timeSlipService = _timeslipService;
@@ -209,8 +211,6 @@ export class AddTimeslipComponent{
     this.showProjectList();
     this.getAllTimeSlips();
     this.getAllCustomDays();
-    
-
   }
 
   // all the functions below
@@ -278,6 +278,7 @@ export class AddTimeslipComponent{
     for (let oneTimeSlip of this.allTimeSlips){
       this.addNewEvent(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask);
     }
+    console.log(this.events);
   }
 
   addNewEvent(title,start,end){
@@ -327,6 +328,8 @@ export class AddTimeslipComponent{
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
+    console.log(action);
+    console.log(event);
     this.modalData = { event, action };
     this.modal.open(this.modalContent, { size: 'lg' });
   }
@@ -374,7 +377,7 @@ export class AddTimeslipComponent{
       Remarks : this.newEvent[0].title,
       WBIId :this.selectedWBI,
       // this uerId need to be changed each time push/pull from github
-      UserId : "47135933-9179-4E48-AE65-C981E1E22344",
+      UserId : sessionStorage.getItem('userId'),
       DayId : ""
     }
     this.timeslipModel = newTimeSlip; 
@@ -406,7 +409,7 @@ export class AddTimeslipComponent{
       Remarks : this.quickRemarks,
       WBIId :this.selectedWBI,
       // this uerId need to be changed each time push/pull from github
-      UserId : "47135933-9179-4E48-AE65-C981E1E22344",
+      UserId : sessionStorage.getItem('userId'),
       DayId : ""
     }
     this.timeslipModel = newTimeSlip; 
@@ -418,6 +421,9 @@ export class AddTimeslipComponent{
         this.getAllTimeSlips();
         this.newEvent = [];
         this.newEventForm = false;
+        this.selectedProject = "";
+        this.selectedWBI = "";
+        this.quickRemarks = "";
       },error =>{
 
         alert(error);
@@ -427,8 +433,7 @@ export class AddTimeslipComponent{
   }
 
   confirmAddCustomDay(){
-    console.log(this.selectedCustomday);
-     
+    console.log(this.selectedCustomday); 
     //console.log(this.clickedDate.getFullYear()+"-"+this.clickedDate.getMonth()+"-"+this.clickedDate.getDay()+"" );
     console.log(this.clickedDate.toISOString());
     let CustomdayTimeslip : customdayTimeslip = {
@@ -452,7 +457,6 @@ export class AddTimeslipComponent{
 
   changeProject(){
     console.log("hello");
-    
     this.selectedWBI = "";
     if (this.selectedProject == ""){
         return ;
@@ -468,7 +472,21 @@ export class AddTimeslipComponent{
       })
     }
    
-  }  
+  }
+  
+  logOut(){
+    sessionStorage.setItem('userId', null);
+    sessionStorage.setItem('token',null);
+        // Set our navigation extras object
+        // that passes on our global query params and fragment
+        let navigationExtras: NavigationExtras = {
+          queryParamsHandling: 'preserve',
+          preserveFragment: true
+        };
+
+
+          this.router.navigate(['login'],navigationExtras);
+  }
 }
 
 export class customdayTimeslip {

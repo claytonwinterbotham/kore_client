@@ -72,7 +72,6 @@ export class AddCustomdayComponent implements OnInit {
   wbiList : any;
   selectedProject : string;
   selectedWBI : string;
-  
   newEventForm :boolean = false;
   newEvent : CalendarEvent[]= [];
   events: CalendarEvent[] = [
@@ -88,7 +87,7 @@ export class AddCustomdayComponent implements OnInit {
     // }
   ];
   timeslipModel: TimeslipModel;
-  userId : string = "47135933-9179-4E48-AE65-C981E1E22344";
+  userId : string = sessionStorage.getItem('userId');
   allTimeSlips :any;
   mySecretDay: Date = new Date(this.randomDate(new Date(1, 1, 1),new Date(2000, 1, 1)));
   viewDate: Date = this.mySecretDay;
@@ -117,8 +116,11 @@ export class AddCustomdayComponent implements OnInit {
   customDayName :string;
   customDayDescription : string;
   myTimeSlips :TimeslipBackEndModel[] = [];
-
-
+  TodaystartTime: any;
+  TodayendTime : any;
+  meridian = true;
+  newEventTitle : string ;
+  selectedWBIs : string[] = [];
 
 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
@@ -131,6 +133,22 @@ export class AddCustomdayComponent implements OnInit {
 
   ngOnInit() {
    //this.mySecretDay = new Date(this.randomDate(new Date(1, 1, 1),new Date(2000, 1, 1)))  ;
+   console.log(this.mySecretDay);
+   this.showProjectList();
+   this.newEvent.push({
+     title: '',
+     start: startOfDay(this.mySecretDay),
+     end: endOfDay(this.mySecretDay),
+     color: colors.red,
+     draggable: true,
+     resizable: {
+       beforeStart: true,
+       afterEnd: true
+     },
+     actions: this.actions
+   });
+   this.refresh.next();
+   this.selectedProject = "";
   }
 
   showProjectList(){
@@ -145,32 +163,32 @@ export class AddCustomdayComponent implements OnInit {
   )
   }
 
-  getAllTimeSlips(){
-    this.events = [];
-    this.timeSlipService.getTimeSlipsByUserId(this.userId).subscribe(
-      data=> {
-        console.log(data);
-        this.allTimeSlips = data;
-        this.showInCalendar();
-      },
-    error => {
-      alert(error);
-    }
-  )
-  }
+  // getAllTimeSlips(){
+  //   this.events = [];
+  //   this.timeSlipService.getTimeSlipsByUserId(this.userId).subscribe(
+  //     data=> {
+  //       console.log(data);
+  //       this.allTimeSlips = data;
+  //       this.showInCalendar();
+  //     },
+  //   error => {
+  //     alert(error);
+  //   }
+  // )
+  // }
 
-  showInCalendar(){
-    for (let oneTimeSlip of this.allTimeSlips){
-      this.addNewEvent(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask);
-    }
-  }
+  // showInCalendar(){
+  //   for (let oneTimeSlip of this.allTimeSlips){
+  //     this.addNewEvent(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask);
+  //   }
+  // }
 
-  addNewEvent(title,start,end){
+  addNewEvent(title,start,end,WBI){
     console.log(start);
       this.events.push({
       title: title,
-      start: new Date(start),
-      end: new Date(end),
+      start: start,
+      end: end,
       color: colors.red,
       draggable: true,
       resizable: {
@@ -182,6 +200,7 @@ export class AddCustomdayComponent implements OnInit {
     this.refresh.next(); 
     console.log("i'm here");
     console.log(this.events);
+    this.selectedWBIs.push(WBI);
   }
     // handler for clicking each day.
     dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
@@ -215,24 +234,24 @@ export class AddCustomdayComponent implements OnInit {
     //this.modal.open(this.modalContent, { size: 'lg' });
   }
 
-  showNewEvent(): void  {
-    this.showProjectList();
-    this.newEvent.push({
-      title: '',
-      start: startOfDay(this.mySecretDay),
-      end: endOfDay(this.mySecretDay),
-      color: colors.red,
-      draggable: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      actions: this.actions
-    });
-    this.refresh.next();
-    this.selectedProject = "";
-    this.newEventForm = true;
-  }
+  // showNewEvent(): void  {
+  //   this.showProjectList();
+  //   this.newEvent.push({
+  //     title: '',
+  //     start: startOfDay(this.mySecretDay),
+  //     end: endOfDay(this.mySecretDay),
+  //     color: colors.red,
+  //     draggable: true,
+  //     resizable: {
+  //       beforeStart: true,
+  //       afterEnd: true
+  //     },
+  //     actions: this.actions
+  //   });
+  //   this.refresh.next();
+  //   this.selectedProject = "";
+  //   this.newEventForm = true;
+  // }
 
   changeProject(){
     console.log("hello");
@@ -251,34 +270,67 @@ export class AddCustomdayComponent implements OnInit {
   }
 
   AddToEvent(){
-    this.events.push(this.newEvent[0]);
+    //console.log(this.mySecretDay.getFullYear().toString());
+    //console.log((this.mySecretDay.getUTCMonth()+1).toString());
+    //console.log(this.mySecretDay.getDate().toString());
+    //console.log("i am in addding to event!")
+    //this.newEvent[0].title = this.newEventTitle;
+    //console.log(this.newEvent[0].start.getFullYear().toString())
+   // console.log(new Date(Date.parse(this.newEvent[0].start.getFullYear().toString() + "/" + this.newEvent[0].start.getMonth().toString() + "/" + this.newEvent[0].start.getDate().toString() + " " + this.TodaystartTime.hour + ":"+ this.TodayendTime.minute))  )
+    this.newEvent[0].start = new Date(new Date(Date.parse(this.newEvent[0].start.getFullYear().toString() + "/" + (this.newEvent[0].start.getMonth()+1).toString() + "/" + this.newEvent[0].start.getDate().toString() + " " + this.TodaystartTime.hour + ":"+ this.TodaystartTime.minute)));
+    console.log(this.newEvent[0].start);
+    this.newEvent[0].end = new Date(new Date(Date.parse(this.newEvent[0].start.getFullYear().toString() + "/" + (this.newEvent[0].start.getMonth()+1).toString() + "/" + this.newEvent[0].start.getDate().toString() + " " + this.TodayendTime.hour + ":"+ this.TodayendTime.minute))); 
+    console.log(this.newEvent[0].end);     
+    this.addNewEvent(this.newEventTitle,this.newEvent[0].start,this.newEvent[0].end,this.selectedWBI);
     this.newEvent = [];
-    this.newEventForm = false;
+    //this.newEventForm = false;
     this.refresh.next(); 
+    //console.log(this.events);
+    this.newEventTitle = "";
+    this.selectedProject = "";
+    this.selectedWBI = "";
+    this.TodaystartTime = "";
+    this.TodayendTime = "";
+
+    this.newEvent.push({
+      title: '',
+      start: startOfDay(this.mySecretDay),
+      end: endOfDay(this.mySecretDay),
+      color: colors.red,
+      draggable: true,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true
+      },
+      actions: this.actions
+    });
+
+  }
+
+  ClearAllEvents(){
+    this.events = [];
+    this.selectedWBIs = [];
   }
 
   confirmAndReturn(){ 
    // console.log(this.events.length);
-    for (let oneEvent of this.events){
-       console.log(oneEvent.start);
-        this.myTimeSlips.push({
-        StartTime : oneEvent.start.toISOString(),
-        EndTime : oneEvent.end.toISOString(),
-        Remarks : oneEvent.title,
-        WBI_Id :this.selectedWBI,
-        // this uerId need to be changed each time push/pull from github
-        UserId : "47135933-9179-4E48-AE65-C981E1E22344"
-      });
-      this.refresh.next(); 
-      //console.log(newTimeSlip);
-    }
-    console.log(this.myTimeSlips); 
-
-
+   for (let i = 0 ; i< this.events.length ; i ++){
+    console.log(this.events[i].start);
+    this.myTimeSlips.push({
+    StartTime : this.events[i].start.toISOString(),
+    EndTime : this.events[i].end.toISOString(),
+    Remarks : this.events[i].title,
+    WBI_Id :this.selectedWBIs[i],
+    // this uerId need to be changed each time push/pull from github
+    UserId : sessionStorage.getItem('userId')
+  });
+  this.refresh.next(); 
+  //console.log(newTimeSlip);     
+   }
     let newCustomDayTimeSlips :CustomDayVM = {
       Name :this.customDayName,
       Description : this.customDayDescription,
-      UserId : "47135933-9179-4E48-AE65-C981E1E22344",
+      UserId : sessionStorage.getItem('userId'),
       TimeSlip : this.myTimeSlips
     }
     console.log(newCustomDayTimeSlips);
