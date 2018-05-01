@@ -1,185 +1,139 @@
-<div class="container">
-  <!-- <div class="row" *ngIf="newEventForm">
-    <div class="col-12 main-content">
-        <table class="table table-bordered">
-            <tbody>
-              <tr>
-                <td> 
-                  <label for="project" class="col-2 col-form-label">Project</label>
-                  <div class="col-12">
-                      <ng-select [items]="projectList"
-                      bindLabel="newName"
-                      bindValue="newProjectId"
-                      [(ngModel)]="selectedProject"
-                      (click)="changeProject()">
-                      </ng-select>
-                  </div>
-                  <label for="wbi" class="col-2 col-form-label">WBI</label>
-                  <div class="col-12">
-                      <ng-select [items]="wbiList"
-                      bindLabel="newRemarks"
-                      bindValue="newChangeRequestId"
-                      [(ngModel)]="selectedWBI">
-                      </ng-select>
-                    <input  class="form-control" type="text"  id="wbi" value="{{selectedProject}}" disabled="disabled">
-                  </div>
-                </td>
-                <td>
-                  <div class="form-group">
-                    <textarea 
-                    class="form-control" 
-                    rows="5" 
-                    id="description"
-                    [(ngModel)]="newEvent[0].title"
-                    (keyup)="refresh.next()"
-                    ></textarea>
-                  </div>   
-                </td>
-                <td>
-                  <calendar-utils-date-time-picker
-                    [(ngModel)]="newEvent[0].start"
-                    (ngModelChange)="refresh.next()"
-                    placeholder="Not set">
-                  </calendar-utils-date-time-picker>
-                </td>
-                <td>
-                  <calendar-utils-date-time-picker
-                    [(ngModel)]="newEvent[0].end"
-                    (ngModelChange)="refresh.next()"
-                    placeholder="Not set">
-                  </calendar-utils-date-time-picker>
-                </td>
-                <td>
-                    <button
-                    class="btn btn-success"
-                    (click)="AddToEvent(); refresh.next()">
-                    Add
-                  </button>
-                  <br> <br> <br> <br>
-                  <button
-                    class="btn btn-danger"
-                    (click)="cancelAddEvent()">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-    </div>   
-  </div> -->
+<div class="row custom_day_header">
+  <div class="col-md-4">
+    <h3>Custom Day Name</h3>
+      <!-- <h1>{{selectedCustomday}}</h1> -->
+  </div>
+  <!-- empty div for layout -->
+  <div class="col-md-4">
+  </div>
+    <!-- <div class="col-md-12" *ngIf="!isSelect  ;else ShowAll"> -->
+  <div class="col-md-4">
+    <form>
+      <div class="form-group">
+        <label for="customdaylist">Please Select Custom Day:</label>
+        <ng-select
+        id="customdaylist"
+        [items]="customdayList"
+        bindLabel="name"
+        bindValue="customDayId"
+        [(ngModel)]="selectedCustomday"
+        (change)="print()">
+        </ng-select>
+      </div>
+    </form>
+  </div>
 </div>
-<div class="col-md-12" *ngIf="!isSelect  ;else ShowAll">
-  <p>Please Select Custom Day:</p>
-    <ng-select
-  
-  [items]="customdayList"
-  bindLabel="name"
-  bindValue="customDayId"
-  [(ngModel)]="selectedCustomday"
-  (change)="print()">
-  </ng-select>
-</div>
-
-<!-- <ng-template #ShowAll>
-  
-    <div  class="row">
-        <div class="col-md-6">
-          <div class="custom_day_view_container" id="custom_day_scroll">
-              <div [ngSwitch]="view">
-                  <mwl-calendar-day-view
-                    *ngSwitchCase="'day'"
-                    [viewDate]="viewDate"
-                    [events]="events"
-                    [refresh]="refresh"
-                    (eventClicked)="handleEvent('Clicked', $event.event)"
-                    (eventTimesChanged)="eventTimesChanged($event)"
-                    [dayStartHour]="8"
-                    [dayEndHour]="18"
-                    >
-                  </mwl-calendar-day-view>
-              </div>
+<!-- <ng-template> -->
+<!-- <ng-template #ShowAll> -->
+  <div  class="row">
+      <div class="col-md-6">
+        <div class="custom_day_view_container" id="custom_day_scroll">
+            <div [ngSwitch]="view">
+                <mwl-calendar-day-view
+                  *ngSwitchCase="'day'"
+                  [viewDate]="viewDate"
+                  [events]="events"
+                  [refresh]="refresh"
+                  (eventClicked)="handleEvent('Clicked', $event.event)"
+                  (eventTimesChanged)="eventTimesChanged($event)"
+                  [dayStartHour]="8"
+                  [dayEndHour]="18"
+                  >
+                </mwl-calendar-day-view>
+            </div>
+        </div> 
+      </div>
+      <div class="col-md-4 offset-md-1">
+        <form>
+            <div class="form-group">
+                <label for="customDayName">customDayName:</label>
+                <input *ngIf="!customDayId" 
+                type="text" class="form-control" id="customDayName" placeholder="Enter custom Day Name"
+                name="customDayName" [(ngModel)]="customDayName"
+                >
+                <p *ngIf="customDayId">{{customDayId}}</p> 
+            </div>
+            <div class="form-group">
+                <label for="customDayDescription">customday description:</label>
+                <input 
+                *ngIf="!customDayId" 
+                type="text" class="form-control" id="customDayDescription" placeholder="Enter custom Day Description"
+                name="customDayDescription" [(ngModel)]="customDayDescription"
+                >
+                <p *ngIf="customDayId">{{customDayId}}</p>
+            </div>
+          <div class="form-group">
+              <label for="remark">TimeSlip Name:</label>
+              <input type="text" class="form-control" id="customdayRemark" placeholder="Enter remarks"
+              name="remark" [(ngModel)]="newEventTitle"
+              >
+          </div>
+          <div class="form-group">
+            <label for="project">Project:</label>
+            <ng-select *ngIf="!searchWBIs" [items]="projectList"
+            bindLabel="newName"
+            bindValue="newProjectId"
+            [(ngModel)]="selectedProject"
+            (change)="changeProject()"
+            name = "projectList"
+            ng-selected="projectList"
+            >
+            </ng-select>
+            <p *ngIf="searchWBIs">{{selectedProject}}</p>
+          </div>
+          <div class="form-group">
+            <label for="wbi">WBI:</label>
+            <ng-select 
+            [items]="wbiList"
+            bindLabel="newRemarks"
+            bindValue="newChangeRequestId"
+            [(ngModel)]="selectedWBI"
+            name = "wbiList"
+            (change)="locateProject()"
+            ></ng-select>
           </div>
 
           <div class="form-group">
-              <label for="searchString">Search WBI:</label>
+            <label for="searchString">Search WBI:</label>
             <div class="input-group">
-                <input type="search" class="form-control"  [(ngModel)]="searchString" name="searchString">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" (click)="searchWBI()">
-                      Search
-                    </button>
-                </div>
-                <div class="form-group">
-                    <label for="customDayDescription">customday description:</label>
-                    <input 
-                    *ngIf="!customDayId" 
-                    type="text" class="form-control" id="customDayDescription" placeholder="Enter custom Day Description"
-                    name="customDayDescription" [(ngModel)]="customDayDescription"
-                    >
-                    <p *ngIf="customDayId">{{customDayId}}</p>
-                </div>
-              <div class="form-group">
-                  <label for="remark">TimeSlip Name:</label>
-                  <input type="text" class="form-control" id="customdayRemark" placeholder="Enter remarks"
-                  name="remark" [(ngModel)]="newEventTitle"
-                  >
+              <input type="search" class="form-control"  [(ngModel)]="searchString" name="searchString">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" (click)="searchWBI()">
+                  Search
+                </button>
               </div>
-              <div class="form-group">
-                <label for="project">Project:</label>
-                <ng-select *ngIf="!searchWBIs" [items]="projectList"
-                bindLabel="newName"
-                bindValue="newProjectId"
-                [(ngModel)]="selectedProject"
-                (change)="changeProject()"
-                name = "projectList"
-                ng-selected="projectList"
-                >
-                </ng-select>
-                <p *ngIf="searchWBIs">{{selectedProject}}</p>
-              </div>
-              <div class="form-group">
-                <label for="wbi">WBI:</label>
-                <ng-select 
-                [items]="wbiList"
-                bindLabel="newRemarks"
-                bindValue="newChangeRequestId"
-                [(ngModel)]="selectedWBI"
-                name = "wbiList"
-                (change)="locateProject()"
-                ></ng-select>
-                <br>
-                <input  [(ngModel)]="searchString" name="searchString">
-                <button (click)="searchWBI()">Search WBI</button>
-              </div>
-    
-              <div class="form-group">
-                  <label for="start_time">Start Time:</label>
-                  <ngb-timepicker name="startTime" [(ngModel)]="TodaystartTime" [meridian]="meridian"></ngb-timepicker>
-              </div>
-    
-              <div class="form-group">
-                  <label for="end_time">End Time:</label>
-                  <ngb-timepicker name="endTime" [(ngModel)]="TodayendTime" [meridian]="meridian"></ngb-timepicker>
-              </div>
-    
-              <button
-              class="btn btn-success"
-              (click)="AddToTemplate()">
-              Add Timeslip
-              </button>
-              <button type="button" class="btn btn-outline-info" (click)="ClearAllEvents()">Clear</button>
-              <br>
-              <hr>
-              <div class="form-group">
-              <button
-              class="btn btn-success"
-              (click)="confirmAndReturn(); refresh.next()">
-              Confirm
-              </button>            
-              </div>
-            </form>
-        </div>
-    </div>
-</ng-template>
+            </div>
+          </div>
 
- -->
+          <div class="form-group">
+              <label for="start_time">Start Time:</label>
+              <ngb-timepicker name="startTime" [(ngModel)]="TodaystartTime" [meridian]="meridian"></ngb-timepicker>
+          </div>
+
+          <div class="form-group">
+              <label for="end_time">End Time:</label>
+              <ngb-timepicker name="endTime" [(ngModel)]="TodayendTime" [meridian]="meridian"></ngb-timepicker>
+          </div>
+
+          <button
+          class="btn btn-success"
+          (click)="AddToTemplate()">
+          Add Timeslip
+          </button>
+          <button type="button" class="btn btn-outline-info" (click)="ClearAllEvents()">Clear</button>
+          <br>
+          <hr>
+          <div class="form-group">
+          <button
+          class="btn btn-success"
+          (click)="confirmAndReturn(); refresh.next()">
+          Confirm
+          </button>            
+          </div>
+        </form>
+      </div>
+    </div> 
+<!-- </ng-template> -->
+
+
+
