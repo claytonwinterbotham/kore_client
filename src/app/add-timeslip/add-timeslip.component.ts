@@ -206,6 +206,8 @@ export class AddTimeslipComponent{
   EditStartDate : Date;
   EditEndDate : Date;
   //mr: NgbModalRef;
+  searchString : string;
+  searchWBIs :boolean = false;
 
   //constructor 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
@@ -222,6 +224,83 @@ export class AddTimeslipComponent{
     this.getAllTimeSlips();
     this.getAllCustomDays();     
   }
+
+  AddNewTimeSlip(){
+
+    console.log("I want to add a new timeslip");
+    console.log(this.viewDate);
+    //console.log(this.startTime)
+    let startDate : Date = new Date(this.viewDate.valueOf());
+    console.log(startDate);
+    console.log(this.startTime.hour)
+    startDate.setHours(this.startTime.hour, this.startTime.minute);
+    let endDate : Date = new Date(this.viewDate.valueOf());
+    endDate.setHours(this.endTime.hour, this.endTime.minute);
+    console.log(startDate);
+    let newTimeSlip: TimeslipModel  = {
+      
+      StartDate : startDate.toLocaleString(),
+      EndDate : endDate.toLocaleString(),
+      Remarks : this.quickRemarks,
+      WBIId :this.selectedWBI,
+      // this uerId need to be changed each time push/pull from github
+      UserId : sessionStorage.getItem('userId'),
+      DayId : ""
+    }
+    this.timeslipModel = newTimeSlip; 
+    this.timeSlipService.postTimeslip(this.timeslipModel).subscribe(
+      data=> {
+        console.log(this.timeslipModel)
+        console.log(data);
+        //this.addEvent()
+        this.getAllTimeSlips();
+        this.newEvent = [];
+        this.newEventForm = false;
+      },error =>{
+
+        alert(error);
+      }
+    ) 
+  }
+
+  searchWBI(){
+    this.wbiService.searchWBI(this.searchString).subscribe(
+      data=> {
+        console.log(data);
+        this.wbiList = (data);
+        this.searchWBIs = true;
+      },
+      error =>{
+        alert(error);
+      }
+    )
+  }
+
+  locateProject(){
+    console.log("i want to locate project");
+    if (!this.searchWBIs){
+      return ;
+    }
+    this.projectService.getOneProjectByWBIId(this.selectedWBI).subscribe(
+      data=>{
+        console.log(data);
+        //this.fixedProject = true;
+        //this.ngselectProject = false;
+        this.selectedProject = data["newName"];
+        //this.selectedProject = data;
+        //let dataArray  = [];
+        //dataArray.push(data);
+        //ng-select only accept arrays, that's why i need to define an array here.
+        //this. = dataArray;
+      },
+      error =>{
+        alert(error);
+      }
+    )
+  }
+
+
+
 
   scrollTo(){
     var scrollContainer = document.getElementById("day_view_scroll")
@@ -505,16 +584,20 @@ export class AddTimeslipComponent{
   }
 
   confirmEdit(){
+    this.EditStartDate.setHours(this.EditStartTime.hour,this.EditStartTime.minute);
+    this.EditEndDate.setHours(this.EditEndTime.hour,this.EditEndTime.minute);
     let newTimeSlip: TimeslipModel = {
       TimeSlipId : this.EditTimeSlipId,
-      StartDate : this.EditStartDate.toDateString(),
-      EndDate : this.EditEndDate.toDateString(),
+      StartDate : this.EditStartDate.toLocaleString(),
+      EndDate : this.EditEndDate.toLocaleString(),
       Remarks : this.EditRemark,
       //WBIId :this.selectedWBI,
       // this uerId need to be changed each time push/pull from github
       UserId : sessionStorage.getItem('userId'),
       DayId : ""      
     }
+    console.log("i want to comfirm edit");
+    console.log(newTimeSlip);
     this.timeSlipService.updateTimeslip(newTimeSlip).subscribe(
       data=>{
         console.log(data);

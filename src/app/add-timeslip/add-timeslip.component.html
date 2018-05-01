@@ -5,7 +5,6 @@
         <table class="table table-bordered">
             <tbody>
               <tr>
-             
                 <td> 
                   <label for="project" class="col-2 col-form-label">Project</label>
                   <div class="col-12">
@@ -85,8 +84,7 @@
             <div class="form-group">
                 <label for="remark">Remark:</label>
                 <input type="text" class="form-control" id="" placeholder="Enter remarks"
-                name="remark" [(ngModel)]="EditRemark"
-                >
+                name="remark" [(ngModel)]="EditRemark">
             </div>
             <div class="form-group">
               <label for="project">Project:</label>
@@ -109,7 +107,7 @@
 
             <button
             class="btn btn-success"
-            (click)="confirmEdit(); refresh.next()">
+            (click)="confirmEdit(); refresh.next();close()">
             Finish
             </button>
             <button type="button" class="btn btn-outline-info"(click)="close()" >Clear</button>
@@ -231,7 +229,10 @@
                   [events]="events"
                   [refresh]="refresh"
                   (eventClicked)="handleEvent('Clicked', $event.event)"
-                  (eventTimesChanged)="eventTimesChanged($event)">
+                  (eventTimesChanged)="eventTimesChanged($event)"
+                  [dayStartHour]="8"
+                  [dayEndHour]="18"
+                  >
                   </mwl-calendar-day-view>
               </div>
           </div>
@@ -297,18 +298,7 @@
                       </div>
                   </div>
                 </div>
-
-                <div class="form-group">
-                    <div class="input-group ">
-                        <input class="form-control" placeholder=""
-                              name="dp" [(ngModel)]="quickAddDate" ngbDatepicker #d="ngbDatepicker">
-                        <div class="input-group-append">
-                          <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
-                          <img src="../../assets/img/calendar.svg" style="width: 2rem; height: 2rem; cursor: pointer;"/>                          </button>
-                        </div>
-                    </div>
-                </div>
-      
+     
                 <div class="form-group">
                     <label for="start_time">Start Time:</label>
                     <ngb-timepicker name="startTime" [(ngModel)]="startTime" [meridian]="meridian" class="startTime"></ngb-timepicker>        
@@ -320,7 +310,7 @@
       
                 <button
                 class="btn btn-success"
-                (click)="AddToEvent()">
+                (click)="AddNewTimeSlip()">
                 Add Timeslip
                 </button>
                 <button type="button" class="btn btn-outline-info" (click)="ClearAllEvents()">Clear</button>
