@@ -42,3 +42,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+src/app/add-customday/add-customday.component.html
+src/app/add-customday/add-customday.component.ts
+src/app/add-timeslip/add-timeslip.component.html
