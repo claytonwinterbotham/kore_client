@@ -327,24 +327,94 @@ alert("hello")
           (dayClicked)="viewDate = $event.day.date; view = 'day'">
           <!-- [excludeDays]="excludeDays" -->
         </mwl-calendar-week-view>
-        <div class="add_timeslip_day_view_container" id="day_view_scroll">
-            <mwl-calendar-day-view
-            id="add_timeslip"
-            *ngSwitchCase="'day'"
-            [viewDate]="viewDate"
-            [events]="events"
-            [refresh]="refresh"
-            (eventClicked)="handleEvent('Clicked', $event.event)"
-            (eventTimesChanged)="eventTimesChanged($event)"
-            [dayStartHour]="8"
-            [dayEndHour]="18"
-            >
-            </mwl-calendar-day-view>
-        </div>
+        <div class="row">
+          <div class="col-md-6">
+              <div class="add_timeslip_day_view_container" id="day_view_scroll">
+                  <mwl-calendar-day-view
+                  id="add_timeslip"
+                  *ngSwitchCase="'day'"
+                  [viewDate]="viewDate"
+                  [events]="events"
+                  [refresh]="refresh"
+                  (eventClicked)="handleEvent('Clicked', $event.event)"
+                  (eventTimesChanged)="eventTimesChanged($event)">
+                  </mwl-calendar-day-view>
+              </div>
+          </div>
+          <div *ngSwitchCase="'day'" class="col-md-4 offset-md-1 add_timeslip_day_form">
+            <form>
+                <!-- <div class="form-group">
+                    <label for="customDayName">customDayName:</label>
+                    <input type="text" class="form-control" id="customDayName" placeholder="Enter custom Day Name"
+                    name="customDayName" [(ngModel)]="customDayName"
+                    >
+                </div> -->
+                <!-- <div class="form-group">
+                    <label for="customDayDescription">customday description:</label>
+                    <input type="text" class="form-control" id="customDayDescription" placeholder="Enter custom Day Description"
+                    name="customDayDescription" [(ngModel)]="customDayDescription"
+                    >
+                </div> -->
+                <div class="form-group">
+                    <label for="remark">TimeSlip Name:</label>
+                    <input type="text" class="form-control" id="customdayRemark" placeholder="Enter remarks"
+                    name="remark" [(ngModel)]="newEventTitle"
+                    >
+                </div>
+                <div class="form-group">
+                  <label for="project">Project:</label>
+                  <ng-select *ngIf="!searchWBIs" [items]="projectList"
+                  bindLabel="newName"
+                  bindValue="newProjectId"
+                  [(ngModel)]="selectedProject"
+                  (change)="changeProject()"
+                  name = "projectList"
+                  ng-selected="projectList"
+                  >
+                  </ng-select>
+                  <p *ngIf="searchWBIs">{{selectedProject}}</p>
+                </div>
+
+                <div class="form-group">
+                  <label for="searchString">Search WBI:</label>
+                  <div class="input-group">
+                      <input type="search" class="form-control"  [(ngModel)]="searchString" name="searchString">
+                      <div class="input-group-append">
+                          <button class="btn btn-outline-secondary" type="button" (click)="searchWBI()">
+                            Search
+                          </button>
+                      </div>
+                  </div>
+                </div>
+      
+                <div class="form-group">
+                    <label for="start_time">Start Time:</label>
+                    <ngb-timepicker name="startTime" [(ngModel)]="TodaystartTime" [meridian]="meridian"></ngb-timepicker>
+                </div>
+      
+                <div class="form-group">
+                    <label for="end_time">End Time:</label>
+                    <ngb-timepicker name="endTime" [(ngModel)]="TodayendTime" [meridian]="meridian"></ngb-timepicker>
+                </div>
+      
+                <button
+                class="btn btn-success"
+                (click)="AddToEvent()">
+                Add Timeslip
+                </button>
+                <button type="button" class="btn btn-outline-info" (click)="ClearAllEvents()">Clear</button>
+                <br>
+                <hr>
+                <div class="form-group">
+                  <button
+                  class="btn btn-success"
+                  (click)="confirmAndReturn(); refresh.next()">
+                  Create
+                  </button>            
+                </div>
+            </form>
+          </div>
       </div>
     </div>   
-  </div>
-  <div class="row">
-
   </div>
 </div>
