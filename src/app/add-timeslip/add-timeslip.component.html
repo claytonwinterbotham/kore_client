@@ -6,10 +6,10 @@ alert("hello")
 
 <div class="container">
   <div class="row">
-    <nav class="navigation navbar navbar-light bg-light">
-        <form class="form-inline my-2 my-lg-0 float-right">
+    <!-- <nav class="navigation navbar navbar-light bg-light"> -->
+        <!-- <form class="form-inline my-2 my-lg-0 float-right"> -->
           <!-- remarks -->
-          <div class="form-group timeslip_text_input">
+          <!-- <div class="form-group timeslip_text_input">
               <input
               name = "quickRemarks"
               placeholder="Please enter your remarks"
@@ -18,24 +18,24 @@ alert("hello")
               rows="10" 
               [(ngModel)]="quickRemarks"
               >
-          </div> 
+          </div>  -->
           <!-- projects icon -->
-          <i
+          <!-- <i
           class="add_timeslip_folder fa fa-folder my-2 my-sm-0"
           
           aria-hidden="true"
           style="font-size:2em;color:#1282c5;"
           (click)="showProjectDropdown()">
           </i>
-          <!-- wbis icon -->
-          <i
-          class="add_timeslip_stickynote fa fa-sticky-note my-2 my-sm-0"
+          <! wbis icon -->
+          <!-- <i -->
+          <!-- class="add_timeslip_stickynote fa fa-sticky-note my-2 my-sm-0"
           aria-hidden="true"
           style="font-size:2em;color:#1282c5;"
           (click)="showWBIDropdown()">
-          </i>
+          </i> -->
           <!-- date picker -->
-          <div class="form-group add_timeslip_datepicker">
+          <!-- <div class="form-group add_timeslip_datepicker">
             <div class="input-group ">
                 <input class="form-control calender_input_box" placeholder=""
                       name="dp" [(ngModel)]="quickAddDate" ngbDatepicker #d="ngbDatepicker">
@@ -45,25 +45,25 @@ alert("hello")
                   </button>
                 </div>
             </div>
-          </div>
+          </div> -->
           <!-- time picker -->
-          <br>
+          <!-- <br>
           <div class="form-group add_timeslip_starttime">
                   <button class="btn btn-success" (click)="showStartTime()">
                   Start Time
                   </button>                     
                   <ngb-timepicker *ngIf="startTimeDropdown" name="startTime" [(ngModel)]="startTime" [meridian]="meridian" class="startTime"></ngb-timepicker>        
-          </div>
+          </div> -->
 
-          <div class="form-group add_timeslip_endtime">
-              <button class="btn btn-success" (click)="showEndTime()">
+          <!-- <div class="form-group add_timeslip_endtime"> -->
+              <!-- <button class="btn btn-success" (click)="showEndTime()">
               End Time
               </button>                     
-              <ngb-timepicker *ngIf="endTimeDropdown" name="endTime" [(ngModel)]="endTime" [meridian]="meridian" class="endTime"></ngb-timepicker>        
+              <ngb-timepicker *ngIf="endTimeDropdown" name="endTime" [(ngModel)]="endTime" [meridian]="meridian" class="endTime"></ngb-timepicker>         -->
            </div>          
           
           <!-- confirm button -->
-          <i
+          <!-- <i
           class="add_timeslip_btn fa fa-check-square my-2 my-sm-0"
           aria-hidden="true"
           style="font-size:2em;color:#1282c5;"
@@ -71,10 +71,10 @@ alert("hello")
         </i>
     
         </form>
-        <button  (click)="logOut()">Logout</button>
-    </nav>
-  </div>  
-<div *ngIf="projectDropdown" >
+        <button  (click)="logOut()">Logout</button> -->
+    <!-- </nav> -->
+  <!-- </div>   -->
+<!-- <div *ngIf="projectDropdown" >
   <div >
       <label for="project" class="col-4 col-form-label">Project</label>
       <div class="col-6">
@@ -84,7 +84,7 @@ alert("hello")
           [(ngModel)]="selectedProject"
           (change)="changeProject()">
           <!-- the code up may need to be changed in the future -->
-          </ng-select>
+          <!-- </ng-select>
           <br>
       </div>
   </div>
@@ -101,7 +101,7 @@ alert("hello")
     </ng-select>
  
 </div>
-</div>
+</div> -->
 
 
 
@@ -276,7 +276,7 @@ alert("hello")
             </div>
             <div
               class="btn btn-primary"
-              (click)="view = 'day'"
+              (click)="view = 'day'; scrollTo();"
               [class.active]="view === 'day'">
               Day
             </div>
@@ -352,12 +352,18 @@ alert("hello")
                     name="customDayDescription" [(ngModel)]="customDayDescription"
                     >
                 </div> -->
+          
                 <div class="form-group">
-                    <label for="remark">TimeSlip Name:</label>
-                    <input type="text" class="form-control" id="customdayRemark" placeholder="Enter remarks"
-                    name="remark" [(ngModel)]="newEventTitle"
+                    <label for="remark">Remarks:</label>
+                    <input 
+                    type="text" 
+                    class="form-control" 
+                    placeholder="Please enter your remarks"
+                    name = "quickRemarks"
+                    [(ngModel)]="quickRemarks"
                     >
                 </div>
+
                 <div class="form-group">
                   <label for="project">Project:</label>
                   <ng-select *ngIf="!searchWBIs" [items]="projectList"
@@ -371,6 +377,17 @@ alert("hello")
                   </ng-select>
                   <p *ngIf="searchWBIs">{{selectedProject}}</p>
                 </div>
+                <div class="form-group">
+                    <label for="wbi">WBI:</label>
+                    <ng-select 
+                    [items]="wbiList"
+                    bindLabel="newRemarks"
+                    bindValue="newChangeRequestId"
+                    [(ngModel)]="selectedWBI"
+                    name = "wbiList"
+                    (change)="locateProject()"
+                    ></ng-select>
+                </div>
 
                 <div class="form-group">
                   <label for="searchString">Search WBI:</label>
@@ -383,16 +400,26 @@ alert("hello")
                       </div>
                   </div>
                 </div>
+
+                <div class="form-group">
+                    <div class="input-group ">
+                        <input class="form-control" placeholder=""
+                              name="dp" [(ngModel)]="quickAddDate" ngbDatepicker #d="ngbDatepicker">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                          <img src="../../assets/img/calendar.svg" style="width: 2rem; height: 2rem; cursor: pointer;"/>                          </button>
+                        </div>
+                    </div>
+                </div>
       
                 <div class="form-group">
                     <label for="start_time">Start Time:</label>
-                    <ngb-timepicker name="startTime" [(ngModel)]="TodaystartTime" [meridian]="meridian"></ngb-timepicker>
+                    <ngb-timepicker name="startTime" [(ngModel)]="startTime" [meridian]="meridian" class="startTime"></ngb-timepicker>        
                 </div>
       
                 <div class="form-group">
                     <label for="end_time">End Time:</label>
-                    <ngb-timepicker name="endTime" [(ngModel)]="TodayendTime" [meridian]="meridian"></ngb-timepicker>
-                </div>
+                    <ngb-timepicker name="endTime" [(ngModel)]="endTime" [meridian]="meridian" class="endTime"></ngb-timepicker>                        </div>
       
                 <button
                 class="btn btn-success"
@@ -402,13 +429,13 @@ alert("hello")
                 <button type="button" class="btn btn-outline-info" (click)="ClearAllEvents()">Clear</button>
                 <br>
                 <hr>
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <button
                   class="btn btn-success"
                   (click)="confirmAndReturn(); refresh.next()">
                   Create
                   </button>            
-                </div>
+                </div> -->
             </form>
           </div>
       </div>

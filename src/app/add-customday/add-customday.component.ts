@@ -158,13 +158,6 @@ export class AddCustomdayComponent implements OnInit {
    });
    this.refresh.next();
    this.selectedProject = "";
-   this.scrollTo()
-  }
-
-  scrollTo(){
-    var scrollContainer = document.getElementsByClassName("custom_day_view_container")[0].scrollTop
-    scrollContainer += 250
-    console.log(scrollContainer)
   }
 
   showProjectList(){

@@ -9,7 +9,7 @@
 }
 
 .main-content{
-    margin-top: 6em;
+    margin-top: 1em;
 }
 
 .add_timeslip_btn{
@@ -68,19 +68,4 @@
 
 .fa-check{
     color: #1282c5
-}
-
-.startTime{
-    position: absolute;
-    top: 30px;
-    right: 10px;
-    
-}
-
-.endTime{
-    position: fixed;
-    top: 30px;
-    right: 10px;
-    z-index: 2147483647;
-    
 }

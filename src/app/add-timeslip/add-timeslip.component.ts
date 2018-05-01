@@ -223,7 +223,11 @@ export class AddTimeslipComponent{
     this.getAllCustomDays();     
   }
 
-
+  scrollTo(){
+    var scrollContainer = document.getElementById("day_view_scroll")
+    setTimeout(function(){ scrollContainer.scrollTop = 465 }, 500);
+    console.log("scroll " + scrollContainer.scrollTop)
+  }
   // all the functions below
   showProjectList(){
     this.projectService.getProjects().subscribe(
