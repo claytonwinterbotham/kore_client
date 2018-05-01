@@ -5,10 +5,10 @@ alert("hello")
 </script>
 
 <div class="container">
-  <div class="row">
+  <!-- <div class="row">
     <nav class="navigation navbar navbar-light bg-light">
         <form class="form-inline my-2 my-lg-0 float-right">
-          <!-- remarks -->
+          
           <div class="form-group timeslip_text_input">
               <input
               name = "quickRemarks"
@@ -19,7 +19,7 @@ alert("hello")
               [(ngModel)]="quickRemarks"
               >
           </div> 
-          <!-- projects icon -->
+         
           <i
           class="add_timeslip_folder fa fa-folder my-2 my-sm-0"
           
@@ -27,14 +27,14 @@ alert("hello")
           style="font-size:2em;color:#1282c5;"
           (click)="showProjectDropdown()">
           </i>
-          <!-- wbis icon -->
+         
           <i
           class="add_timeslip_stickynote fa fa-sticky-note my-2 my-sm-0"
           aria-hidden="true"
           style="font-size:2em;color:#1282c5;"
           (click)="showWBIDropdown()">
           </i>
-          <!-- date picker -->
+         
           <div class="form-group add_timeslip_datepicker">
             <div class="input-group ">
                 <input class="form-control calender_input_box" placeholder=""
@@ -46,7 +46,7 @@ alert("hello")
                 </div>
             </div>
           </div>
-          <!-- time picker -->
+          
           <br>
           <div class="form-group add_timeslip_starttime">
                   <button class="btn btn-success" (click)="showStartTime()">
@@ -62,7 +62,7 @@ alert("hello")
               <ngb-timepicker *ngIf="endTimeDropdown" name="endTime" [(ngModel)]="endTime" [meridian]="meridian" class="endTime"></ngb-timepicker>        
            </div>          
           
-          <!-- confirm button -->
+          
           <i
           class="add_timeslip_btn fa fa-check-square my-2 my-sm-0"
           aria-hidden="true"
@@ -83,7 +83,7 @@ alert("hello")
           bindValue="newProjectId"
           [(ngModel)]="selectedProject"
           (change)="changeProject()">
-          <!-- the code up may need to be changed in the future -->
+        
           </ng-select>
           <br>
       </div>
@@ -111,7 +111,7 @@ alert("hello")
         <table class="table table-bordered">
             <tbody>
               <tr>
-              <!-- <tr *ngFor="let event of events; let index = index"> -->
+             
                 <td> 
                   <label for="project" class="col-2 col-form-label">Project</label>
                   <div class="col-12">
@@ -174,7 +174,7 @@ alert("hello")
             </tbody>
           </table>
     </div>   
-  </div>
+  </div> -->
 
   <!-- Start Model -->
   <div class="row">
@@ -291,8 +291,7 @@ alert("hello")
                     <ng-select [items]="customdayList"
                     bindLabel="name"
                     bindValue="customDayId"
-                    [(ngModel)]="selectedCustomday"
-                    >
+                    [(ngModel)]="selectedCustomday">
                     </ng-select>                           
             </p>
             <button *ngIf="selectedCustomday"
@@ -312,7 +311,10 @@ alert("hello")
           [activeDayIsOpen]="activeDayIsOpen"
           (dayClicked)="dayClicked($event.day)"
           (eventClicked)="handleEvent('Clicked', $event.event)"
-          (eventTimesChanged)="eventTimesChanged($event)">
+          (eventTimesChanged)="eventTimesChanged($event)"
+          (dayClicked)="viewDate = $event.day.date; view = 'day'"
+          >
+          
            <!-- [excludeDays]="excludeDays" -->
         </mwl-calendar-month-view>
         <mwl-calendar-week-view
@@ -321,7 +323,8 @@ alert("hello")
           [events]="events"
           [refresh]="refresh"
           (eventClicked)="handleEvent('Clicked', $event.event)"
-          (eventTimesChanged)="eventTimesChanged($event)">
+          (eventTimesChanged)="eventTimesChanged($event)"
+          (dayClicked)="viewDate = $event.day.date; view = 'day'">
           <!-- [excludeDays]="excludeDays" -->
         </mwl-calendar-week-view>
         <div class="add_timeslip_day_view_container" id="day_view_scroll">
@@ -332,7 +335,10 @@ alert("hello")
             [events]="events"
             [refresh]="refresh"
             (eventClicked)="handleEvent('Clicked', $event.event)"
-            (eventTimesChanged)="eventTimesChanged($event)">
+            (eventTimesChanged)="eventTimesChanged($event)"
+            [dayStartHour]="8"
+            [dayEndHour]="18"
+            >
             </mwl-calendar-day-view>
         </div>
       </div>

@@ -25,6 +25,7 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { ClickOutsideModule } from 'ng-click-outside';
 import {ScrollToModule} from 'ng2-scroll-to';
+import { CreatecustomdayComponent } from './createcustomday/createcustomday.component';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import {ScrollToModule} from 'ng2-scroll-to';
     RegisterComponent,
     LoginComponent,
     HomeComponent,
+    CreatecustomdayComponent,
   ],
   imports: [
     BrowserModule,

@@ -274,7 +274,7 @@ export class AddTimeslipComponent{
   }
 
   getAllCustomDays(){
-    this.customdayService.getCustomdays("47135933-9179-4E48-AE65-C981E1E22344").subscribe(
+    this.customdayService.getCustomdays(sessionStorage.getItem('userId')).subscribe(
       data=> {
       console.log(data);
       this.customdayList = data;

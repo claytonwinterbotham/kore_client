@@ -27,6 +27,7 @@ import { MyWBIService } from "../services/app.wbiservice";
 import { MyTimeslipService } from "../services/app.timeslipservice";
 import { TimeslipModel } from "../services/app.timeslipservice";
 import {MyCustomDayService} from "../services/app.customdayservice";
+import {TimeslipTemplateService,TimeSlipTemplate} from "../services/timeslip-template.service"
 import { Subject } from 'rxjs/Subject';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -38,6 +39,7 @@ import {
 import { Router, NavigationExtras } from '@angular/router';
 import { Inject} from "@angular/core";
 import { DOCUMENT } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 
 //const
 const colors: any = {
@@ -71,6 +73,7 @@ export class AddCustomdayComponent implements OnInit {
   wbiService : MyWBIService;
   timeSlipService : MyTimeslipService;
   mycustomdayService : MyCustomDayService;
+  timeSlipTemplateService : TimeslipTemplateService;
   projectList : any;
   wbiList : any;
   selectedProject : string;
@@ -131,13 +134,26 @@ export class AddCustomdayComponent implements OnInit {
   fixedProject :boolean = false;
   fixedProjectName : string;
   searchWBIs :boolean = false;
+  customDayId : any;
+  customdayList : any;
+  selectedCustomday : string;
+  isSelect : boolean = false;
+  timeSlipTemplates : any;
+  selectCustomDayItem : any;
 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
-    public router:Router,_customdayService:MyCustomDayService, @Inject(DOCUMENT) private document: Document) { 
+    public router:Router,_customdayService:MyCustomDayService, @Inject(DOCUMENT) private document: Document,private route: ActivatedRoute,
+   _timeSlipTemplateService : TimeslipTemplateService) { 
     this.projectService = _projectService;
     this.wbiService = _wbiService;
     this.timeSlipService = _timeslipService;
     this.mycustomdayService = _customdayService;
+    this.timeSlipTemplateService = _timeSlipTemplateService;
+    this.route.params.subscribe(res =>{
+      console.log(res.id);
+      this.customDayId = res.id;
+      //this.isSelect = true;
+    } )
   }
 
   ngOnInit() {
@@ -158,7 +174,109 @@ export class AddCustomdayComponent implements OnInit {
    });
    this.refresh.next();
    this.selectedProject = "";
-   this.scrollTo()
+   this.selectedCustomday = "";
+   //this.scrollTo();
+   this.getAllCustomDays();
+   console.log(this.customDayId);
+  //  if (this.customDayId != null){
+  //    this.isSelect = true;
+  //    this.getAllTemplates();
+  //  }
+
+  }
+
+  AddToTemplate(){
+    let oneTemplate : TimeSlipTemplate = {
+      WBI_Id : this.selectedWBI,
+      CustomDayId : this.selectedCustomday,
+      StartTime : this.TodaystartTime.hour + ":"+ this.TodaystartTime.minute,
+      EndTime :  this.TodayendTime.hour + ":"+ this.TodayendTime.minute,
+      Remarks : this.newEventTitle  
+    }
+    console.log("I want to post a timeslip template");
+    this.timeSlipTemplateService.postTemplate(oneTemplate).subscribe(
+      data=>{
+        console.log(data);
+        this.getAllTemplates();
+      },
+      error =>{
+        alert(error);
+      }
+    )
+  }
+
+  getAllTemplates(){
+   // this.timeSlipTemplates 
+   console.log("i want to get all the timeslip template for this customday");
+   this.timeSlipTemplateService.getAllTimeSlips(this.selectedCustomday).subscribe(
+     data => {
+       console.log(data);
+       this.timeSlipTemplates = data;
+       this.ShowAllTemplates();
+     },
+     error =>{
+       alert(error);
+     }
+   )
+  }
+
+  ShowAllTemplates(){
+    console.log("I want to show all ts");
+    this.events = [];
+     for (let oneTimeSlip of this.timeSlipTemplates){
+      let startTime : string = oneTimeSlip.startTime;
+      let endTime : string = oneTimeSlip.endTime;
+      console.log("I want to get the sliced string");
+      let startHour =  parseInt(startTime.slice(11,13));
+      let startMinute= parseInt(startTime.slice(14,16));
+      let endHour = parseInt(endTime.slice(11,13));
+      let endMinute = parseInt(endTime.slice(14,16));
+      console.log(startHour);
+      console.log(startMinute);
+      //this.mySecretDay.setHours()
+      let startDate : Date = new Date(this.mySecretDay.valueOf()) ;
+      let endDate : Date =  new Date (this.mySecretDay.valueOf());
+      startDate.setHours(startHour,startMinute);
+      //startDate.setMinutes(startMinute);
+      endDate.setHours(endHour,endMinute);
+      //endDate.setMinutes(endMinute);
+      console.log(startDate);
+      console.log(endDate);
+      this.addNewEvent(oneTimeSlip.remarks,startDate,endDate);
+    }   
+  }
+
+  getAllCustomDays(){
+    this.mycustomdayService.getCustomdays(sessionStorage.getItem('userId')).subscribe(
+      data=> {
+      console.log(data);
+      this.customdayList = data;
+      },
+      error => {
+        alert(error);
+      }
+    )
+  }
+
+  getThisCustomDay(){
+      for(let oneCustomDay of this.customdayList){
+          if (oneCustomDay.customDayId == this.selectedCustomday){
+            //this.selectCustomDayItem = oneCustomDay;
+           // console.log(this.selectCustomDayItem);
+           this.customDayName = oneCustomDay.name;
+           this.customDayDescription = oneCustomDay.description;
+          }
+      }
+  }
+
+
+  print(){
+    console.log(this.selectedCustomday);
+    this.isSelect = true;
+    this.getAllTemplates();
+    this.getThisCustomDay();
+    //this.customDayName = ;
+    //this.customDayDescription =
   }
 
   scrollTo(){
@@ -234,7 +352,7 @@ export class AddCustomdayComponent implements OnInit {
   //   }
   // }
 
-  addNewEvent(title,start,end,WBI){
+  addNewEvent(title,start,end){
     console.log(start);
       this.events.push({
       title: title,
@@ -251,7 +369,7 @@ export class AddCustomdayComponent implements OnInit {
     this.refresh.next(); 
     console.log("i'm here");
     console.log(this.events);
-    this.selectedWBIs.push(WBI);
+    //this.selectedWBIs.push(WBI);
   }
     // handler for clicking each day.
     dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
@@ -336,7 +454,7 @@ export class AddCustomdayComponent implements OnInit {
     console.log(this.newEvent[0].start);
     this.newEvent[0].end = new Date(new Date(Date.parse(this.newEvent[0].start.getFullYear().toString() + "/" + (this.newEvent[0].start.getMonth()+1).toString() + "/" + this.newEvent[0].start.getDate().toString() + " " + this.TodayendTime.hour + ":"+ this.TodayendTime.minute))); 
     console.log(this.newEvent[0].end);     
-    this.addNewEvent(this.newEventTitle,this.newEvent[0].start,this.newEvent[0].end,this.selectedWBI);
+    //this.addNewEvent(this.newEventTitle,this.newEvent[0].start,this.newEvent[0].end,this.selectedWBI);
     this.newEvent = [];
     //this.newEventForm = false;
     this.refresh.next(); 
@@ -430,7 +548,7 @@ export class CustomDayVM{
   Name : string;
   Description : string;
   UserId : string;
-  TimeSlip :TimeslipBackEndModel[];
+  TimeSlip? :TimeslipBackEndModel[];
 }
 
 export class TimeslipBackEndModel {
