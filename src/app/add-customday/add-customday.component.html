@@ -17,7 +17,8 @@
         bindLabel="name"
         bindValue="customDayId"
         [(ngModel)]="selectedCustomday"
-        (change)="print()">
+        (change)="getThisCustomDay()"
+        name="customDayList">
         </ng-select>
       </div>
     </form>
@@ -117,7 +118,7 @@
 
           <button
           class="btn btn-success"
-          (click)="AddToTemplate()">
+          (click)="addToTemplate()">
           Add Timeslip
           </button>
           <button type="button" class="btn btn-outline-info" (click)="ClearAllEvents()">Clear</button>

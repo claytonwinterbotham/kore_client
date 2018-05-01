@@ -174,6 +174,7 @@ export class AddCustomdayComponent implements OnInit {
    });
    this.refresh.next();
    this.selectedProject = "";
+   this.getAllCustomDays();
   }
 
   showProjectList(){
@@ -224,25 +225,79 @@ export class AddCustomdayComponent implements OnInit {
     )
   }
 
-  // getAllTimeSlips(){
-  //   this.events = [];
-  //   this.timeSlipService.getTimeSlipsByUserId(this.userId).subscribe(
-  //     data=> {
-  //       console.log(data);
-  //       this.allTimeSlips = data;
-  //       this.showInCalendar();
-  //     },
-  //   error => {
-  //     alert(error);
-  //   }
-  // )
-  // }
+  getThisCustomDay(){
+    for(let oneCustomDay of this.customdayList){
+        if (oneCustomDay.customDayId == this.selectedCustomday){
+          //this.selectCustomDayItem = oneCustomDay;
+         // console.log(this.selectCustomDayItem);
+        this.customDayName = oneCustomDay.name;
+        this.customDayDescription = oneCustomDay.description;
+        this.getAllTemplates();          
+        }
+    }
+  }
 
-  // showInCalendar(){
-  //   for (let oneTimeSlip of this.allTimeSlips){
-  //     this.addNewEvent(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask);
-  //   }
-  // }
+    getAllTemplates(){
+       // this.timeSlipTemplates 
+       console.log("i want to get all the timeslip template for this customday");
+       this.timeSlipTemplateService.getAllTimeSlips(this.selectedCustomday).subscribe(
+         data => {
+           console.log(data);
+           this.timeSlipTemplates = data;
+           this.ShowAllTemplates();
+         },
+         error =>{
+           alert(error);
+         }
+       )
+    }
+
+      ShowAllTemplates(){
+          console.log("I want to show all ts");
+          this.events = [];
+           for (let oneTimeSlip of this.timeSlipTemplates){
+            let startTime : string = oneTimeSlip.startTime;
+            let endTime : string = oneTimeSlip.endTime;
+           console.log("I want to get the sliced string");
+            let startHour =  parseInt(startTime.slice(11,13));
+            let startMinute= parseInt(startTime.slice(14,16));
+            let endHour = parseInt(endTime.slice(11,13));
+            let endMinute = parseInt(endTime.slice(14,16));
+            console.log(startHour);
+            console.log(startMinute);
+            //this.mySecretDay.setHours()
+            let startDate : Date = new Date(this.mySecretDay.valueOf()) ;
+            let endDate : Date =  new Date (this.mySecretDay.valueOf());
+            startDate.setHours(startHour,startMinute);
+            //startDate.setMinutes(startMinute);
+            endDate.setHours(endHour,endMinute);
+            //endDate.setMinutes(endMinute);
+            console.log(startDate);
+            console.log(endDate);
+            this.addNewEvent(oneTimeSlip.remarks,startDate,endDate);
+          }   
+        }
+
+  addToTemplate(){
+        let oneTemplate : TimeSlipTemplate = {
+            WBI_Id : this.selectedWBI,
+            CustomDayId : this.selectedCustomday,
+            StartTime : this.TodaystartTime.hour + ":"+ this.TodaystartTime.minute,
+            EndTime :  this.TodayendTime.hour + ":"+ this.TodayendTime.minute,
+            Remarks : this.newEventTitle  
+          }
+          console.log("I want to post a timeslip template");
+          this.timeSlipTemplateService.postTemplate(oneTemplate).subscribe(
+            data=>{
+              console.log(data);
+              this.getAllTemplates();
+            },
+            error =>{
+              alert(error);
+            }
+          )    
+  }
+
 
   addNewEvent(title,start,end){
     console.log(start);
@@ -295,25 +350,6 @@ export class AddCustomdayComponent implements OnInit {
     //this.modal.open(this.modalContent, { size: 'lg' });
   }
 
-  // showNewEvent(): void  {
-  //   this.showProjectList();
-  //   this.newEvent.push({
-  //     title: '',
-  //     start: startOfDay(this.mySecretDay),
-  //     end: endOfDay(this.mySecretDay),
-  //     color: colors.red,
-  //     draggable: true,
-  //     resizable: {
-  //       beforeStart: true,
-  //       afterEnd: true
-  //     },
-  //     actions: this.actions
-  //   });
-  //   this.refresh.next();
-  //   this.selectedProject = "";
-  //   this.newEventForm = true;
-  // }
-
   changeProject(){
     this.showSelect = true;
     this.showInput = false;
@@ -331,6 +367,18 @@ export class AddCustomdayComponent implements OnInit {
         alert(error);
       })
     }
+  }
+
+  getAllCustomDays(){
+    this.mycustomdayService.getCustomdays(sessionStorage.getItem('userId')).subscribe(
+      data=> {
+      console.log(data);
+      this.customdayList = data;
+      },
+      error => {
+        alert(error);
+      }
+    )
   }
 
   AddToEvent(){
@@ -414,8 +462,6 @@ export class AddCustomdayComponent implements OnInit {
         alert(error);
       }
     )
-
-
   }
 
   cancelAddEvent(){
