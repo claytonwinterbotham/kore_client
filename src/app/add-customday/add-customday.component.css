@@ -4,8 +4,34 @@
 }
 
 .custom_day_header{
-    background-color: blue;
+    background-color: #DDDDDD;
+    padding-top: .5em;
+    margin-bottom: 2em;
 }
 
+.custom_day_scroll{
+    height: 600px;
+    overflow-x: scroll;
+}
+
+.custom_day_form{
+    height: 600px;
+}
+
+.custom_day_main_content{
+}
+
+.wbi_search_group{
+    background-color: #F7FFE6
+}
+
+#start_time, #end_time{
+    width: 50%;  
+    float: left;
+}
+
+#end_time{
+    padding-left: 15px;
+}
 
 

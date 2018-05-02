@@ -118,8 +118,8 @@ export class AddCustomdayComponent implements OnInit {
   customDayName :string;
   customDayDescription : string;
   myTimeSlips :TimeslipBackEndModel[] = [];
-  TodaystartTime: any;
-  TodayendTime : any;
+  TodaystartTime : any = {hour: 9, minute: 30};
+  TodayendTime :any = {hour: 13, minute: 30};
   meridian = true;
   newEventTitle : string ;
   selectedWBIs : string[] = [];
@@ -182,6 +182,12 @@ export class AddCustomdayComponent implements OnInit {
    this.refresh.next();
    this.selectedProject = "";
    this.getAllCustomDays();
+   this.scrollTo();
+  }
+
+  scrollTo(){
+    var scrollContainer = document.getElementById("day_view_scroll")
+    setTimeout(function(){ scrollContainer.scrollTop = 465 }, 500);
   }
 
   showProjectList(){
