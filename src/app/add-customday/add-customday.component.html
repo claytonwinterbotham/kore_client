@@ -1,7 +1,7 @@
 <div class="row custom_day_header">
   <div class="col-md-4">
     <h3>Custom Day Name</h3>
-      <!-- <h1>{{selectedCustomday}}</h1> -->
+      <h1>{{customDayName}}</h1>
   </div>
   <!-- empty div for layout -->
   <div class="col-md-4">
@@ -9,7 +9,7 @@
     <!-- <div class="col-md-12" *ngIf="!isSelect  ;else ShowAll"> -->
   <div class="col-md-4">
     <form>
-      <div class="form-group">
+      <div class="form-group" *ngIf="!customDayId">
         <label for="customdaylist">Please Select Custom Day:</label>
         <ng-select
         id="customdaylist"
@@ -63,6 +63,7 @@
                 >
                 <p *ngIf="customDayId">{{customDayDescription}}</p>
             </div>
+            <h1>Create New TimeSlip</h1>
           <div class="form-group">
               <label for="remark">TimeSlip Name:</label>
               <input type="text" class="form-control" id="customdayRemark" placeholder="Enter remarks"
