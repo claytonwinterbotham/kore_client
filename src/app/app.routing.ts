@@ -16,7 +16,7 @@ const appRoutes: Routes = [
     {path: 'viewalltimeslips', component: ViewTimeslipComponent},
     {path: 'Createcustomday', component:CreatecustomdayComponent},
     {path: "addcustomday",component:AddCustomdayComponent},
-    {path: "addcustomday/:id",component:AddCustomdayComponent},
+    {path: "addcustomday/:id/:name/:description",component:AddCustomdayComponent},
     {path: 'viewallprojects', component: ViewProjectsComponent},
     {path: 'viewallwbis', component: ViewWmbsComponent},
     {path: 'home', component: HomeComponent},

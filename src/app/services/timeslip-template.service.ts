@@ -19,6 +19,21 @@ export class TimeslipTemplateService {
       //this.site = "http://localhost:64779/wbi/"
    }
 
+   applyTimeTemplate(_customdayTimeslipVM : any): Observable<Comment[]>{
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({headers: headers});
+    // headers.append( 'Authorization', 'Bearer ' 
+    // + sessionStorage.getItem('token'));    
+    let dataUrl = this.site + "CreateAllTimeslipsUsingCustomDay";    
+    let TimeslipByCustomday = {
+        "CustomdayId":  _customdayTimeslipVM.CustomdayId,
+        "Date": _customdayTimeslipVM.Date
+    }
+    return this.http.post(dataUrl, TimeslipByCustomday,options)
+    .map(this.extractData) 
+    .catch(this.handleError);        
+}
+
   postTemplate(tt: TimeSlipTemplate): Observable<Comment[]>{
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({headers: headers});
@@ -42,6 +57,21 @@ export class TimeslipTemplateService {
     .map(this.extractData) 
     .catch(this.handleError);         
   }
+
+      //delete a Timeslip Template
+      deleteTimeslipTemplate(id: String): Observable<Comment[]> {
+        let headers = new Headers({ 'Content-Type': 'application/json' }); 
+        let options = new RequestOptions({headers: headers});
+        id = id.toUpperCase();
+        console.log("Timeslip id:" + id);
+        // let timeslipVM = {
+        //     "TimeSlipId" : id
+        // };
+        let dataUrl = this.site + "Delete/" + id;
+        return this.http.delete(dataUrl,options)
+            .map(this.extractData)
+            .catch(this.handleError);            
+      }
 
   private extractData(res: Response) {
     let body = res.json();

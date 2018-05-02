@@ -27,6 +27,7 @@ import { MyProjectService } from "../services/app.projectservice";
 import { MyWBIService } from "../services/app.wbiservice";
 import { MyTimeslipService } from "../services/app.timeslipservice";
 import { MyCustomDayService } from "../services/app.customdayservice";
+import {TimeslipTemplateService,TimeSlipTemplate} from "../services/timeslip-template.service"
 import { TimeslipModel } from "../services/app.timeslipservice";
 import { Subject } from 'rxjs/Subject';
 import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -172,6 +173,7 @@ export class AddTimeslipComponent{
   wbiService : MyWBIService;
   timeSlipService : MyTimeslipService;
   customdayService : MyCustomDayService;
+  timeSlipTemplateService : TimeslipTemplateService;
   projectList : any;
   wbiList : any;
   customdayList :any;
@@ -211,11 +213,13 @@ export class AddTimeslipComponent{
 
   //constructor 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
-  _customdayService : MyCustomDayService,public router:Router, @Inject(DOCUMENT) private document: Document) {
+  _customdayService : MyCustomDayService,public router:Router, @Inject(DOCUMENT) private document: Document,
+  _timeSlipTemplateService : TimeslipTemplateService) {
     this.projectService = _projectService;
     this.wbiService = _wbiService;
     this.timeSlipService = _timeslipService;
     this.customdayService = _customdayService;
+    this.timeSlipTemplateService = _timeSlipTemplateService;
   }
 
   // init fucntion
@@ -256,6 +260,10 @@ export class AddTimeslipComponent{
         this.getAllTimeSlips();
         this.newEvent = [];
         this.newEventForm = false;
+        this.quickRemarks = "";
+        this.selectedProject = "";
+        this.selectedWBI = "";
+
       },error =>{
 
         alert(error);
@@ -573,7 +581,7 @@ export class AddTimeslipComponent{
       CustomdayId :this.selectedCustomday,
       Date :this.clickedDate.toISOString()
     }
-    this.timeSlipService.createTimeslipByCustomday(CustomdayTimeslip).subscribe(
+    this.timeSlipTemplateService.applyTimeTemplate(CustomdayTimeslip).subscribe(
       data=> {
         console.log(data);
         this.getAllTimeSlips();

@@ -45,6 +45,17 @@ export class MyCustomDayService {
             .map(this.extractData)
             .catch(this.handleError); 
     }
+
+    //update a customday
+    upDateCustomday(customDay : CustomDayVM):Observable<Comment[]>{
+        let headers = new Headers({ 'Content-Type': 'application/json' }); 
+        let options = new RequestOptions({headers: headers});
+        let dataUrl = this.site + "Update" ;
+
+        return this.http.put(dataUrl,customDay,options)  
+        .map(this.extractData)
+        .catch(this.handleError);               
+    }
     
     //delete a custom day
     deleteCustomDay(id: String): Observable<Comment[]> {

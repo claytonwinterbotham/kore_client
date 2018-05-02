@@ -22,6 +22,7 @@ import {
 } from 'date-fns';
 import { RRule} from 'rrule';
 import { NgModel } from '@angular/forms';
+import {customdayTimeslip} from "../add-timeslip/add-timeslip.component"
 import { MyProjectService } from "../services/app.projectservice";
 import { MyWBIService } from "../services/app.wbiservice";
 import { MyTimeslipService } from "../services/app.timeslipservice";
@@ -112,8 +113,14 @@ export class AddCustomdayComponent implements OnInit {
     {
       label: '<i class="fa fa-fw fa-times"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter(iEvent => iEvent !== event);
-        this.handleEvent('Deleted', event);
+        this.timeSlipTemplateService.deleteTimeslipTemplate(event.meta.timeSlipId).subscribe(
+          data=> {
+            console.log(data);
+            this.getAllTemplates();
+          },error =>{
+            alert(error);
+          }
+        )
       }
     }
   ];
@@ -152,7 +159,10 @@ export class AddCustomdayComponent implements OnInit {
     this.route.params.subscribe(res =>{
       console.log(res.id);
       this.customDayId = res.id;
+      this.selectedCustomday = res.id;
       //this.isSelect = true;
+      this.customDayName = res.name;
+      this.customDayDescription = res.description;
     } )
   }
 
@@ -274,7 +284,7 @@ export class AddCustomdayComponent implements OnInit {
             //endDate.setMinutes(endMinute);
             console.log(startDate);
             console.log(endDate);
-            this.addNewEvent(oneTimeSlip.remarks,startDate,endDate);
+            this.addNewEvent(oneTimeSlip.remarks,startDate,endDate,oneTimeSlip.timeslipTemplateId);
           }   
         }
 
@@ -282,11 +292,12 @@ export class AddCustomdayComponent implements OnInit {
         let oneTemplate : TimeSlipTemplate = {
             WBI_Id : this.selectedWBI,
             CustomDayId : this.selectedCustomday,
-            StartTime : this.TodaystartTime.hour + ":"+ this.TodaystartTime.minute,
-            EndTime :  this.TodayendTime.hour + ":"+ this.TodayendTime.minute,
+            StartTime : this.padNumber(this.TodaystartTime.hour)  + ":"+ this.padNumber(this.TodaystartTime.minute),
+            EndTime :  this.padNumber(this.TodayendTime.hour) + ":"+ this.padNumber(this.TodayendTime.minute),
             Remarks : this.newEventTitle  
           }
           console.log("I want to post a timeslip template");
+          console.log(oneTemplate);
           this.timeSlipTemplateService.postTemplate(oneTemplate).subscribe(
             data=>{
               console.log(data);
@@ -299,12 +310,15 @@ export class AddCustomdayComponent implements OnInit {
   }
 
 
-  addNewEvent(title,start,end){
+  addNewEvent(title,start,end,timeSlipId){
     console.log(start);
       this.events.push({
       title: title,
       start: start,
       end: end,
+      meta:{
+        timeSlipId :timeSlipId
+      },
       color: colors.red,
       draggable: true,
       resizable: {
@@ -427,41 +441,24 @@ export class AddCustomdayComponent implements OnInit {
   }
 
   confirmAndReturn(){ 
-   // console.log(this.events.length);
-   for (let i = 0 ; i< this.events.length ; i ++){
-    console.log(this.events[i].start);
-    this.myTimeSlips.push({
-    StartTime : this.events[i].start.toISOString(),
-    EndTime : this.events[i].end.toISOString(),
-    Remarks : this.events[i].title,
-    WBI_Id :this.selectedWBIs[i],
-    // this uerId need to be changed each time push/pull from github
-    UserId : sessionStorage.getItem('userId')
-  });
-  this.refresh.next(); 
-  //console.log(newTimeSlip);     
-   }
-    let newCustomDayTimeSlips :CustomDayVM = {
-      Name :this.customDayName,
+    let customDay : CustomDayVM = {
+      Name : this.customDayName,
       Description : this.customDayDescription,
       UserId : sessionStorage.getItem('userId'),
-      TimeSlip : this.myTimeSlips
+      CustomDayId: this.selectedCustomday
     }
-    console.log(newCustomDayTimeSlips);
-
-    this.mycustomdayService.create(newCustomDayTimeSlips).subscribe(
-      data=> {
+    this.mycustomdayService.upDateCustomday(customDay).subscribe(
+      data=>{
         console.log(data);
-        //navigate to calendar page
         let navigationExtras: NavigationExtras = {
           queryParamsHandling: 'preserve',
           preserveFragment: true
         };
-        this.router.navigate(['addtimeslip'],navigationExtras);        
-      },error => {
+        this.router.navigate(['addtimeslip'],navigationExtras);
+      },error=>{
         alert(error);
       }
-    )
+    )  
   }
 
   cancelAddEvent(){
@@ -480,13 +477,19 @@ export class AddCustomdayComponent implements OnInit {
 
     return ([year, month, day].join('-'));
 }
-}
+
+    padNumber(n:number){
+      return (n < 10) ? ("0" + n) : n;
+    }
+
+}    
 
 export class CustomDayVM{
   Name : string;
   Description : string;
   UserId : string;
   TimeSlip? :TimeslipBackEndModel[];
+  CustomDayId?:  string;
 }
 
 export class TimeslipBackEndModel {

@@ -34,7 +34,8 @@ export class CreatecustomdayComponent implements OnInit {
         this.createdCustomday = data["customDayId"];
 
         console.log("i want to go to another page!");
-        this.router.navigate(["/addcustomday",{id:this.createdCustomday}]);
+        this.router.navigate(["/addcustomday",{id:this.createdCustomday,
+        name:this.customDayName,description:this.customDayDescription}]);
       },
       error =>{
         alert(error);
