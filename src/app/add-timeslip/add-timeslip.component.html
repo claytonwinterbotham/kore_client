@@ -183,7 +183,8 @@
                     <ng-select [items]="customdayList"
                     bindLabel="name"
                     bindValue="customDayId"
-                    [(ngModel)]="selectedCustomday">
+                    [(ngModel)]="selectedCustomday"
+                    (change)="showFakeCalendar()">
                     </ng-select>                           
             </p>
             <button *ngIf="selectedCustomday"

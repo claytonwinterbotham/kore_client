@@ -58,6 +58,16 @@ export class TimeslipTemplateService {
     .catch(this.handleError);         
   }
 
+  // update a TimeSlip Template
+  updateTimeSlipTemplate(timeSlipTemplate: TimeSlipTemplate): Observable<Comment[]>{
+    let headers = new Headers({ 'Content-Type': 'application/json' }); 
+    let options = new RequestOptions({headers: headers});
+    let dataUrl = this.site + "Update";
+    return this.http.put(dataUrl,timeSlipTemplate,options)
+        .map(this.extractData)
+        .catch(this.handleError);        
+  }
+
       //delete a Timeslip Template
       deleteTimeslipTemplate(id: String): Observable<Comment[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
@@ -94,8 +104,9 @@ private handleError(error: any) {
 }
 
 export class TimeSlipTemplate{
-  WBI_Id : string;
-  CustomDayId : string;
+  TimeslipTemplateId? : string;  
+  WBI_Id? : string;
+  CustomDayId? : string;
   StartTime : string;
   EndTime : string;
   Remarks : string;

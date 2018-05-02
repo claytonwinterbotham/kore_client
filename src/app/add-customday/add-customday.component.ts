@@ -81,18 +81,7 @@ export class AddCustomdayComponent implements OnInit {
   selectedWBI : string;
   newEventForm :boolean = false;
   newEvent : CalendarEvent[]= [];
-  events: CalendarEvent[] = [
-    // {
-    //   start: subDays(startOfDay(new Date()), 1),
-    //   end: addDays(new Date(), 1),
-    //   title: 'title',
-    //   project: 'Atlanta',
-    //   wbi: 'Projects',
-    //   description: 'Worked on projects',
-    //   color: colors.red,
-    //   actions: this.actions
-    // }
-  ];
+  events: CalendarEvent[] = [];
   timeslipModel: TimeslipModel;
   userId : string = sessionStorage.getItem('userId');
   allTimeSlips :any;
@@ -147,6 +136,14 @@ export class AddCustomdayComponent implements OnInit {
   isSelect : boolean = false;
   timeSlipTemplates : any;
   selectCustomDayItem : any;
+  EditRemark : string;
+  EditProjectName : string;
+  EditWBIName : string;
+  EditStartTime : any;
+  EditEndTime : any;
+  EditTimeSlipId : string;
+  EditStartDate : Date;
+  EditEndDate : Date;
 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
     public router:Router,_customdayService:MyCustomDayService, @Inject(DOCUMENT) private document: Document,private route: ActivatedRoute,
@@ -284,7 +281,10 @@ export class AddCustomdayComponent implements OnInit {
             //endDate.setMinutes(endMinute);
             console.log(startDate);
             console.log(endDate);
-            this.addNewEvent(oneTimeSlip.remarks,startDate,endDate,oneTimeSlip.timeslipTemplateId);
+            console.log("I want to see what is in one tiem slip");
+            console.log(oneTimeSlip);
+            
+            this.addNewEvent(oneTimeSlip.remarks,startDate,endDate,oneTimeSlip.timeslipTemplateId,oneTimeSlip.newChangeRequestId);
           }   
         }
 
@@ -309,15 +309,40 @@ export class AddCustomdayComponent implements OnInit {
           )    
   }
 
+  confirmEdit(){
+    console.log("i want to see what's start time hour");
+    console.log(this.EditStartTime.hour)
+    this.EditStartDate.setHours(this.EditStartTime.hour,this.EditStartTime.minute);
+    this.EditEndDate.setHours(this.EditEndTime.hour,this.EditEndTime.minute);
+    let editedTimeSlipTemplate: TimeSlipTemplate = {
+      TimeslipTemplateId : this.EditTimeSlipId,
+      StartTime : this.EditStartDate.toLocaleString(),
+      EndTime : this.EditEndDate.toLocaleString(),
+      Remarks : this.EditRemark    
+    }
+    console.log("i want to comfirm edit");
+    console.log(editedTimeSlipTemplate);
+    this.timeSlipTemplateService.updateTimeSlipTemplate(editedTimeSlipTemplate).subscribe(
+      data=>{
+        console.log(data);
+        this.getAllTemplates();
+        //this.mr.close();
+      },error =>{
+        alert(error);
+      }
+    )
+  }
 
-  addNewEvent(title,start,end,timeSlipId){
+
+  addNewEvent(title,start,end,timeSlipId,WBIId){
     console.log(start);
       this.events.push({
       title: title,
       start: start,
       end: end,
       meta:{
-        timeSlipId :timeSlipId
+        timeSlipId :timeSlipId,
+        WBIId : WBIId
       },
       color: colors.red,
       draggable: true,
@@ -362,6 +387,45 @@ export class AddCustomdayComponent implements OnInit {
   handleEvent(action: string, event: CalendarEvent): void {
     //this.modalData = { event, action };
     //this.modal.open(this.modalContent, { size: 'lg' });
+    console.log(action);
+    console.log(event);
+    this.getProjectName(event.meta.WBIId);
+    this.getWBIName(event.meta.WBIId);
+    this.EditTimeSlipId = event.meta.timeSlipId;
+    this.EditRemark = event.title;
+    this.EditStartDate = event.start;
+    this.EditEndDate = event.end;
+    this.EditStartTime = {hour: event.start.getHours(),minute: event.start.getMinutes()};
+    this.EditEndTime = {hour: event.end.getHours(),minute: event.end.getMinutes()};
+    this.modalData = { event, action };
+    this.modal.open(this.modalContent, { size: 'lg' });    
+  }
+
+  getProjectName(WBIId : string){
+    this.projectService.getOneProjectByWBIId(WBIId).subscribe(
+      data=>{
+        console.log(data);
+        this.EditProjectName = data["newName"];
+      },
+      error=>{
+        alert(error);
+        
+      }
+      
+    )
+  }
+
+  getWBIName(WBIId : string) {
+    console.log("I want to get WBI Name!")
+    this.wbiService.getOneWBI(WBIId).subscribe(
+      data=> {
+        console.log(data);
+        this.EditWBIName = data["newRemarks"];
+      },
+      error =>{
+        alert (error);
+      }
+    )
   }
 
   changeProject(){

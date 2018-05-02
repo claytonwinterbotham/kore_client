@@ -210,6 +210,7 @@ export class AddTimeslipComponent{
   //mr: NgbModalRef;
   searchString : string;
   searchWBIs :boolean = false;
+  fakeTimeSlips : any;
 
   //constructor 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
@@ -378,12 +379,13 @@ export class AddTimeslipComponent{
 
   showInCalendar(){
     for (let oneTimeSlip of this.allTimeSlips){
-      this.addNewEvent(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask,oneTimeSlip.newTimesheetEntryId,oneTimeSlip.newChangeRequestId);
+      this.addNewEvent(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask,oneTimeSlip.newTimesheetEntryId,oneTimeSlip.newChangeRequestId,colors.red);
     }
     console.log(this.events);
   }
 
-  addNewEvent(title,start,end,timeSlipId,WBIId){
+  addNewEvent(title,start,end,timeSlipId,WBIId,color)
+  {
     console.log(start);
       this.events.push({
       title: title,
@@ -393,7 +395,7 @@ export class AddTimeslipComponent{
         timeSlipId :timeSlipId,
         WBIId :WBIId
       },
-      color: colors.red,
+      color: color,
       draggable: true,
       resizable: {
         beforeStart: true,
@@ -403,6 +405,44 @@ export class AddTimeslipComponent{
     });
     this.refresh.next(); 
     console.log(this.events);
+  }
+
+  showFakeCalendar(){
+    this.getAllTimeSlips(); //each time call this method with make the this.events to be empty first.
+    console.log("I want to show fake custom day");
+    this.timeSlipTemplateService.getAllTimeSlips(this.selectedCustomday).subscribe(
+      data => {
+        console.log(data);
+        this.fakeTimeSlips = data;
+        for (let fakeTimeSlip of this.fakeTimeSlips){
+          let fakeStart = new Date(fakeTimeSlip.startTime);
+          console.log(fakeStart);
+          let fakeEnd = new Date(fakeTimeSlip.endTime);
+          let startHour = fakeStart.getHours();
+          let startMinute = fakeStart.getMinutes();
+          let endHour = fakeEnd.getHours();
+          let endMinute = fakeEnd.getMinutes();
+          
+          fakeStart.setFullYear(this.viewDate.getFullYear(), this.viewDate.getMonth(),this.viewDate.getDate());
+          console.log(fakeStart);
+          console.log(startHour);
+          fakeStart.setHours(startHour);
+          fakeStart.setMinutes(startMinute);
+          console.log(fakeStart);
+         
+          fakeEnd.setFullYear(this.viewDate.getFullYear(), this.viewDate.getMonth(),this.viewDate.getDate());
+          fakeEnd.setHours(endHour);
+          fakeEnd.setMinutes(endMinute);
+
+          this.addNewEvent(fakeTimeSlip.remarks,fakeStart,fakeEnd,fakeTimeSlip.TimeslipTemplateId,fakeTimeSlip.NewChangeRequestId,colors.blue);
+          
+        }
+        ///this.ShowAllTemplates();
+      },
+      error =>{
+        alert(error);
+      }
+    )
   }
 
   // handler for clicking each day.
