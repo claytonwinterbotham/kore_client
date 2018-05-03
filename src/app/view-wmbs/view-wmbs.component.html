@@ -1,53 +1,47 @@
-<div class="container">
-    <div class="row">
-      <div class="col-8 offset-md-2 main-content">
-          <form>
-            <div class="form-group">
-              <label for="wbi">WBI:</label>
-              <input type="text" class="form-control" id="wbi" placeholder="">
-            </div>
+<div class="row main-content">
+  <div class="col-md-4 offset-md-4">
+    <form>
+      <div class="form-group">
+        <label for="wbi">WBI:</label>
+        <input type="text" class="form-control" id="wbi" placeholder="">
+      </div>
 
-            <!-- <div class="form-group">
-                <label for="projects">Project:</label>
-                <ng-select [dropdownPosition]="'down'"
-                  id="projects"
-                  [searchable]="true"
-                  [items]="projects"
-                  bindlabel="label"
-                  bindvalue="value">
-                </ng-select>
-            </div> -->
-            <div class="form-group">
-              <label for="project">Project:</label>
-              <ng-select [items]="projectList"
-              bindLabel="newName"
-              bindValue="newProjectId"
-              [(ngModel)]="selectedProject"
-            
-              name = "projectList">
-              </ng-select>
-            </div>
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <textarea 
-                class="form-control" 
-                rows="5" 
-                id="description"
-                (keyup)="refresh.next()"
-                ></textarea>
-            </div>   
-  
-            <div class="form-group row">
-                <label for="estimated" class="col-2 col-form-label">Number</label>
-                <div class="col-10">
-                  <input class="form-control" type="number" value="0" id="example-number-input">
-                </div>
-            </div>
-          <button type="submit" class="btn btn-outline-success">Submit</button>
-        </form>
-    </div>   
+      <!-- <div class="form-group">
+          <label for="projects">Project:</label>
+          <ng-select [dropdownPosition]="'down'"
+            id="projects"
+            [searchable]="true"
+            [items]="projects"
+            bindlabel="label"
+            bindvalue="value">
+          </ng-select>
+      </div> -->
+      <div class="form-group">
+        <label for="project">Project:</label>
+        <ng-select [items]="projectList"
+        bindLabel="newName"
+        bindValue="newProjectId"
+        [(ngModel)]="selectedProject"
+      
+        name = "projectList">
+        </ng-select>
+      </div>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <input type="text" class="form-control" id="description" placeholder="">
+      </div>   
+
+      <div class="form-group row">
+        <label for="estimated" class="col-2 col-form-label">Est. Hours:</label>
+        <div class="col-4">
+          <input class="form-control" type="number" value="0" id="example-number-input">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-outline-success">Submit</button>
+    </form>  
   </div>
-</div>
+</div>        
+
   
   
   

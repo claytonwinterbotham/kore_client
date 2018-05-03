@@ -1,24 +1,23 @@
 
-<ul class="nav flex-column timeslip_list">
+<ul class="nav flex-column">
     <li class="nav-item">
-      <a class="nav-link" routerLink="/addtimeslip" href="">Manage<br>Timeslip</a>
+      <a class="nav-link" routerLink="/addtimeslip" href="">Timeslips</a>
     </li>
-
-    <li class="nav-item">
-        <a class="nav-link" routerLink="/Createcustomday" href="">Create<br>Custom Day</a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/addcustomday" href="">Edit<br>Custom Day</a>
-      </li>
-</ul>    
-
-<ul class="nav flex-column manage_list">   
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Custom<br>Day</a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" routerLink="/Createcustomday" href="">Create</a>
+        <a class="dropdown-item" routerLink="/addcustomday" href="">Edit</a>
+      </div>
+    </li>    
     <li class="nav-item">
       <a class="nav-link" routerLink="/viewallprojects" href="">Projects</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" routerLink="/viewallwbis" href="">WBI's</a>
+        <a class="nav-link" routerLink="/viewallwbis" href="">WBI</a>
+    </li>
+    <li class="nav-item logout">
+        <button class="btn btn-small btn-secondary" (click)="logOut()">Logout</button>
     </li>
 </ul>
 

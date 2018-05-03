@@ -1,17 +1,15 @@
-.sidebar_list{
-
+.nav{
+    margin-top: 8em;
 }
-
 .nav a{
     color: #fff;
+    padding: 12px 10px;
 }
 
-.timeslip_list{
-    position: absolute;
-    top: 20vh;
+.dropdown-menu .dropdown-item{
+    color: #000;
 }
 
-.manage_list{
-    position: absolute;
-    top: 50vh;
+.logout{
+    margin-top: 14em;
 }
