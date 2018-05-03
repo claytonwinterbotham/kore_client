@@ -81,11 +81,7 @@
         </div>
         <div class="modal-body">
           <form>
-            <div class="form-group">
-                <label for="remark">Remark:</label>
-                <input type="text" class="form-control" id="" placeholder="Enter remarks"
-                name="remark" [(ngModel)]="EditRemark">
-            </div>
+
             <div class="form-group">
               <label for="project">Project:</label>
               {{EditProjectName}}
@@ -94,7 +90,11 @@
               <label for="wbi">WBI:</label>
               {{EditWBIName}}
             </div>
-
+            <div class="form-group">
+              <label for="remark">Remark:</label>
+              <input type="text" class="form-control" id="" placeholder="Enter remarks"
+              name="remark" [(ngModel)]="EditRemark">
+          </div>
             <div class="form-group">
                 <label for="start_time">Start Time:</label>
                 <ngb-timepicker [(ngModel)]="EditStartTime" [meridian]="meridian" name="editStartTime"></ngb-timepicker>
@@ -176,13 +176,14 @@
         </div>
       </div>
       <br>
+
+       <!-- [activeDayIsOpen]="activeDayIsOpen" -->
       <div [ngSwitch]="view">
         <mwl-calendar-month-view
           *ngSwitchCase="'month'"
           [viewDate]="viewDate"
           [events]="events"
-          [refresh]="refresh"
-          [activeDayIsOpen]="activeDayIsOpen"
+          [refresh]="refresh"    
           (dayClicked)="dayClicked($event.day)"
           (eventClicked)="handleEvent('Clicked', $event.event)"
           (eventTimesChanged)="eventTimesChanged($event)"
@@ -222,7 +223,7 @@
               </div>
           </div>
           <div *ngSwitchCase="'day'" class="col-md-4 add_timeslip_day_form border-right">
-            <form>
+            <form #form="ngForm" (ngSubmit)="AddNewTimeSlip()">
                 <!-- <div class="form-group">
                     <label for="customDayName">customDayName:</label>
                     <input type="text" class="form-control" id="customDayName" placeholder="Enter custom Day Name"
@@ -238,17 +239,8 @@
 
                 <h3 class="text-center">Create New Timeslip</h3>
                 <hr>
-                <div class="form-group">
-                    <label for="remark">Remarks:</label>
-                    <input 
-                    type="text" 
-                    class="form-control" 
-                    placeholder="Please enter your remarks"
-                    name = "quickRemarks"
-                    [(ngModel)]="quickRemarks"
-                    >
-                </div>
 
+                <!-- <div *ngIf="remark?.errors?.required" class="alert alert-danger form-group"> Remarks should not Be Empty!</div> -->
                 <div class="form-group">
                   <label for="project">Project:</label>
                   <ng-select *ngIf="!searchWBIs" [items]="projectList"
@@ -258,9 +250,12 @@
                   (change)="changeProject()"
                   name = "projectList"
                   ng-selected="projectList"
+                  required
+                             
                   >
                   </ng-select>
                   <p *ngIf="searchWBIs">{{selectedProject}}</p>
+                  <div *ngIf="selectedPject?.errors?.required" class="alert alert-danger form-group"> Project should not Be Empty!</div>
                 </div>
                 <div class="form-group  wbi_search_group border p-2">
                     <label for="wbi">WBI:</label>
@@ -271,6 +266,7 @@
                     [(ngModel)]="selectedWBI"
                     name = "wbiList"
                     (change)="locateProject()"
+                    required
                     ></ng-select>
             
                   <label class="pt-2" for="searchString">Search WBI:</label>
@@ -283,6 +279,17 @@
                       </div>
                   </div>
                 </div>
+                <div class="form-group">
+                  <label for="remark">Remarks:</label>
+                  <input 
+                  type="text" 
+                  class="form-control" 
+                  placeholder="Please enter your remarks"
+                  name = "quickRemarks"
+                  [(ngModel)]="quickRemarks"
+                 
+                  >
+              </div>
                 <div class="form-group clearfix">
                   <div id="start_time"class="border-right">
                       <label for="start_time">Start Time:</label>
@@ -296,8 +303,10 @@
                 </div>
                 <div class="form-group text-left clearfix mt-2">
                   <button
+                  type="submit"
                   class="btn btn-outline-success"
-                  (click)="AddNewTimeSlip()">
+                  [disabled]="!form.valid"
+                  >
                   Add Timeslip
                   </button>
                   <button type="button" class="btn btn-outline-info" (click)="ClearAllEvents()">Clear</button>

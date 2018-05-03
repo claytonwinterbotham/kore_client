@@ -398,6 +398,9 @@ export class AddTimeslipComponent{
   }
 
   showInCalendar(){
+    if (this.allTimeSlips.length == 0){
+      return ;
+    }
     for (let oneTimeSlip of this.allTimeSlips){
       this.addNewEvent(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask,oneTimeSlip.newTimesheetEntryId,oneTimeSlip.newChangeRequestId,colors.red);
     }
@@ -684,7 +687,7 @@ export class AddTimeslipComponent{
   validateCustomDay(originalEvents : CalendarEvent[], newEvents : CalendarEvent[]):boolean{
     for(let originalEvent of originalEvents){
       for (let newEvent of newEvents){
-        if (originalEvent.start> newEvent.end || originalEvent.end < newEvent.start){
+        if (originalEvent.start > newEvent.end || originalEvent.end < newEvent.start){
 
         }else {
           return false;
@@ -697,32 +700,60 @@ export class AddTimeslipComponent{
   confirmEdit(){
     this.EditStartDate.setHours(this.EditStartTime.hour,this.EditStartTime.minute);
     this.EditEndDate.setHours(this.EditEndTime.hour,this.EditEndTime.minute);
-    let newTimeSlip: TimeslipModel = {
-      TimeSlipId : this.EditTimeSlipId,
-      StartDate : this.EditStartDate.toLocaleString(),
-      EndDate : this.EditEndDate.toLocaleString(),
-      Remarks : this.EditRemark,
-      //WBIId :this.selectedWBI,
-      // this uerId need to be changed each time push/pull from github
-      UserId : sessionStorage.getItem('userId'),
-      DayId : ""      
+    if (this.EditStartDate >= this.EditEndDate){
+      alert("please input correct time start time and end time!!");
+      this.getAllTimeSlips();
+      return ;
     }
-    console.log("i want to comfirm edit");
-    console.log(newTimeSlip);
-    this.timeSlipService.updateTimeslip(newTimeSlip).subscribe(
-      data=>{
-        console.log(data);
-        this.getAllTimeSlips();
-        //this.mr.close();
-      },error =>{
-        alert(error);
+
+    let event: CalendarEvent = {
+      start : this.EditStartDate,
+      end : this.EditEndDate,
+      title : "test",
+      meta : {
+        timeSlipId: this.EditTimeSlipId
       }
-    )
+    }
+
+    let reuslt = this.validateEditEvent(event);
+    if (reuslt == false){
+      alert("Please Ensure there is no time overlap!");
+      this.getAllTimeSlips();
+      return ;
+    }else {
+      let newTimeSlip: TimeslipModel = {
+        TimeSlipId : this.EditTimeSlipId,
+        StartDate : this.EditStartDate.toLocaleString(),
+        EndDate : this.EditEndDate.toLocaleString(),
+        Remarks : this.EditRemark,
+        //WBIId :this.selectedWBI,
+        // this uerId need to be changed each time push/pull from github
+        UserId : sessionStorage.getItem('userId'),
+        DayId : ""      
+      }
+      console.log("i want to comfirm edit");
+      console.log(newTimeSlip);
+      this.timeSlipService.updateTimeslip(newTimeSlip).subscribe(
+        data=>{
+          console.log(data);
+          this.getAllTimeSlips();
+          //this.mr.close();
+        },error =>{
+          alert(error);
+        }
+      )
+    }
   }
 
   cancelAddEvent(){
     this.newEvent = [];
     this.newEventForm = false;
+  }
+
+  ClearAllEvents(){
+    this.selectedProject = "";
+    this.selectedWBI = "";
+    this.quickRemarks = "";
   }
 
   changeProject(){

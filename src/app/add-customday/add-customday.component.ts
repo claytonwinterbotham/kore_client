@@ -369,23 +369,40 @@ export class AddCustomdayComponent implements OnInit {
     this.EditStartDate.setHours(this.EditStartTime.hour,this.EditStartTime.minute);
     console.log(this.EditStartDate);
     this.EditEndDate.setHours(this.EditEndTime.hour,this.EditEndTime.minute);
-    let editedTimeSlipTemplate: TimeSlipTemplate = {
-      TimeslipTemplateId : this.EditTimeSlipId,
-      StartTime : this.EditStartDate.toLocaleString("en-US"),
-      EndTime : this.EditEndDate.toLocaleString("en-US"),
-      Remarks : this.EditRemark    
-    }
-    console.log("i want to comfirm edit");
-    console.log(editedTimeSlipTemplate);
-    this.timeSlipTemplateService.updateTimeSlipTemplate(editedTimeSlipTemplate).subscribe(
-      data=>{
-        console.log(data);
-        this.getAllTemplates();
-        //this.mr.close();
-      },error =>{
-        alert(error);
+
+    let event: CalendarEvent = {
+      start : this.EditStartDate,
+      end : this.EditEndDate,
+      title : "test",
+      meta : {
+        timeSlipId: this.EditTimeSlipId
       }
-    )
+    }
+
+    let reuslt = this.validateEditEvent(event);
+    if (reuslt == false){
+      alert("Please Ensure there is no time overlap!");
+      this.getAllTemplates();
+      return ;
+    }else {
+      let editedTimeSlipTemplate: TimeSlipTemplate = {
+        TimeslipTemplateId : this.EditTimeSlipId,
+        StartTime : this.EditStartDate.toLocaleString("en-US"),
+        EndTime : this.EditEndDate.toLocaleString("en-US"),
+        Remarks : this.EditRemark    
+      }
+      console.log("i want to comfirm edit");
+      console.log(editedTimeSlipTemplate);
+      this.timeSlipTemplateService.updateTimeSlipTemplate(editedTimeSlipTemplate).subscribe(
+        data=>{
+          console.log(data);
+          this.getAllTemplates();
+          //this.mr.close();
+        },error =>{
+          alert(error);
+        }
+      )    
+    }    
   }
 
 

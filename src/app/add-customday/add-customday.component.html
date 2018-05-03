@@ -52,12 +52,7 @@
         <form #form="ngForm" (ngSubmit)="addToTemplate()">
             <h3 class="text-center">New Timeslip Template</h3>
             <hr>
-          <div class="form-group">
-              <label for="remark">Remarks:</label>
-              <input type="text" class="form-control" id="customdayRemark" placeholder="Enter remarks"
-              name="remark" [(ngModel)]="newEventTitle" required ngModel
-              >
-          </div>
+
           <div class="form-group">
             <label for="project">Project:</label>
             <ng-select *ngIf="!searchWBIs" [items]="projectList"
@@ -94,6 +89,12 @@
               </div>
             </div>
           </div>
+          <div class="form-group">
+            <label for="remark">Remarks:</label>
+            <input type="text" class="form-control" id="customdayRemark" placeholder="Enter remarks"
+            name="remark" [(ngModel)]="newEventTitle" 
+            >
+        </div>
           <div class="form-group clearfix">
             <div id="start_time"class="border-right">
               <label for="start_time">Start Time:</label>
@@ -159,11 +160,7 @@
     </div>
     <div class="modal-body">
       <form>
-        <div class="form-group">
-            <label for="remark">Remark:</label>
-            <input type="text" class="form-control" id="" placeholder="Enter remarks"
-            name="remark" [(ngModel)]="EditRemark">
-        </div>
+
         <div class="form-group">
           <label for="project">Project:</label>
           {{EditProjectName}}
@@ -172,7 +169,11 @@
           <label for="wbi">WBI:</label>
           {{EditWBIName}}
         </div>
-
+        <div class="form-group">
+          <label for="remark">Remark:</label>
+          <input type="text" class="form-control" id="" placeholder="Enter remarks"
+          name="remark" [(ngModel)]="EditRemark">
+      </div>
         <div class="form-group">
             <label for="start_time">Start Time:</label>
             <ngb-timepicker [(ngModel)]="EditStartTime" [meridian]="meridian" name="editStartTime"></ngb-timepicker>

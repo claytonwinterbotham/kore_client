@@ -146,10 +146,13 @@ export class MyTimeslipService {
         // We'd also dig deeper into the error to get a better message
         // console.log(error.json().err)
         // let errMsg = error.json().err
+        
         let errMsg = (error.message) ? error.message :
             error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-        // console.error(errMsg); // log to console instead
-        return Observable.throw(errMsg);
+        console.log(error._body);
+        console.log(JSON.parse(error._body).message);
+        //console.error(errMsg); // log to console instead
+        return Observable.throw(JSON.parse(error._body).message);
     }
 }
 

@@ -6,12 +6,16 @@
         <input type="text" class="form-control" id="customDayName" placeholder="Enter custom Day Name"
         name="customDayName" [(ngModel)]="customDayName"
         >
+        <br>
+        <div *ngIf="!nameNotEmpty" class="alert alert-danger"> Custom Day name should not Be Empty!</div>
     </div>
     <div class="form-group">
         <label for="customDayDescription">customday description:</label>
         <input type="text" class="form-control" id="customDayDescription" placeholder="Enter custom Day Description"
         name="customDayDescription" [(ngModel)]="customDayDescription"
         >
+        <br>
+        <div *ngIf="!descriptionNotEmpty" class="alert alert-danger"> Custom Day Description should not Be Empty!</div>
     </div>
     <div class="form-group">
       <button  class="btn btn-success" (click)="createCustomday()">Continue</button>
