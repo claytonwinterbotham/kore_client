@@ -132,7 +132,8 @@ export class AddCustomdayComponent implements OnInit {
   searchWBIs :boolean = false;
   customDayId : any;
   customdayList : any;
-  selectedCustomday : string;
+  selectedCustomday : string ;
+  selected : boolean = false;
   isSelect : boolean = false;
   timeSlipTemplates : any;
   selectCustomDayItem : any;
@@ -144,6 +145,7 @@ export class AddCustomdayComponent implements OnInit {
   EditTimeSlipId : string;
   EditStartDate : Date;
   EditEndDate : Date;
+  customDayNameEmpty : boolean = false;
 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
     public router:Router,_customdayService:MyCustomDayService, @Inject(DOCUMENT) private document: Document,private route: ActivatedRoute,
@@ -239,6 +241,7 @@ export class AddCustomdayComponent implements OnInit {
   }
 
   getThisCustomDay(){
+    this.selected = true;
     for(let oneCustomDay of this.customdayList){
         if (oneCustomDay.customDayId == this.selectedCustomday){
           //this.selectCustomDayItem = oneCustomDay;
@@ -248,6 +251,22 @@ export class AddCustomdayComponent implements OnInit {
         this.getAllTemplates();          
         }
     }
+  }
+
+  deleteCustomDay(){
+    console.log("I want to delete this custom day!");
+    this.mycustomdayService.deleteCustomDay(this.selectedCustomday).subscribe(
+      data=>{
+        console.log(data);
+        let navigationExtras: NavigationExtras = {
+          queryParamsHandling: 'preserve',
+          preserveFragment: true
+        };
+        this.router.navigate(['addtimeslip'],navigationExtras);
+      },error =>{
+        alert(error);
+      }
+    )
   }
 
     getAllTemplates(){
@@ -341,7 +360,6 @@ export class AddCustomdayComponent implements OnInit {
     return true;
   }
 
-
   confirmEdit(){
     console.log("i want to see what's start time hour");
     console.log(this.EditStartTime.hour)
@@ -350,8 +368,8 @@ export class AddCustomdayComponent implements OnInit {
     this.EditEndDate.setHours(this.EditEndTime.hour,this.EditEndTime.minute);
     let editedTimeSlipTemplate: TimeSlipTemplate = {
       TimeslipTemplateId : this.EditTimeSlipId,
-      StartTime : this.EditStartDate.toLocaleString(),
-      EndTime : this.EditEndDate.toLocaleString(),
+      StartTime : this.EditStartDate.toLocaleString("en-US"),
+      EndTime : this.EditEndDate.toLocaleString("en-US"),
       Remarks : this.EditRemark    
     }
     console.log("i want to comfirm edit");
@@ -553,29 +571,39 @@ export class AddCustomdayComponent implements OnInit {
   }
 
   ClearAllEvents(){
-    this.events = [];
-    this.selectedWBIs = [];
+    // this.events = [];
+    // this.selectedWBIs = [];
+    this.newEventTitle = "";
+    this.selectedProject = "";
+    this.selectedWBI = "";
   }
 
   confirmAndReturn(){ 
-    let customDay : CustomDayVM = {
-      Name : this.customDayName,
-      Description : this.customDayDescription,
-      UserId : sessionStorage.getItem('userId'),
-      CustomDayId: this.selectedCustomday
-    }
-    this.mycustomdayService.upDateCustomday(customDay).subscribe(
-      data=>{
-        console.log(data);
-        let navigationExtras: NavigationExtras = {
-          queryParamsHandling: 'preserve',
-          preserveFragment: true
-        };
-        this.router.navigate(['addtimeslip'],navigationExtras);
-      },error=>{
-        alert(error);
+
+    if (this.customDayName == ""){
+      this.customDayNameEmpty = true;
+      return ;
+    }else {
+
+      let customDay : CustomDayVM = {
+        Name : this.customDayName,
+        Description : this.customDayDescription,
+        UserId : sessionStorage.getItem('userId'),
+        CustomDayId: this.selectedCustomday
       }
-    )  
+      this.mycustomdayService.upDateCustomday(customDay).subscribe(
+        data=>{
+          console.log(data);
+          let navigationExtras: NavigationExtras = {
+            queryParamsHandling: 'preserve',
+            preserveFragment: true
+          };
+          this.router.navigate(['addtimeslip'],navigationExtras);
+        },error=>{
+          alert(error);
+        }
+      )
+    }  
   }
 
   cancelAddEvent(){

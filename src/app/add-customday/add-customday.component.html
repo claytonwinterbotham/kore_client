@@ -21,7 +21,9 @@
         (change)="getThisCustomDay()"
         name="customDayList">
         </ng-select>
+        
       </div>
+      
     </form>
   </div>
 </div>
@@ -47,13 +49,13 @@
         </div> 
       </div>
       <div class="col-md-4 custom_day_form border-right">
-        <form>
+        <form #form="ngForm" (ngSubmit)="addToTemplate()">
             <h3 class="text-center">New Timeslip Template</h3>
             <hr>
           <div class="form-group">
               <label for="remark">Remarks:</label>
               <input type="text" class="form-control" id="customdayRemark" placeholder="Enter remarks"
-              name="remark" [(ngModel)]="newEventTitle"
+              name="remark" [(ngModel)]="newEventTitle" required ngModel
               >
           </div>
           <div class="form-group">
@@ -65,6 +67,7 @@
             (change)="changeProject()"
             name = "projectList"
             ng-selected="projectList"
+            required ngModel
             >
             </ng-select>
             <p *ngIf="searchWBIs">{{selectedProject}}</p>
@@ -78,6 +81,7 @@
             [(ngModel)]="selectedWBI"
             name = "wbiList"
             (change)="locateProject()"
+            required ngModel
             ></ng-select>
 
             <label class="pt-2" for="searchString">Search WBI:</label>
@@ -90,7 +94,6 @@
               </div>
             </div>
           </div>
-
           <div class="form-group clearfix">
             <div id="start_time"class="border-right">
               <label for="start_time">Start Time:</label>
@@ -103,8 +106,10 @@
           </div>
           <div class="form-group text-left clearfix mt-2">
             <button
+            type="submit"
             class="btn btn-outline-success"
-            (click)="addToTemplate()">
+            [disabled]="!form.valid"
+           >
             Add Template
             </button>
             <button type="button" class="btn btn-outline-info" (click)="ClearAllEvents()">Clear</button>
@@ -121,6 +126,7 @@
               type="text" class="form-control" id="customDayName" placeholder="Enter name"
               name="customDayName" [(ngModel)]="customDayName"
               >
+              <div *ngIf="customDayNameEmpty" class="alert alert-danger"> Custom Day name should not Be Empty</div>
               <p *ngIf="customDayId">{{customDayName}}</p> 
           </div>
           <div class="form-group">
@@ -137,7 +143,8 @@
             class="btn btn-outline-success"
             (click)="confirmAndReturn(); refresh.next()">
             Confirm
-            </button>            
+            </button>
+            <button *ngIf="selected === true " class="btn btn-danger"(click)="deleteCustomDay()" > Delete </button>            
           </div>
         </form>
       </div> 
