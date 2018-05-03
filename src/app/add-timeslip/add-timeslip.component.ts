@@ -228,7 +228,8 @@ export class AddTimeslipComponent{
   ngOnInit() {
     this.showProjectList();
     this.getAllTimeSlips();
-    this.getAllCustomDays();     
+    this.getAllCustomDays();
+    this.scrollTo();     
   }
 
   AddNewTimeSlip(){
@@ -479,6 +480,7 @@ export class AddTimeslipComponent{
       }
     }
     this.clickedDate = date;
+    this.scrollTo();
   }
 
   //hander for the change of time of events

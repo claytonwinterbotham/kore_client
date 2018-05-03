@@ -12,60 +12,44 @@
     margin-top: 1em;
 }
 
-.add_timeslip_btn{
-   position: fixed;
-   top: .4em;
-   right: 2em;
-
+.add_timeslip_scroll{
+    height: 600px;
+    overflow-x: scroll;
 }
 
-.timeslip_text_input{
-    position: fixed;
-    top: .4em;
-    left: 15em;
+.add_timeslip_day_form{
+    height: 600px;
 }
 
-.timeslip_text_input_box{
-    min-width: 300px;
+.wbi_search_group{
+    background-color: #F7FFE6
 }
 
-.add_timeslip_folder{
-    position: fixed;
-    top: .4em;
-    left: 19em;
- 
- }
-
-.add_timeslip_stickynote{
-    position: fixed;
-    top: .4em;
-    left: 21em;
-
-} 
-
-.add_timeslip_datepicker{
-    position: fixed;
-    top: .4em;
-    right: 25em;
+#start_time, #end_time{
+    width: 50%;  
+    float: left;
 }
 
-.calender_input_box{
-    width: 110px;
+#end_time{
+    padding-left: 15px;
 }
 
-.add_timeslip_starttime{
-    position: fixed;
-    top: .4em;
-    right : 16em;
+.custom_day_section{
+    height: 300px;
 }
 
-.add_timeslip_endtime{
-    position: fixed;
-    top: .4em;
-    right : 7em;
-   
-}
 
-.fa-check{
-    color: #1282c5
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
