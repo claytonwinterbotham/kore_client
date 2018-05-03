@@ -325,7 +325,7 @@ export class AddCustomdayComponent implements OnInit {
     }   
         let result = this.validateNewEvent(validationEvent,this.events);
         if (result == false){
-          alert("you need to ensure there is no time overlap!");
+          alert("you need to ensure there is no time overlap Or Time is correct!!");
           return ;
         }else {
           let oneTemplate : TimeSlipTemplate = {
@@ -350,6 +350,9 @@ export class AddCustomdayComponent implements OnInit {
   }
 
   validateNewEvent(validationEvent : CalendarEvent, events : Array<CalendarEvent<{ timeSlipId: string,WBIId : string }>>): boolean{
+    if (validationEvent.start >= validationEvent.end){
+      return false;
+    }
     for (let oneEvent of events){
       if (oneEvent.start> validationEvent.end || oneEvent.end < validationEvent.start){
 
