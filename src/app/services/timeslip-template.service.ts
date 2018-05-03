@@ -63,6 +63,8 @@ export class TimeslipTemplateService {
     let headers = new Headers({ 'Content-Type': 'application/json' }); 
     let options = new RequestOptions({headers: headers});
     let dataUrl = this.site + "Update";
+    console.log("here is the detail to be updated:" );
+    console.log(timeSlipTemplate);
     return this.http.put(dataUrl,timeSlipTemplate,options)
         .map(this.extractData)
         .catch(this.handleError);        

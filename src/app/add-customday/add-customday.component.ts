@@ -289,7 +289,21 @@ export class AddCustomdayComponent implements OnInit {
         }
 
   addToTemplate(){
-        let oneTemplate : TimeSlipTemplate = {
+    let startDate = new Date(this.viewDate.valueOf());
+    startDate.setHours(this.TodaystartTime.hour,this.TodaystartTime.minute);
+    let endDate = new Date(this.viewDate.valueOf());
+    endDate.setHours(this.TodayendTime.hour,this.TodayendTime.minute);
+    let validationEvent : CalendarEvent= {
+      start:startDate,
+      end:endDate,
+      title: " test"
+    }   
+        let result = this.validateNewEvent(validationEvent,this.events);
+        if (result == false){
+          alert("you need to ensure there is no time overlap!");
+          return ;
+        }else {
+          let oneTemplate : TimeSlipTemplate = {
             WBI_Id : this.selectedWBI,
             CustomDayId : this.selectedCustomday,
             StartTime : this.padNumber(this.TodaystartTime.hour)  + ":"+ this.padNumber(this.TodaystartTime.minute),
@@ -307,12 +321,26 @@ export class AddCustomdayComponent implements OnInit {
               alert(error);
             }
           )    
+        }
   }
+
+  validateNewEvent(validationEvent : CalendarEvent, events : Array<CalendarEvent<{ timeSlipId: string,WBIId : string }>>): boolean{
+    for (let oneEvent of events){
+      if (oneEvent.start> validationEvent.end || oneEvent.end < validationEvent.start){
+
+      }else {
+        return false;
+      }
+    }
+    return true;
+  }
+
 
   confirmEdit(){
     console.log("i want to see what's start time hour");
     console.log(this.EditStartTime.hour)
     this.EditStartDate.setHours(this.EditStartTime.hour,this.EditStartTime.minute);
+    console.log(this.EditStartDate);
     this.EditEndDate.setHours(this.EditEndTime.hour,this.EditEndTime.minute);
     let editedTimeSlipTemplate: TimeSlipTemplate = {
       TimeslipTemplateId : this.EditTimeSlipId,
@@ -387,6 +415,7 @@ export class AddCustomdayComponent implements OnInit {
   handleEvent(action: string, event: CalendarEvent): void {
     //this.modalData = { event, action };
     //this.modal.open(this.modalContent, { size: 'lg' });
+
     console.log(action);
     console.log(event);
     this.getProjectName(event.meta.WBIId);
@@ -397,8 +426,26 @@ export class AddCustomdayComponent implements OnInit {
     this.EditEndDate = event.end;
     this.EditStartTime = {hour: event.start.getHours(),minute: event.start.getMinutes()};
     this.EditEndTime = {hour: event.end.getHours(),minute: event.end.getMinutes()};
-    this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });    
+
+    let reuslt = this.validateEditEvent(event);
+    if (reuslt == false){
+      alert("Please Ensure there is no time overlap!");
+      this.getAllTemplates();
+      return ;
+    }else {
+      this.modalData = { event, action };
+      this.modal.open(this.modalContent, { size: 'lg' });    
+    }
+  }
+
+  validateEditEvent(event :CalendarEvent): boolean{
+    for (let oneEvent of this.events.filter(ev=> ev.meta.timeSlipId != event.meta.timeSlipId)){
+      if (oneEvent.start> event.end || oneEvent.end < event.start){
+      }else {
+        return false;
+      }
+    }
+    return true;
   }
 
   getProjectName(WBIId : string){

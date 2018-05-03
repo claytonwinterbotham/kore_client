@@ -211,6 +211,7 @@ export class AddTimeslipComponent{
   searchString : string;
   searchWBIs :boolean = false;
   fakeTimeSlips : any;
+  originalEvents :CalendarEvent[] = [];
 
   //constructor 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
@@ -242,8 +243,19 @@ export class AddTimeslipComponent{
     let endDate : Date = new Date(this.viewDate.valueOf());
     endDate.setHours(this.endTime.hour, this.endTime.minute);
     console.log(startDate);
+
+    let validationEvent : CalendarEvent= {
+      start:startDate,
+      end:endDate,
+      title: " test"
+    }
+
+   let result : boolean =  this.validateNewEvent(validationEvent,this.events);
+
+   if (result != true){
+     alert("please ensure that there is not time overlap!");
+   }else {
     let newTimeSlip: TimeslipModel  = {
-      
       StartDate : startDate.toLocaleString(),
       EndDate : endDate.toLocaleString(),
       Remarks : this.quickRemarks,
@@ -266,10 +278,21 @@ export class AddTimeslipComponent{
         this.selectedWBI = "";
 
       },error =>{
-
         alert(error);
       }
-    ) 
+    )
+   }
+  }
+
+  validateNewEvent (validationEvent : CalendarEvent, events : Array<CalendarEvent<{ timeSlipId: string,WBIId : string }>>): boolean{
+    for (let oneEvent of events){
+      if (oneEvent.start> validationEvent.end || oneEvent.end < validationEvent.start){
+
+      }else {
+        return false;
+      }
+    }
+    return true;
   }
 
   searchWBI(){
@@ -307,10 +330,6 @@ export class AddTimeslipComponent{
       }
     )
   }
-
-
-
-
   scrollTo(){
     var scrollContainer = document.getElementById("day_view_scroll")
     setTimeout(function(){ scrollContainer.scrollTop = 465 }, 500);
@@ -409,6 +428,7 @@ export class AddTimeslipComponent{
 
   showFakeCalendar(){
     this.getAllTimeSlips(); //each time call this method with make the this.events to be empty first.
+    this.originalEvents = this.events;
     console.log("I want to show fake custom day");
     this.timeSlipTemplateService.getAllTimeSlips(this.selectedCustomday).subscribe(
       data => {
@@ -484,8 +504,27 @@ export class AddTimeslipComponent{
     this.EditEndDate = event.end;
     this.EditStartTime = {hour: event.start.getHours(),minute: event.start.getMinutes()};
     this.EditEndTime = {hour: event.end.getHours(),minute: event.end.getMinutes()};
-    this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
+    
+    let reuslt = this.validateEditEvent(event);
+    if (reuslt == false){
+      alert("Please Ensure there is no time overlap!");
+      this.getAllTimeSlips();
+      return ;
+    }
+    else {
+      this.modalData = { event, action };
+      this.modal.open(this.modalContent, { size: 'lg' });
+    }
+  }
+
+  validateEditEvent(event :CalendarEvent) :boolean{
+    for (let oneEvent of this.events.filter(ev=> ev.meta.timeSlipId != event.meta.timeSlipId)){
+      if (oneEvent.start> event.end || oneEvent.end < event.start){
+      }else {
+        return false;
+      }
+    }
+    return true;
   }
 
   getProjectName(WBIId : string){
@@ -613,22 +652,44 @@ export class AddTimeslipComponent{
 
   }
 
+
+
   confirmAddCustomDay(){
     console.log(this.selectedCustomday); 
     //console.log(this.clickedDate.getFullYear()+"-"+this.clickedDate.getMonth()+"-"+this.clickedDate.getDay()+"" );
-    console.log(this.clickedDate.toISOString());
-    let CustomdayTimeslip : customdayTimeslip = {
-      CustomdayId :this.selectedCustomday,
-      Date :this.clickedDate.toISOString()
+    let result = this.validateCustomDay(this.events.filter(event=> event.color == colors.red),this.events.filter(event=> event.color == colors.blue));
+    if (result == false){
+      alert("Please confirm that time will not overlap!");
+      return ;
     }
-    this.timeSlipTemplateService.applyTimeTemplate(CustomdayTimeslip).subscribe(
-      data=> {
-        console.log(data);
-        this.getAllTimeSlips();
-      },error =>{
-        alert(error);
+    else {
+      console.log(this.clickedDate.toISOString());
+      let CustomdayTimeslip : customdayTimeslip = {
+        CustomdayId :this.selectedCustomday,
+        Date :this.clickedDate.toISOString()
       }
-    )
+      this.timeSlipTemplateService.applyTimeTemplate(CustomdayTimeslip).subscribe(
+        data=> {
+          console.log(data);
+          this.getAllTimeSlips();
+        },error =>{
+          alert(error);
+        }
+      )
+    }
+  }
+
+  validateCustomDay(originalEvents : CalendarEvent[], newEvents : CalendarEvent[]):boolean{
+    for(let originalEvent of originalEvents){
+      for (let newEvent of newEvents){
+        if (originalEvent.start> newEvent.end || originalEvent.end < newEvent.start){
+
+        }else {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   confirmEdit(){
