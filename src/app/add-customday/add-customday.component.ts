@@ -354,7 +354,7 @@ export class AddCustomdayComponent implements OnInit {
       return false;
     }
     for (let oneEvent of events){
-      if (oneEvent.start> validationEvent.end || oneEvent.end < validationEvent.start){
+      if (oneEvent.start>= validationEvent.end || oneEvent.end <= validationEvent.start){
 
       }else {
         return false;
@@ -484,7 +484,7 @@ export class AddCustomdayComponent implements OnInit {
 
   validateEditEvent(event :CalendarEvent): boolean{
     for (let oneEvent of this.events.filter(ev=> ev.meta.timeSlipId != event.meta.timeSlipId)){
-      if (oneEvent.start> event.end || oneEvent.end < event.start){
+      if (oneEvent.start>= event.end || oneEvent.end <= event.start){
       }else {
         return false;
       }
