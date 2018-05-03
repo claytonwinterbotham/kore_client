@@ -1,4 +1,4 @@
-<p>
+<!-- <p>
   <tr *ngFor="let project of projectList">
     <td>{{project.newName}}</td><td> 
       <button type="button"
@@ -9,7 +9,7 @@
       </button>     
   </td>
   </tr>
-  <br>
+  <br> -->
 
 <!-- {{oneProject.newName}}<br>
 {{oneProject.newStartDate}} -->
@@ -33,7 +33,7 @@
           (click)="createProject(newProject)">Submit</button> -->
 
 
-</p>
+<!-- </p> -->
 
 
 <!-- <br>
@@ -52,71 +52,69 @@ One project Detail
       [(ngModel)]="oneProject.newEndDate" /></p>
         <button type="button"
         (click)="updateProject(oneProject)">Submit</button> -->
-       
+        
+<div class="row main-content">
+  <div class="col-md-4 offset-md-4">
+    <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+      <div class="form-group">
+        <label for="project">Project Name:</label>
+        <input 
+        type="text" 
+        class="form-control" 
+        id="project" 
+        placeholder="project name"
+        name="project"
+        [(ngModel)]="newProject.Name"
+        required
+        >
+      </div>
+      <div class="form-group">
+        <label for="client">Client:</label>
+          <select  name="client" [(ngModel)]="newProject.Client" class="form-control" required>
+              <option *ngFor="let client of clientList" value="{{client.accountId}}">{{client.name}}</option>                       
+          </select>
+      </div>
 
-<div class="container">
-  <div class="row">
-    <div class="col-8 offset-md-2 main-content">
-        <form (ngSubmit)="onSubmit(f)" #f="ngForm">
-          <div class="form-group">
-            <label for="project">Project Name:</label>
-            <input 
-            type="text" 
-            class="form-control" 
-            id="project" 
-            placeholder="project name"
-            name="project"
-            [(ngModel)]="newProject.Name"
-            required
-            >
+      <div class="form-group">
+          <label for="start_date">Start Date:</label>
+        <div class="input-group">
+          <input class="form-control" placeholder="yyyy-mm-dd"
+                  name="start_date" [(ngModel)]="newProject.StartDate" ngbDatepicker #d1="ngbDatepicker" required>
+          <div class="input-group-append">
+              <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
+              <img src="../../assets/img/calendar.svg" style="width: 2rem; height: 2rem; cursor: pointer;"/>
+              </button>
           </div>
-          <div class="form-group">
-            <label for="client">Client:</label>
-              <select  name="client" [(ngModel)]="newProject.Client" class="form-control" required>
-                  <option *ngFor="let client of clientList" value="{{client.accountId}}">{{client.name}}</option>                       
-              </select>
-          </div>
+        </div>
+      </div>
 
-          <div class="form-group">
-              <label for="start_date">Start Date:</label>
-            <div class="input-group">
-              <input class="form-control" placeholder="yyyy-mm-dd"
-                      name="start_date" [(ngModel)]="newProject.StartDate" ngbDatepicker #d1="ngbDatepicker" required>
-              <div class="input-group-append">
-                  <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
-                  <img src="../../assets/img/calendar.svg" style="width: 2rem; height: 2rem; cursor: pointer;"/>
-                  </button>
-              </div>
+      <div class="form-group">
+          <label for="end_date">End Date:</label>
+          <div class="input-group">
+            <input class="form-control" placeholder="yyyy-mm-dd"
+            name="end_date"
+            [(ngModel)]="newProject.EndDate" ngbDatepicker #d2="ngbDatepicker" required>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
+                <img src="../../assets/img/calendar.svg" style="width: 2rem; height: 2rem; cursor: pointer;"/>
+                </button>
             </div>
           </div>
+        </div>
+      
+      <div class="form-group">
+        <label for="project_type">Project Type:</label>
+        <input type="text" class="form-control" id="" placeholder="project type"
+        name="project_type"
+        [(ngModel)]="newProject.ProjectType"
+        required>
+      </div>
 
-          <div class="form-group">
-              <label for="end_date">End Date:</label>
-              <div class="input-group">
-                <input class="form-control" placeholder="yyyy-mm-dd"
-                name="end_date"
-                [(ngModel)]="newProject.EndDate" ngbDatepicker #d2="ngbDatepicker" required>
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
-                    <img src="../../assets/img/calendar.svg" style="width: 2rem; height: 2rem; cursor: pointer;"/>
-                    </button>
-                </div>
-              </div>
-            </div>
-          
-          <div class="form-group">
-            <label for="project_type">Project Type:</label>
-            <input type="text" class="form-control" id="" placeholder="project type"
-            name="project_type"
-            [(ngModel)]="newProject.ProjectType"
-            required>
-          </div>
-
-          <button type="button" class="btn btn-outline-success" (click)="createProject(f,newProject)" [disabled]="!f.valid">Submit</button>
-          <button type="button" class="btn btn-outline-info" (click)="onClear(f)">Clear</button>
-        </form>
-    </div>   
+      <button type="button" class="btn btn-outline-success" (click)="createProject(f,newProject)" [disabled]="!f.valid">Submit</button>
+      <button type="button" class="btn btn-outline-info" (click)="onClear(f)">Clear</button>
+    </form>  
   </div>
-</div>
+</div>        
+
 
 
