@@ -15,17 +15,6 @@ body{
     border-radius: 0.2rem;
 }
 
-.add_timeslip_day_view_container{
-    height: 800px;
-    width: 100%;
-    overflow-x: scroll;
-}
-
-.add_timeslip_day_form{
-    height: 800px;
-    width: 100%;
-}
-
 mwl-calendar-day-view{
     padding: 25px;
 }

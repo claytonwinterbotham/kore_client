@@ -177,23 +177,6 @@
       </div>
       <br>
       <div [ngSwitch]="view">
-      <div class="alert alert-info">
-        <strong *ngIf="clickedDate">You clicked on this day: {{ clickedDate | date:'mediumDate' }}
-            <p>Use Customday:             
-                    <ng-select [items]="customdayList"
-                    bindLabel="name"
-                    bindValue="customDayId"
-                    [(ngModel)]="selectedCustomday"
-                    (change)="showFakeCalendar()">
-                    </ng-select>                           
-            </p>
-            <button *ngIf="selectedCustomday"
-            class="btn btn-success"
-            (click)="confirmAddCustomDay(); refresh.next()">
-            Confirm
-          </button>            
-        </strong>
-      </div>    
         <mwl-calendar-month-view
           *ngSwitchCase="'month'"
           [viewDate]="viewDate"
@@ -218,10 +201,11 @@
           (dayClicked)="viewDate = $event.day.date; view = 'day'">
           <!-- [excludeDays]="excludeDays" -->
         </mwl-calendar-week-view>
-        <div class="row">
-          <div class="col-md-6">
-          
-              <div class="add_timeslip_day_view_container" id="day_view_scroll">
+        <div class="row add_timeslip_main_content">
+          <div class="col-md-1 pr-0"></div>
+          <div class="col-md-3 pl-0">
+              <div class="
+              add_timeslip_scroll" id="day_view_scroll">
                   <!-- <h1>My TimeSlips</h1> -->
                   <mwl-calendar-day-view
                   id="add_timeslip"
@@ -231,13 +215,13 @@
                   [refresh]="refresh"
                   (eventClicked)="handleEvent('Clicked', $event.event)"
                   (eventTimesChanged)="eventTimesChanged($event)"
-                  [dayStartHour]="8"
-                  [dayEndHour]="18"
+                  [dayStartHour]="0"
+                  [dayEndHour]="24"
                   >
                   </mwl-calendar-day-view>
               </div>
           </div>
-          <div *ngSwitchCase="'day'" class="col-md-4 offset-md-1 add_timeslip_day_form">
+          <div *ngSwitchCase="'day'" class="col-md-4 add_timeslip_day_form border-right">
             <form>
                 <!-- <div class="form-group">
                     <label for="customDayName">customDayName:</label>
@@ -252,8 +236,8 @@
                     >
                 </div> -->
 
-                <h1>Create New TimeSlip</h1>
-          
+                <h3 class="text-center">Create New Timeslip</h3>
+                <hr>
                 <div class="form-group">
                     <label for="remark">Remarks:</label>
                     <input 
@@ -278,7 +262,7 @@
                   </ng-select>
                   <p *ngIf="searchWBIs">{{selectedProject}}</p>
                 </div>
-                <div class="form-group">
+                <div class="form-group  wbi_search_group border p-2">
                     <label for="wbi">WBI:</label>
                     <ng-select 
                     [items]="wbiList"
@@ -288,10 +272,8 @@
                     name = "wbiList"
                     (change)="locateProject()"
                     ></ng-select>
-                </div>
-
-                <div class="form-group">
-                  <label for="searchString">Search WBI:</label>
+            
+                  <label class="pt-2" for="searchString">Search WBI:</label>
                   <div class="input-group">
                       <input type="search" class="form-control"  [(ngModel)]="searchString" name="searchString">
                       <div class="input-group-append">
@@ -301,24 +283,25 @@
                       </div>
                   </div>
                 </div>
-     
-                <div class="form-group">
-                    <label for="start_time">Start Time:</label>
-                    <ngb-timepicker name="startTime" [(ngModel)]="startTime" [meridian]="meridian" class="startTime"></ngb-timepicker>        
+                <div class="form-group clearfix">
+                  <div id="start_time"class="border-right">
+                      <label for="start_time">Start Time:</label>
+                      <ngb-timepicker size="small" name="startTime" [(ngModel)]="startTime" [meridian]="meridian" class="startTime"></ngb-timepicker>        
+                  </div>
+        
+                  <div id="end_time">
+                      <label for="end_time">End Time:</label>
+                      <ngb-timepicker size="small" name="endTime" [(ngModel)]="endTime" [meridian]="meridian" class="endTime"></ngb-timepicker>       
+                    </div>
                 </div>
-      
-                <div class="form-group">
-                    <label for="end_time">End Time:</label>
-                    <ngb-timepicker name="endTime" [(ngModel)]="endTime" [meridian]="meridian" class="endTime"></ngb-timepicker>                        </div>
-      
-                <button
-                class="btn btn-success"
-                (click)="AddNewTimeSlip()">
-                Add Timeslip
-                </button>
-                <button type="button" class="btn btn-outline-info" (click)="ClearAllEvents()">Clear</button>
-                <br>
-                <hr>
+                <div class="form-group text-left clearfix mt-2">
+                  <button
+                  class="btn btn-outline-success"
+                  (click)="AddNewTimeSlip()">
+                  Add Timeslip
+                  </button>
+                  <button type="button" class="btn btn-outline-info" (click)="ClearAllEvents()">Clear</button>
+                </div>
                 <!-- <div class="form-group">
                   <button
                   class="btn btn-success"
@@ -328,6 +311,25 @@
                 </div> -->
             </form>
           </div>
+          <div *ngSwitchCase="'day'" class="col-md-3 custom_day_section alert alert-info">
+            <h3 class="text-center pb-2"> Select Custom Day</h3>
+            <hr>
+            <strong *ngIf="clickedDate">You clicked on this day: {{ clickedDate | date:'mediumDate' }}</strong>
+                <label for="customdayList" class="pt-2">Use custom day:</label>             
+                  <ng-select [items]="customdayList"
+                  name="customdayList"
+                  bindLabel="name"
+                  bindValue="customDayId"
+                  [(ngModel)]="selectedCustomday"
+                  (change)="showFakeCalendar()">
+                  </ng-select> 
+
+                <button *ngIf="selectedCustomday"
+                class="btn btn-warning mt-3"
+                (click)="confirmAddCustomDay(); refresh.next()">
+                Confirm
+              </button>            
+          </div>      
       </div>
     </div>   
   </div>
