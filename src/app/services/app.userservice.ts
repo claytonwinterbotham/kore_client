@@ -26,10 +26,10 @@ export class MyUserService {
     constructor(private http: Http) {
 
         //for asw:
-        //this.site = "https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/user/"
+        this.site = "https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/user/"
 
         //for localhost:
-        this.site = 'http://localhost:64779/user/';
+        //this.site = 'http://localhost:64779/user/';
      }
 
      login(userInfo : LoginModel): Observable<Comment[]> {
@@ -114,13 +114,11 @@ deleteUser(id: String): Observable<Comment[]> {
     }
     
     private handleError(error: any) {
-        // In a real world app, we might use a remote logging infrastructure
-        // We'd also dig deeper into the error to get a better message
-        // console.log(error.json().err)
-        // let errMsg = error.json().err
         let errMsg = (error.message) ? error.message :
             error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-        // console.error(errMsg); // log to console instead
-        return Observable.throw(errMsg);
+        console.log(error._body);
+        console.log(JSON.parse(error._body).message);
+        //console.error(errMsg); // log to console instead
+        return Observable.throw(JSON.parse(error._body).message);
     }
 }

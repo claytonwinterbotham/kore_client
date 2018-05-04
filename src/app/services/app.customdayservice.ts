@@ -14,9 +14,9 @@ export class MyCustomDayService {
     public site:string;
     constructor(private http: Http) {
         // for aws:
-        //this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/customDay/';
+        this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/customDay/';
         // for local host:
-        this.site = "http://localhost:64779/customDay/"
+        //this.site = "http://localhost:64779/customDay/"
      }
 
     //create new customday

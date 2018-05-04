@@ -212,6 +212,7 @@ export class AddTimeslipComponent{
   searchWBIs :boolean = false;
   fakeTimeSlips : any;
   originalEvents :CalendarEvent[] = [];
+  wbiRemainingHours : string;
 
   //constructor 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
@@ -276,7 +277,7 @@ export class AddTimeslipComponent{
         this.quickRemarks = "";
         this.selectedProject = "";
         this.selectedWBI = "";
-
+        this.wbiRemainingHours = "" ;
       },error =>{
         alert(error);
       }
@@ -310,6 +311,7 @@ export class AddTimeslipComponent{
 
   locateProject(){
     console.log("i want to locate project");
+    this.wbiRemainingHours = "Remaining Hours: "+ this.getRemainingWBIHour(this.selectedWBI);
     if (!this.searchWBIs){
       return ;
     }
@@ -330,6 +332,22 @@ export class AddTimeslipComponent{
       }
     )
   }
+
+  getRemainingWBIHour(WBI : string) : number{
+    if (this.selectedWBI == ""){
+      return 0;
+    }else {
+      let wbi = this.wbiList.filter(i=> i.newChangeRequestId == WBI);
+      //return wbi.
+      console.log("I want to get remaining wbi hours");
+      //console.log(wbi);
+      //console.log(wbi[0]["newActualHours"]);
+      console.log(Number.parseInt(wbi[0]["newActualHours"])  - Number.parseInt(wbi[0]["newEstimatedHours"]));
+      return Number.parseInt(wbi[0]["newEstimatedHours"])  - Number.parseInt(wbi[0]["newActualHours"])
+      //return 1;
+    }
+  }
+
   scrollTo(){
       setTimeout(function(){
          var scrollContainer = document.getElementById("day_view_scroll")
@@ -760,6 +778,7 @@ export class AddTimeslipComponent{
   changeProject(){
     console.log("hello");
     this.selectedWBI = "";
+    this.wbiRemainingHours = "please select a WBI";
     if (this.selectedProject == ""){
         return ;
     }else {

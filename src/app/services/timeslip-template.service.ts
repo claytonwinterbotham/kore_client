@@ -14,9 +14,9 @@ export class TimeslipTemplateService {
   public site:string;
   constructor(private http: Http) {
       // for aws:
-      //this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/customDay_WBI/';
+      this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/customDay_WBI/';
       // for local host:
-      this.site = "http://localhost:64779/wbi/"
+      //this.site = "http://localhost:64779/wbi/"
    }
 
    applyTimeTemplate(_customdayTimeslipVM : any): Observable<Comment[]>{
@@ -91,14 +91,12 @@ export class TimeslipTemplateService {
 }
 
 private handleError(error: any) {
-    // In a real world app, we might use a remote logging infrastructure
-    // We'd also dig deeper into the error to get a better message
-    // console.log(error.json().err)
-    // let errMsg = error.json().err
     let errMsg = (error.message) ? error.message :
-        error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-    // console.error(errMsg); // log to console instead
-    return Observable.throw(errMsg);
+    error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+console.log(error._body);
+console.log(JSON.parse(error._body).message);
+//console.error(errMsg); // log to console instead
+return Observable.throw(JSON.parse(error._body).message);
 }
 
   

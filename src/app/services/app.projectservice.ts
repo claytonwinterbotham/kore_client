@@ -28,9 +28,9 @@ export class MyProjectService {
     public site:string;
     constructor(private http: Http) {
         // for aws:
-        //this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/project/';
+        this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/project/';
         // for local host:
-        this.site = "http://localhost:64779/project/"
+        //this.site = "http://localhost:64779/project/"
      }
 
     //add a project
@@ -64,6 +64,7 @@ export class MyProjectService {
             .map(this.extractData)
             .catch(this.handleError);
     }
+    
 
     //get one project
     getOneProject(projectId : string): Observable<Comment[]>{
@@ -99,8 +100,8 @@ export class MyProjectService {
             "ProjectName": _project.newName,
             "StartDate": _project.newStartDate,
             "EndDate": _project.newEndDate,
-            "ClientId": _project.newClient
-            // "ProjectType": _project.ProjectType,    
+            "ClientId": _project.newClient,
+            "ProjectType": _project.ProjectType,    
         };
         return this.http.put(dataUrl,ProjectJson, options)
         .map(this.extractData)
@@ -119,8 +120,17 @@ export class MyProjectService {
             .catch(this.handleError);
             
     }
-
-
+    //get all project types
+    getProjectTypes(): Observable<Comment[]> {
+        let headers = new Headers({ 'Content-Type': 'application/json' }); 
+        let options = new RequestOptions({headers: headers});
+        // headers.append( 'Authorization', 'Bearer ' 
+        // + sessionStorage.getItem('token'));
+        let dataUrl = this.site + "GetAllProjectTypes";
+        return this.http.get(dataUrl, options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
     
     private extractData(res: Response) {
         let body = res.json();
@@ -128,13 +138,11 @@ export class MyProjectService {
     }
     
     private handleError(error: any) {
-        // In a real world app, we might use a remote logging infrastructure
-        // We'd also dig deeper into the error to get a better message
-        // console.log(error.json().err)
-        // let errMsg = error.json().err
         let errMsg = (error.message) ? error.message :
             error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-        // console.error(errMsg); // log to console instead
-        return Observable.throw(errMsg);
+        console.log(error._body);
+        console.log(JSON.parse(error._body).message);
+        //console.error(errMsg); // log to console instead
+        return Observable.throw(JSON.parse(error._body).message);
     }
 }
