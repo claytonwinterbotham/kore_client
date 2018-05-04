@@ -15,6 +15,10 @@ export class ViewProjectsComponent implements OnInit {
 
   projectService : MyProjectService;
   projectList : any;
+
+  projectTypeList : any;
+ 
+
   oneProject :any = {};
   newProject : any = {};
 
@@ -31,6 +35,7 @@ export class ViewProjectsComponent implements OnInit {
   ngOnInit() {
     this.showProjectList();
     this.showClientList()
+    this.showProjectTypeList();
   }
 
   createProject(form: NgForm, project : ProjectModel){
@@ -49,6 +54,17 @@ export class ViewProjectsComponent implements OnInit {
       data=> {
         console.log(data);
         this.projectList = data;
+      },
+    error => {
+      alert(error);
+    }
+  )
+  }
+  showProjectTypeList(){
+    this.projectService.getProjectTypes().subscribe(
+      data=> {
+        console.log(data);
+        this.projectTypeList = data;
       },
     error => {
       alert(error);
