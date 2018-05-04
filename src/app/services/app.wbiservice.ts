@@ -19,9 +19,9 @@ export class MyWBIService {
     public site:string;
     constructor(private http: Http) {
         // for aws:
-        this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/wbi/';
+        //this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/wbi/';
         // for local host:
-        //this.site = "http://localhost:64779/wbi/"
+        this.site = "http://localhost:64779/wbi/"
      }
 
     //add a wbi
@@ -34,7 +34,7 @@ export class MyWBIService {
         let WBIJson = {         
             "Description": _wbi.Description,
             "EstimatedHours": Number(_wbi.EstimatedHours),
-            "ActualHours": Number(_wbi.ActualHours), 
+            "ActualHours": 0, 
             "ProjectId": _wbi.ProjectId,
         }
         console.log(WBIJson)

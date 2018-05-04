@@ -1,43 +1,30 @@
 <div class="row main-content">
   <div class="col-md-4 offset-md-4">
-    <form>
-      <div class="form-group">
-        <label for="wbi">WBI:</label>
-        <input type="text" class="form-control" id="wbi" placeholder="">
-      </div>
+    <form  #f="ngForm">
 
-      <!-- <div class="form-group">
-          <label for="projects">Project:</label>
-          <ng-select [dropdownPosition]="'down'"
-            id="projects"
-            [searchable]="true"
-            [items]="projects"
-            bindlabel="label"
-            bindvalue="value">
-          </ng-select>
-      </div> -->
       <div class="form-group">
         <label for="project">Project:</label>
         <ng-select [items]="projectList"
         bindLabel="newName"
         bindValue="newProjectId"
-        [(ngModel)]="selectedProject"
-      
+        [(ngModel)]="newWBI.ProjectId"
         name = "projectList">
         </ng-select>
       </div>
+
       <div class="form-group">
         <label for="description">Description:</label>
-        <input type="text" class="form-control" id="description" placeholder="">
+        <input name="description" [(ngModel)]="newWBI.Description" type="text" class="form-control" id="description" placeholder="">
       </div>   
 
       <div class="form-group row">
-        <label for="estimated" class="col-2 col-form-label">Est. Hours:</label>
+        <label for="estHours" class="col-2 col-form-label">Est. Hours:</label>
         <div class="col-4">
-          <input class="form-control" type="number" value="0" id="example-number-input">
+          <input name="estHours" [(ngModel)]="newWBI.EstimatedHours" class="form-control" type="number" value="0" id="example-number-input">
         </div>
       </div>
-      <button type="submit" class="btn btn-outline-success">Submit</button>
+      <button type="submit" class="btn btn-outline-success" (click)="createWBI(f, newWBI)">Submit</button>
+      <button type="button" class="btn btn-outline-info" (click)="onClear(f)">Clear</button>
     </form>  
   </div>
 </div>        
