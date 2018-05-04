@@ -14,9 +14,9 @@ export class TimeslipTemplateService {
   public site:string;
   constructor(private http: Http) {
       // for aws:
-      //this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/customDay_WBI/';
+      this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/customDay_WBI/';
       // for local host:
-      this.site = "http://localhost:64779/wbi/"
+      //this.site = "http://localhost:64779/wbi/"
    }
 
    applyTimeTemplate(_customdayTimeslipVM : any): Observable<Comment[]>{

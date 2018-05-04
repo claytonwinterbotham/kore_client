@@ -26,10 +26,10 @@ export class MyUserService {
     constructor(private http: Http) {
 
         //for asw:
-        //this.site = "https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/user/"
+        this.site = "https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/user/"
 
         //for localhost:
-        this.site = 'http://localhost:64779/user/';
+        //this.site = 'http://localhost:64779/user/';
      }
 
      login(userInfo : LoginModel): Observable<Comment[]> {
