@@ -279,7 +279,6 @@ export class AddTimeslipComponent{
         this.selectedProject = "";
         this.selectedWBI = "";
         this.wbiRemainingHours = "" ;
-
       },error =>{
         alert(error);
       }
