@@ -50,7 +50,6 @@ export class ViewWmbsComponent implements OnInit {
         alert(error);
       }
     )
-    console.log("new wbi" + JSON.stringify(wbi));
     form.reset();
 
   } 
