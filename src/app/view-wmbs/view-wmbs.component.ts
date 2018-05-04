@@ -1,28 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { MyProjectService } from '../services/app.projectservice';
+import { MyWBIService } from '../services/app.wbiservice';
+import  {WBIModel} from "../services/app.wbiservice";
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-view-wmbs',
   templateUrl: './view-wmbs.component.html',
   styleUrls: ['./view-wmbs.component.css'],
-  providers: [MyProjectService]
+  providers: [
+    MyProjectService,
+    MyWBIService
+  ]
 })
 export class ViewWmbsComponent implements OnInit {
 
   projectList: any;
   projectService: MyProjectService;
-  // projects = [
-  //   { value: 1, label: 'projects1' },
-  //   { value: 2, label: 'projects2' },
-  //   { value: 3, label: 'projects3' },
-  //   { value: 4, label: 'projects4' },
-  //   { value: 5, label: 'projects5' },
-  //   { value: 6, label: 'projects6' }
-  // ];
-  selectedProject : string;
+  wbiService: MyWBIService;
+  newWBI : any = {};
 
-  constructor(_projectService: MyProjectService) { 
+
+  constructor(_projectService: MyProjectService, _wbiService: MyWBIService) { 
     this.projectService = _projectService;
+    this.wbiService = _wbiService;
   }
 
   ngOnInit() {
@@ -39,6 +40,23 @@ export class ViewWmbsComponent implements OnInit {
       alert(error);
     }
   )
+  }
+
+  createWBI(form: NgForm, wbi : WBIModel){
+    this.wbiService.postWBI(wbi).subscribe(
+      data=> {
+        console.log(data);
+      },error =>{
+        alert(error);
+      }
+    )
+    console.log("new wbi" + JSON.stringify(wbi));
+    form.reset();
+
+  } 
+
+  onClear(form: NgForm){
+    form.reset();
   }
 
 }
