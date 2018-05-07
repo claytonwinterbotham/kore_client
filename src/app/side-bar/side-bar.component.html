@@ -1,11 +1,11 @@
 
 <ul class="nav flex-column">
     <li class="nav-item">
-      <a class="nav-link" routerLink="/addtimeslip" href="">Timeslips</a>
+      <a class="nav-link" routerLink="/addtimeslip" routerLinkActive="active" href="">Timeslips</a>
     </li>
-    <li class="nav-item dropdown">
+    <li class="nav-item dropdown" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
       <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Custom<br>Day</a>
-      <div class="dropdown-menu">
+      <div class="dropdown-menu" >
         <a class="dropdown-item" routerLink="/Createcustomday" href="">Create</a>
         <a class="dropdown-item" routerLink="/addcustomday" href="">Edit</a>
       </div>
@@ -14,10 +14,10 @@
         <hr>
     </li>    
     <li class="nav-item">
-      <a class="nav-link" routerLink="/viewallprojects" href="">Projects</a>
+      <a class="nav-link" routerLink="/viewallprojects" routerLinkActive="active" href="">Projects</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" routerLink="/viewallwbis" href="">WBI</a>
+        <a class="nav-link" routerLink="/viewallwbis" routerLinkActive="active" href="">WBI</a>
     </li>
     <li class="nav-item logout">
         <button class="btn btn-small btn-secondary" (click)="logOut()">Logout</button>
