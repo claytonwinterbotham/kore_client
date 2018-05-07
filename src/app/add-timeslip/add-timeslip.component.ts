@@ -240,8 +240,7 @@ export class AddTimeslipComponent{
   ngOnInit() {
     this.showProjectList();
     this.getAllTimeSlips();
-    this.getAllCustomDays();
-    this.scrollTo();     
+    this.getAllCustomDays(); 
   }
 
   hourSegmentClicked(date: Date) {
@@ -430,9 +429,12 @@ export class AddTimeslipComponent{
   }
 
   scrollTo(){
-    var scrollContainer = document.getElementById("day_view_scroll")
-    setTimeout(function(){ scrollContainer.scrollTop = 465 }, 500);
-    console.log("scroll " + scrollContainer.scrollTop)
+      setTimeout(function(){
+         var scrollContainer = document.getElementById("day_view_scroll")
+         scrollContainer.scrollTop = 465 
+         console.log("scroll " + scrollContainer.scrollTop)
+        }, 300);
+      
   }
   // all the functions below
   showProjectList(){
@@ -581,7 +583,6 @@ export class AddTimeslipComponent{
       }
     }
     this.clickedDate = date;
-    this.scrollTo();
   }
 
   //hander for the change of time of events

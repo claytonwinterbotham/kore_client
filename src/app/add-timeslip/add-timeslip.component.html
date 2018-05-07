@@ -178,30 +178,40 @@
 
        <!-- [activeDayIsOpen]="activeDayIsOpen" -->
       <div [ngSwitch]="view">
-        <mwl-calendar-month-view
-          *ngSwitchCase="'month'"
-          [viewDate]="viewDate"
-          [events]="events"
-          [refresh]="refresh"    
-          (dayClicked)="dayClicked($event.day)"
-          (eventClicked)="handleEvent('Clicked', $event.event)"
-          (eventTimesChanged)="eventTimesChanged($event)"
-          (dayClicked)="viewDate = $event.day.date; view = 'day'"
-          >
-          
-           <!-- [excludeDays]="excludeDays" -->
-        </mwl-calendar-month-view>
-        <mwl-calendar-week-view
-          *ngSwitchCase="'week'"     
-          [viewDate]="viewDate"
-          [events]="events"
-          [refresh]="refresh"
-          (eventClicked)="handleEvent('Clicked', $event.event)"
-          (eventTimesChanged)="eventTimesChanged($event)"
-          (dayClicked)="viewDate = $event.day.date; view = 'day'">
-          <!-- [excludeDays]="excludeDays" -->
-        </mwl-calendar-week-view>
-        <div class="row add_timeslip_main_content">
+        <div class="row" *ngSwitchCase="'month'" >
+          <div class="col-md-1"></div>
+          <div class="col-md-10 month_view_content">
+            <mwl-calendar-month-view
+            [viewDate]="viewDate"
+            [events]="events"
+            [refresh]="refresh"    
+            (dayClicked)="dayClicked($event.day); scrollTo();"
+            (eventClicked)="handleEvent('Clicked', $event.event)"
+            (eventTimesChanged)="eventTimesChanged($event)"
+            (dayClicked)="viewDate = $event.day.date; view = 'day'"
+            > 
+               <!-- [excludeDays]="excludeDays" -->
+            </mwl-calendar-month-view>
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+        <div *ngSwitchCase="'week'" class="row">
+          <div class="col-md-1"></div>
+          <div class="col-md-10 week_view_content">
+            <mwl-calendar-week-view   
+            [viewDate]="viewDate"
+            [events]="events"
+            [refresh]="refresh"
+            (eventClicked)="handleEvent('Clicked', $event.event)"
+            (eventTimesChanged)="eventTimesChanged($event)"
+            (dayClicked)="viewDate = $event.day.date; view = 'day'">
+            <!-- [excludeDays]="excludeDays" -->
+            </mwl-calendar-week-view>
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+        
+        <div *ngSwitchCase="'day'" class="row add_timeslip_main_content">
           <div class="col-md-1 pr-0"></div>
           <div class="col-md-3 pl-0">
               <div class="
@@ -209,7 +219,6 @@
                   <!-- <h1>My TimeSlips</h1> -->
                   <mwl-calendar-day-view
                   id="add_timeslip"
-                  *ngSwitchCase="'day'"
                   [viewDate]="viewDate"
                   [events]="events"
                   [refresh]="refresh"
@@ -223,7 +232,7 @@
                   </mwl-calendar-day-view>
               </div>
           </div>
-          <div *ngSwitchCase="'day'" class="col-md-4 add_timeslip_day_form border-right">
+          <div class="col-md-4 add_timeslip_day_form border-right">
             <form #form="ngForm" (ngSubmit)="AddNewTimeSlip()">
                 <!-- <div class="form-group">
                     <label for="customDayName">customDayName:</label>
@@ -322,7 +331,7 @@
                 </div> -->
             </form>
           </div>
-          <div *ngSwitchCase="'day'" class="col-md-3 custom_day_section alert alert-info">
+          <div class="col-md-3 custom_day_section alert alert-info">
             <h3 class="text-center pb-2"> Select Custom Day</h3>
             <hr>
             <strong *ngIf="clickedDate">You clicked on this day: {{ clickedDate | date:'mediumDate' }}</strong>
