@@ -3,14 +3,14 @@
         <h1 class="text-center">Create Custom Day</h1>
         <form>
             <div class="form-group">
-                <label for="customDayName">Custom day name:</label>
+                <label for="customDayName">Name:</label>
                 <input type="text" class="form-control" id="customDayName" placeholder="enter name"
                 name="customDayName" [(ngModel)]="customDayName"
                 >
                 <div *ngIf="!nameNotEmpty" class="alert alert-danger"> Custom Day name should not Be Empty!</div>
             </div>
             <div class="form-group">
-                <label for="customDayDescription">Custom day description:</label>
+                <label for="customDayDescription">Description:</label>
                 <input type="text" class="form-control" id="customDayDescription" placeholder="enter description"
                 name="customDayDescription" [(ngModel)]="customDayDescription"
                 >
