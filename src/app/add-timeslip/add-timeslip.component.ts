@@ -35,7 +35,8 @@ import {
   CalendarEvent,
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
-  CalendarEventTitleFormatter
+  CalendarEventTitleFormatter,
+  CalendarMonthViewDay 
 } from 'angular-calendar';
 // import {layui} from "layui-src"
 import { ClickOutsideModule } from 'ng-click-outside';
@@ -43,6 +44,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { Router, NavigationExtras } from '@angular/router';
 import { Inject} from "@angular/core";
 import { DOCUMENT } from '@angular/platform-browser';
+import { DayViewHour } from 'calendar-utils';
 
 //const
 const colors: any = {
@@ -103,14 +105,20 @@ export class AddTimeslipComponent{
     {
       label: '<i class="fa fa-fw fa-times"></i>',
       onClick: ( { event }: { event: CalendarEvent } ): void => {
-        this.timeSlipService.deleteTimeslip(event.meta.timeSlipId).subscribe(
-          data=> {
-            console.log(data);
-            this.getAllTimeSlips();
-          },error =>{
-            alert(error);
-          }
-        )
+
+        if (event.meta.timeSlipId == ""){
+          this.events = this.events.filter(iEvent => iEvent !== event);
+          this.newTimeSlipTest = true;
+        }else {
+          this.timeSlipService.deleteTimeslip(event.meta.timeSlipId).subscribe(
+            data=> {
+              console.log(data);
+              this.getAllTimeSlips();
+            },error =>{
+              alert(error);
+            }
+          )
+        }
       }
     }
   ];
@@ -213,6 +221,9 @@ export class AddTimeslipComponent{
   fakeTimeSlips : any;
   originalEvents :CalendarEvent[] = [];
   wbiRemainingHours : string;
+  selectedDayViewDate: Date;
+  dayView: DayViewHour[];
+  newTimeSlipTest: boolean = true;
 
   //constructor 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
@@ -233,8 +244,77 @@ export class AddTimeslipComponent{
     this.scrollTo();     
   }
 
-  AddNewTimeSlip(){
+  hourSegmentClicked(date: Date) {
+    this.selectedDayViewDate = date;
+    this.addSelectedDayViewClass();
+  }
 
+  beforeDayViewRender(dayView: DayViewHour[]) {
+   
+    this.dayView = dayView;
+    this.addSelectedDayViewClass();
+  }
+
+  addSelectedDayViewClass() {
+
+ 
+
+
+
+    this.dayView.forEach(hourSegment => {
+      hourSegment.segments.forEach(segment => {
+        delete segment.cssClass;
+        if (
+          this.selectedDayViewDate &&
+          segment.date.getTime() === this.selectedDayViewDate.getTime()
+        ) {
+
+          
+          //segment.cssClass = 'cal-day-selected';
+          //console.log(new Date(segment.date.getTime()));
+          //this.endTime.setMinutes(this.startTime.getMinutes()+30);
+          console.log(segment.date.getHours());
+          this.startTime = {hour: segment.date.getHours(), minute: segment.date.getMinutes()};
+          let newDate = new Date(segment.date.getTime());
+          newDate.setMinutes(newDate.getMinutes()+30);
+          //segment.date.setMinutes(segment.date.getMinutes()+30);
+          this.endTime = {hour:newDate.getHours(), minute: newDate.getMinutes()};
+          console.log(this.startTime.hour)
+          console.log(newDate);
+          this.refresh.next();
+          // if (this.newTimeSlipTest == true){
+          //   this.events.push({
+          //     title: this.quickRemarks,
+          //     start: new Date(segment.date.getTime()),
+          //     end: newDate,
+          //     meta:{
+          //       timeSlipId: "",
+          //       WBIId :this.selectedWBI
+          //     },
+          //     color: colors.blue,
+          //     draggable: true,
+          //     resizable: {
+          //       beforeStart: true,
+          //       afterEnd: true
+          //     },
+          //     actions: this.actions
+          //   });
+            
+          //   this.newTimeSlipTest =false;
+            
+          // }else {
+          //   return ;
+          // }
+        }
+      });
+    });
+  }
+
+
+
+
+
+  AddNewTimeSlip(){
     console.log("I want to add a new timeslip");
     console.log(this.viewDate);
     //console.log(this.startTime)
