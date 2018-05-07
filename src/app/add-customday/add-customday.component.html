@@ -98,11 +98,15 @@
           <div class="form-group clearfix">
             <div id="start_time"class="border-right">
               <label for="start_time">Start Time:</label>
-              <ngb-timepicker size="small" name="startTime" [(ngModel)]="TodaystartTime" [meridian]="meridian"></ngb-timepicker>
+              <ngb-timepicker (click)="onStartTimeChange()" size="small" name="startTime" [(ngModel)]="TodaystartTime" [meridian]="meridian"></ngb-timepicker>
             </div>
             <div id="end_time">
               <label for="end_time">End Time:</label>
-              <ngb-timepicker size="small" name="endTime" [(ngModel)]="TodayendTime" [meridian]="meridian"></ngb-timepicker>
+              <ngb-timepicker (click)="onEndTimeChange()" size="small" name="endTime" [(ngModel)]="TodayendTime" [meridian]="meridian"></ngb-timepicker>
+            </div>
+            <div id="bind_controls_checkbox">
+              <label for="bind_controls_cb">Bind Time Controls</label>
+              <input (change)="onCheckboxChange()" type="checkbox" name="bind_controls_cb" [(ngModel)]="controlsAreBinded">
             </div>
           </div>
           <div class="form-group text-left clearfix mt-2">
