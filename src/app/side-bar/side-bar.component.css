@@ -6,6 +6,10 @@
     padding: 12px 10px;
 }
 
+.nav hr{
+    background-color: #9d9d9d
+}
+
 .dropdown-menu .dropdown-item{
     color: #000;
 }

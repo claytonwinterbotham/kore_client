@@ -6,3 +6,7 @@ select.ng-invalid.ng-touched{
 .main-content{
     margin-top: 3em;
 }
+
+.main-content h1{
+    margin-bottom: 1em;
+}

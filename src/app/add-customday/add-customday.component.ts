@@ -434,8 +434,8 @@ export class AddCustomdayComponent implements OnInit {
     }else {
       let editedTimeSlipTemplate: TimeSlipTemplate = {
         TimeslipTemplateId : this.EditTimeSlipId,
-        StartTime : this.EditStartDate.toLocaleString("en-US"),
-        EndTime : this.EditEndDate.toLocaleString("en-US"),
+        StartTime : this.EditStartDate.toLocaleString(),
+        EndTime : this.EditEndDate.toLocaleString(),
         Remarks : this.EditRemark    
       }
       console.log("i want to comfirm edit");
