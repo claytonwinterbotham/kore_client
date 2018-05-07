@@ -228,6 +228,8 @@
                   (eventTimesChanged)="eventTimesChanged($event)"
                   [dayStartHour]="0"
                   [dayEndHour]="24"
+                  (beforeViewRender)="beforeDayViewRender($event.body.hourGrid)"
+                  (hourSegmentClicked)="hourSegmentClicked($event.date)">
                   >
                   </mwl-calendar-day-view>
               </div>
