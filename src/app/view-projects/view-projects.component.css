@@ -7,6 +7,10 @@ select.ng-invalid.ng-touched{
     margin-top: 3em;
 }
 
+.row{
+    margin-right: 0;
+}
+
 .main-content h1{
     margin-bottom: 1em;
 }

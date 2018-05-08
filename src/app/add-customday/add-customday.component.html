@@ -29,8 +29,8 @@
 </div> -->
 <!-- <ng-template> -->
 <!-- <ng-template #ShowAll> -->
-  <div  class="row custom_day_main_content">
-      <div class="col-md-1 pr-0"></div>
+  <div class="row main_content">
+      <div class="col-md-1"></div>
       <div class="col-md-4 custom_day_form">
         <form #form="ngForm" (ngSubmit)="addToTemplate()">
             <h3 class="text-center timeslip-header">New Timeslip Template</h3>
@@ -93,14 +93,13 @@
             <input type="text" class="form-control" id="customdayRemark" placeholder="Enter remarks"
             name="remark" [(ngModel)]="newEventTitle" 
             >
-        </div>
+          </div>
           
           <div class="form-group text-left clearfix mt-2">
             <button
             type="submit"
             class="btn btn-outline-success"
             [disabled]="(!form.valid || confirmDisabled) && !form.valid"
-            
            >
             Add Template
             </button>
@@ -108,7 +107,7 @@
           </div>
         </form>
       </div>
-      <div class="col-md-3 pl-0">
+      <div class="col-md-3">
         <h3 class="text-center timeslip-header">Timeslot</h3>
         <hr>
         <div class="custom_day_view_container custom_day_scroll" id="day_view_scroll">
@@ -178,6 +177,7 @@
           </div>
         </form>
       </div> 
+</div>
 <!-- </ng-template> -->
 
 <ng-template #modalContent let-close="close">

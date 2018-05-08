@@ -3,6 +3,14 @@
     padding: 0;
 }
 
+.row{
+    margin-right: 0;
+}
+
+.main_content{
+    margin-top: 5em;
+}
+
 .custom_day_header{
     background-color: #DDDDDD;
     padding-top: .5em;
@@ -37,5 +45,7 @@
     margin-bottom: 20px;
     font-size: 20px;
 }
+
+
 
 
