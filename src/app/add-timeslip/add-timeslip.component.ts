@@ -407,6 +407,9 @@ export class AddTimeslipComponent{
   }
 
   validateNewEvent (validationEvent : CalendarEvent, events : Array<CalendarEvent<{ timeSlipId: string,WBIId : string }>>): boolean{
+    if (events.length == 0){
+      return true;
+    }
     for (let oneEvent of events){
       if (oneEvent.start>= validationEvent.end || oneEvent.end <= validationEvent.start){
 
@@ -549,7 +552,11 @@ export class AddTimeslipComponent{
     this.timeSlipService.getTimeSlipsByUserId(this.userId).subscribe(
       data=> {
         console.log(data);
-        this.allTimeSlips = data;
+        if (data[0]["newTimesheetEntryId"] == null){
+          this.allTimeSlips = "";
+        }else {
+          this.allTimeSlips = data;
+        }
         this.showInCalendar();
       },
     error => {
@@ -571,13 +578,16 @@ export class AddTimeslipComponent{
   }
 
   showInCalendar(){
-    if (this.allTimeSlips.length == 0){
+    if (this.allTimeSlips == ""){
       return ;
+    }else {
+      console.log(this.allTimeSlips);
+      for (let oneTimeSlip of this.allTimeSlips){
+        //this.getTitleName(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask,oneTimeSlip.newTimesheetEntryId,oneTimeSlip.newChangeRequestId,colors.blue,true);
+        this.addNewEvent(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask,oneTimeSlip.newTimesheetEntryId,oneTimeSlip.newChangeRequestId,oneTimeSlip.wbiName, colors.blue);
+      }
     }
-    for (let oneTimeSlip of this.allTimeSlips){
-      //this.getTitleName(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask,oneTimeSlip.newTimesheetEntryId,oneTimeSlip.newChangeRequestId,colors.blue,true);
-      this.addNewEvent(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask,oneTimeSlip.newTimesheetEntryId,oneTimeSlip.newChangeRequestId,oneTimeSlip.wbiName, colors.blue);
-    }
+
     console.log(this.events);
   }
 
