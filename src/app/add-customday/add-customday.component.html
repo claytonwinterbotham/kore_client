@@ -211,7 +211,7 @@
     </div>
   </ng-template>
 
-  <ng-template #searchFail let-c="close" let-d="dismiss">
+  <ng-template #OriFail let-c="close" let-d="dismiss">
     <div class="modal-header">
       <h4 class="modal-title">Modal title</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
@@ -221,6 +221,18 @@
     <div class="modal-body">
       <p>There is no Wbi found!</p>
     </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+
+  <ng-template #searchFail let-c="close" let-d="dismiss">
+      <div class="modal-header"></div>
+      <div class="modal-body">
+          <div class="alert alert-danger">
+              <strong>Ooops!</strong> here is no Wbi found!
+          </div>
+      </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
     </div>

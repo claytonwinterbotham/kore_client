@@ -190,7 +190,8 @@
                 </div>
                 <div class="form-group  wbi_search_group border p-2">
                     <label for="wbi">WBI:</label>
-                    <p class="alert alert-info">{{wbiRemainingHours}}</p>
+                    <p class="alert alert-info" *ngIf="!remainingHourInvalid">{{wbiRemainingHours}}</p>
+                    <p class="alert alert-danger" *ngIf="remainingHourInvalid">{{wbiRemainingHours}}</p>                   
                     <ng-select 
                     [items]="wbiList"
                     bindLabel="newName"
@@ -228,7 +229,7 @@
                   <button
                   type="submit"
                   class="btn btn-outline-success"
-                  [disabled]="!form.valid"
+                  [disabled]="!form.valid || remainingHourInvalid"
                   >
                   Add Timeslip
                   </button>
@@ -290,21 +291,18 @@
 
   <!-- modal: -->
   <ng-template #searchSuccess let-c="close" let-d="dismiss">
-    <div class="modal-header">
-      <h4 class="modal-title">Modal title</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <p>You Can Select Your WBI in the DropDown List Now!</p>
-    </div>
+      <div class="modal-header"></div>
+      <div class="modal-body">
+          <div class="alert alert-success">
+              <strong>Success!</strong> You can select WBIs in the DropDown Now!
+          </div>
+      </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
     </div>
   </ng-template>
 
-  <ng-template #searchFail let-c="close" let-d="dismiss">
+  <ng-template #OriFail let-c="close" let-d="dismiss">
     <div class="modal-header">
       <h4 class="modal-title">Modal title</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
@@ -319,17 +317,24 @@
     </div>
   </ng-template>
 
-  <ng-template #confirmDelete let-c="close" let-d="dismiss">
-    <div class="modal-header">
-      <h4 class="modal-title">{{id}}</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
+  <ng-template #confirmDelete let-c="close" let-d="dismiss" >
+    <div class="alert alert-info">
+    <div class="modal-body " >
       <p>Are you sure to delete this timeslip????</p>
     </div>
     <button type="button" class="btn btn-light" (click)="deleteTimeSlip();c('Close click')">Yes</button>
     <button type="button" class="btn btn-light" (click)="c('Close click')">No</button>
+  </div>
+  </ng-template>
 
+  <ng-template #searchFail let-c="close" let-d="dismiss">
+      <div class="modal-header"></div>
+      <div class="modal-body">
+          <div class="alert alert-danger">
+              <strong>Ooops!</strong> here is no Wbi found!
+          </div>
+      </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
+    </div>
   </ng-template>

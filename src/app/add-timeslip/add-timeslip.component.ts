@@ -236,6 +236,7 @@ export class AddTimeslipComponent{
     
       controlsAreBinded : boolean;
 
+  remainingHourInvalid: boolean = false;
   //constructor 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
   _customdayService : MyCustomDayService,public router:Router, @Inject(DOCUMENT) private document: Document,
@@ -465,6 +466,11 @@ export class AddTimeslipComponent{
       this.wbiRemainingHours = "";
     }
     this.wbiRemainingHours = "Remaining Hours: "+ this.getRemainingWBIHour(this.selectedWBI);
+    if(this.getRemainingWBIHour(this.selectedWBI) <= 0){
+     this.remainingHourInvalid = true;
+    }else {
+      this.remainingHourInvalid = false;
+    } 
     if (!this.searchWBIs){
       return ;
     }
@@ -976,6 +982,7 @@ export class AddTimeslipComponent{
       this.wbiList = null;
       this.WBIDisabled = true;
       this.searchDisabled = false;
+      this.wbiRemainingHours = null;
       return ;
     }else {
       this.wbiService.GetAllWBIsByProjectId(this.selectedProject).subscribe(data=>{
