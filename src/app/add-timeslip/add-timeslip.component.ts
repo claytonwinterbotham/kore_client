@@ -266,9 +266,6 @@ export class AddTimeslipComponent{
       }
     )
   }
-
-
-
   hourSegmentClicked(date: Date) {
     this.selectedDayViewDate = date;
     this.addSelectedDayViewClass();
@@ -282,10 +279,6 @@ export class AddTimeslipComponent{
 
   addSelectedDayViewClass() {
 
- 
-
-
-
     this.dayView.forEach(hourSegment => {
       hourSegment.segments.forEach(segment => {
         delete segment.cssClass;
@@ -294,7 +287,6 @@ export class AddTimeslipComponent{
           segment.date.getTime() === this.selectedDayViewDate.getTime()
         ) {
 
-          
           //segment.cssClass = 'cal-day-selected';
           //console.log(new Date(segment.date.getTime()));
           //this.endTime.setMinutes(this.startTime.getMinutes()+30);
