@@ -140,27 +140,6 @@
         
         <div *ngSwitchCase="'day'" class="row add_timeslip_main_content">
           <div class="col-md-1 pr-0"></div>
-          <div class="col-md-3 pl-0">
-          <h3 class="text-center timeslip-header">Timeslot</h3>
-          <hr>
-              <div class="
-              add_timeslip_scroll" id="day_view_scroll">
-                  <!-- <h1>My TimeSlips</h1> -->
-                  <mwl-calendar-day-view
-                  id="add_timeslip"
-                  [viewDate]="viewDate"
-                  [events]="events"
-                  [refresh]="refresh"
-                  (eventClicked)="handleEvent('Clicked', $event.event)"
-                  (eventTimesChanged)="eventTimesChanged($event)"
-                  [dayStartHour]="0"
-                  [dayEndHour]="24"
-                  (beforeViewRender)="beforeDayViewRender($event.body.hourGrid)"
-                  (hourSegmentClicked)="hourSegmentClicked($event.date)">
-                  >
-                  </mwl-calendar-day-view>
-              </div>
-          </div>
           <div class="col-md-4 add_timeslip_day_form">
             <form #form="ngForm" (ngSubmit)="AddNewTimeSlip()">
                 <!-- <div class="form-group">
@@ -178,7 +157,17 @@
 
                 <h3 class="text-center timeslip-header">Create New Timeslip</h3>
                 <hr>
-
+                <div class="form-group clearfix">
+                  <div id="start_time"class="border-right">
+                      <label for="start_time">Start Time:</label>
+                      <ngb-timepicker size="small" name="startTime" [(ngModel)]="startTime" [meridian]="meridian" class="startTime"></ngb-timepicker>        
+                  </div>
+        
+                  <div id="end_time">
+                      <label for="end_time">End Time:</label>
+                      <ngb-timepicker size="small" name="endTime" [(ngModel)]="endTime" [meridian]="meridian" class="endTime"></ngb-timepicker>       
+                    </div>
+                </div>
                 <!-- <div *ngIf="remark?.errors?.required" class="alert alert-danger form-group"> Remarks should not Be Empty!</div> -->
                 <div class="form-group">
                   <label for="project">Project:</label>
@@ -231,17 +220,7 @@
                  
                   >
               </div>
-                <div class="form-group clearfix">
-                  <div id="start_time"class="border-right">
-                      <label for="start_time">Start Time:</label>
-                      <ngb-timepicker size="small" name="startTime" [(ngModel)]="startTime" [meridian]="meridian" class="startTime"></ngb-timepicker>        
-                  </div>
-        
-                  <div id="end_time">
-                      <label for="end_time">End Time:</label>
-                      <ngb-timepicker size="small" name="endTime" [(ngModel)]="endTime" [meridian]="meridian" class="endTime"></ngb-timepicker>       
-                    </div>
-                </div>
+               
                 <div class="form-group text-left clearfix mt-2">
                   <button
                   type="submit"
@@ -261,6 +240,28 @@
                 </div> -->
             </form>
           </div>
+          <div class="col-md-3 pl-0">
+          <h3 class="text-center timeslip-header">Timeslot</h3>
+          <hr>
+              <div class="
+              add_timeslip_scroll" id="day_view_scroll">
+                  <!-- <h1>My TimeSlips</h1> -->
+                  <mwl-calendar-day-view
+                  id="add_timeslip"
+                  [viewDate]="viewDate"
+                  [events]="events"
+                  [refresh]="refresh"
+                  (eventClicked)="handleEvent('Clicked', $event.event)"
+                  (eventTimesChanged)="eventTimesChanged($event)"
+                  [dayStartHour]="0"
+                  [dayEndHour]="24"
+                  (beforeViewRender)="beforeDayViewRender($event.body.hourGrid)"
+                  (hourSegmentClicked)="hourSegmentClicked($event.date)">
+                  >
+                  </mwl-calendar-day-view>
+              </div>
+          </div>
+         
           <div class="col-md-3 custom_day_section alert alert-info">
             <h3 class="text-center pb-2"> Select Custom Day</h3>
             <hr>
