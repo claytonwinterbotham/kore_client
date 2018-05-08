@@ -1,79 +1,9 @@
- 
-  <div class="row  main-content" *ngIf="newEventForm">
-    <div class="col-12">
-        <table class="table table-bordered">
-            <tbody>
-              <tr>
-                <td> 
-                  <label for="project" class="col-2 col-form-label">Project</label>
-                  <div class="col-12">
-                      <ng-select [items]="projectList"
-                      bindLabel="newName"
-                      bindValue="newProjectId"
-                      [(ngModel)]="selectedProject"
-                      (click)="changeProject()">
-                      </ng-select>
-                  </div>
-                  <label for="wbi" class="col-2 col-form-label">WBI</label>
-                  <div class="col-12">
-                      <ng-select [items]="wbiList"
-                      bindLabel="newRemarks"
-                      bindValue="newChangeRequestId"
-                      [(ngModel)]="selectedWBI">
-                      </ng-select>
-                    <input  class="form-control" type="text"  id="wbi" value="{{selectedProject}}" disabled="disabled">
-                  </div>
-                </td>
-                <td>
-                  <div class="form-group">
-                    <textarea 
-                    class="form-control" 
-                    rows="5" 
-                    id="description"
-                    [(ngModel)]="newEvent[0].title"
-                    (keyup)="refresh.next()"
-                    ></textarea>
-                  </div>   
-                </td>
-                <td>
-                  <calendar-utils-date-time-picker
-                    [(ngModel)]="newEvent[0].start"
-                    (ngModelChange)="refresh.next()"
-                    placeholder="Not set">
-                  </calendar-utils-date-time-picker>
-                </td>
-                <td>
-                  <calendar-utils-date-time-picker
-                    [(ngModel)]="newEvent[0].end"
-                    (ngModelChange)="refresh.next()"
-                    placeholder="Not set">
-                  </calendar-utils-date-time-picker>
-                </td>
-                <td>
-                    <button
-                    class="btn btn-success"
-                    (click)="confirmAddEvent(); refresh.next()">
-                    Confirm
-                  </button>
-                  <br> <br> <br> <br>
-                  <button
-                    class="btn btn-danger"
-                    (click)="cancelAddEvent()">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-    </div>   
-  </div> 
-
   <!-- Start Model -->
   <div class="row">
     <div class="col-12 main-content">
       <ng-template #modalContent let-close="close">
         <div class="modal-header">
-          <h5 class="modal-title">Event action occurred</h5>
+          <h5 class="modal-title">Edit TimeSlip</h5>
           <button type="button" class="close" (click)="close()">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -107,13 +37,10 @@
             <button
             class="btn btn-success"
             (click)="confirmEdit(); refresh.next();close()">
-            Finish
+            Confirm
             </button>
-            <button type="button" class="btn btn-outline-info"(click)="close()" >Clear</button>
+            <button type="button" class="btn btn-outline-info"(click)="close()" >Cancel</button>
           </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" (click)="close()">OK</button>
         </div>
       </ng-template>
             
@@ -261,7 +188,7 @@
                   name = "projectList"
                   ng-selected="projectList"
                   required
-                             
+                  [disabled]="projectDisabled"           
                   >
                   </ng-select>
                   <p *ngIf="searchWBIs">{{selectedProject}}</p>
@@ -272,19 +199,20 @@
                     <p class="alert alert-info">{{wbiRemainingHours}}</p>
                     <ng-select 
                     [items]="wbiList"
-                    bindLabel="newRemarks"
+                    bindLabel="newName"
                     bindValue="newChangeRequestId"
                     [(ngModel)]="selectedWBI"
                     name = "wbiList"
                     (change)="locateProject()"
                     required
+                    [disabled]="WBIDisabled"
                     ></ng-select>
             
                   <label class="pt-2" for="searchString">Search WBI:</label>
                   <div class="input-group">
                       <input type="search" class="form-control"  [(ngModel)]="searchString" name="searchString">
                       <div class="input-group-append">
-                          <button class="btn btn-outline-secondary" type="button" (click)="searchWBI()">
+                          <button class="btn btn-outline-secondary" type="button" (click)="searchWBI()" [disabled]="searchDisabled">
                             Search
                           </button>
                       </div>
@@ -343,7 +271,6 @@
                   [(ngModel)]="selectedCustomday"
                   (change)="showFakeCalendar()">
                   </ng-select> 
-
                 <button *ngIf="selectedCustomday"
                 class="btn btn-warning mt-3"
                 (click)="confirmAddCustomDay(); refresh.next()">
@@ -354,3 +281,50 @@
     </div>   
   </div>
 </div>
+
+
+  <!-- modal: -->
+  <ng-template #searchSuccess let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Modal title</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>You Can Select Your WBI in the DropDown List Now!</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+
+  <ng-template #searchFail let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Modal title</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>There is no Wbi found!</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+
+  <ng-template #confirmDelete let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">{{id}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure to delete this timeslip????</p>
+    </div>
+    <button type="button" class="btn btn-light" (click)="deleteTimeSlip();c('Close click')">Yes</button>
+    <button type="button" class="btn btn-light" (click)="c('Close click')">No</button>
+
+  </ng-template>

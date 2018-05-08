@@ -78,7 +78,7 @@ export class MyTimeslipService {
     getTimeSlipsByUserId(UserId : string):Observable<Comment[]>{
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({headers: headers});     
-        let dataUrl = this.site + "GetAllTimeslipsByUserId/" + UserId;
+        let dataUrl = this.site + "GetAllTimeslipsByUserIdWithWBIName/" + UserId;
         // headers.append( 'Authorization', 'Bearer ' 
         // + sessionStorage.getItem('token'));
         return this.http.get(dataUrl, options)

@@ -27,6 +27,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import {ScrollToModule} from 'ng2-scroll-to';
 import { CreatecustomdayComponent } from './createcustomday/createcustomday.component';
 
+// import { PopupModule} from "ng2-opd-popup";
+
 
 @NgModule({
   declarations: [
@@ -58,6 +60,7 @@ import { CreatecustomdayComponent } from './createcustomday/createcustomday.comp
     HttpModule,
     BrowserAnimationsModule,
     ClickOutsideModule,
+    // PopupModule.forRoot()
   ],
   providers: [
   ],

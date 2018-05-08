@@ -5,7 +5,8 @@ import {
   OnInit, 
   ChangeDetectionStrategy,
   ViewChild,
-  TemplateRef
+  TemplateRef,
+  Input
 } from '@angular/core';
 import {
   getMonth,
@@ -84,8 +85,12 @@ interface RecurringEvent {
 })
 
 export class AddTimeslipComponent{
-  @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
+  @Input() id;
+  @ViewChild('modalContent') modalContent: TemplateRef<any>;
+  @ViewChild('searchSuccess') searchSuccess: TemplateRef<any>;
+  @ViewChild('searchFail') searchFail: TemplateRef<any>;
+  @ViewChild('confirmDelete') confirmDelete: TemplateRef<any>;
   view: string = 'month';
 
   viewDate: Date = new Date();
@@ -110,14 +115,9 @@ export class AddTimeslipComponent{
           this.events = this.events.filter(iEvent => iEvent !== event);
           this.newTimeSlipTest = true;
         }else {
-          this.timeSlipService.deleteTimeslip(event.meta.timeSlipId).subscribe(
-            data=> {
-              console.log(data);
-              this.getAllTimeSlips();
-            },error =>{
-              alert(error);
-            }
-          )
+          const modalRef = this.modalService.open(this.confirmDelete);
+          this.deletingTimeSlipId = event.meta.timeSlipId;
+
         }
       }
     }
@@ -190,7 +190,7 @@ export class AddTimeslipComponent{
   selectedCustomday : string;
   newEventForm :boolean = false;
   newEvent : CalendarEvent[]= [];
-  events: Array<CalendarEvent<{ timeSlipId: string,WBIId : string }>> = [];
+  events: CalendarEvent[]= [];
   timeslipModel: TimeslipModel;
   //userId : string = "47135933-9179-4E48-AE65-C981E1E22344";
   timeslipId : string;
@@ -224,11 +224,15 @@ export class AddTimeslipComponent{
   selectedDayViewDate: Date;
   dayView: DayViewHour[];
   newTimeSlipTest: boolean = true;
+  WBIDisabled : boolean = true;
+  searchDisabled : boolean = false;
+  projectDisabled : boolean = false;
+  deletingTimeSlipId : string;
 
   //constructor 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
   _customdayService : MyCustomDayService,public router:Router, @Inject(DOCUMENT) private document: Document,
-  _timeSlipTemplateService : TimeslipTemplateService) {
+  _timeSlipTemplateService : TimeslipTemplateService,private modalService: NgbModal) {
     this.projectService = _projectService;
     this.wbiService = _wbiService;
     this.timeSlipService = _timeslipService;
@@ -242,6 +246,20 @@ export class AddTimeslipComponent{
     this.getAllTimeSlips();
     this.getAllCustomDays(); 
   }
+
+  deleteTimeSlip(){
+    this.timeSlipService.deleteTimeslip(this.deletingTimeSlipId).subscribe(
+      data=> {
+        console.log(data);
+        this.getAllTimeSlips();
+        this.deletingTimeSlipId = null;
+      },error =>{
+        alert(error);
+      }
+    )
+  }
+
+
 
   hourSegmentClicked(date: Date) {
     this.selectedDayViewDate = date;
@@ -281,29 +299,7 @@ export class AddTimeslipComponent{
           console.log(this.startTime.hour)
           console.log(newDate);
           this.refresh.next();
-          // if (this.newTimeSlipTest == true){
-          //   this.events.push({
-          //     title: this.quickRemarks,
-          //     start: new Date(segment.date.getTime()),
-          //     end: newDate,
-          //     meta:{
-          //       timeSlipId: "",
-          //       WBIId :this.selectedWBI
-          //     },
-          //     color: colors.blue,
-          //     draggable: true,
-          //     resizable: {
-          //       beforeStart: true,
-          //       afterEnd: true
-          //     },
-          //     actions: this.actions
-          //   });
-            
-          //   this.newTimeSlipTest =false;
-            
-          // }else {
-          //   return ;
-          // }
+
         }
       });
     });
@@ -358,6 +354,9 @@ export class AddTimeslipComponent{
         this.selectedProject = "";
         this.selectedWBI = "";
         this.wbiRemainingHours = "" ;
+        this.ClearAllEvents();
+        this.startTime = this.endTime;
+        this.endTime = this.endTime;
       },error =>{
         alert(error);
       }
@@ -377,11 +376,33 @@ export class AddTimeslipComponent{
   }
 
   searchWBI(){
+
+    if (this.searchString == null || this.searchString == ""){
+      alert("you can't search for empty WBI!");
+      return ;
+    }
+    this.selectedWBI = null;
+    this.wbiList = null;
+    this.selectedProject = null;
+
     this.wbiService.searchWBI(this.searchString).subscribe(
       data=> {
         console.log(data);
         this.wbiList = (data);
         this.searchWBIs = true;
+        if (data.length != 0){
+          this.WBIDisabled = false;
+          this.projectDisabled = true;
+          //this.openWBI = true;
+          // this.popup.show();
+          this.modalService.open(this.searchSuccess);
+        }
+        else{
+          this.WBIDisabled = true;
+          this.projectDisabled = false;
+          this.modalService.open(this.searchFail);
+          this.ClearAllEvents();
+        }
       },
       error =>{
         alert(error);
@@ -391,10 +412,15 @@ export class AddTimeslipComponent{
 
   locateProject(){
     console.log("i want to locate project");
+    if (this.selectedWBI == null || this.selectedWBI == ""){
+      this.wbiRemainingHours = "";
+    }
     this.wbiRemainingHours = "Remaining Hours: "+ this.getRemainingWBIHour(this.selectedWBI);
     if (!this.searchWBIs){
       return ;
     }
+
+
     this.projectService.getOneProjectByWBIId(this.selectedWBI).subscribe(
       data=>{
         console.log(data);
@@ -502,21 +528,23 @@ export class AddTimeslipComponent{
       return ;
     }
     for (let oneTimeSlip of this.allTimeSlips){
-      this.addNewEvent(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask,oneTimeSlip.newTimesheetEntryId,oneTimeSlip.newChangeRequestId,colors.red);
+      //this.getTitleName(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask,oneTimeSlip.newTimesheetEntryId,oneTimeSlip.newChangeRequestId,colors.blue,true);
+      this.addNewEvent(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask,oneTimeSlip.newTimesheetEntryId,oneTimeSlip.newChangeRequestId,oneTimeSlip.wbiName, colors.blue);
     }
     console.log(this.events);
   }
 
-  addNewEvent(title,start,end,timeSlipId,WBIId,color)
+  addNewEvent(title,start,end,timeSlipId,WBIId,WBIName, color)
   {
-    console.log(start);
+   // console.log(start);
       this.events.push({
-      title: title,
+      title: WBIName,
       start: new Date(start),
       end: new Date(end),
       meta:{
         timeSlipId :timeSlipId,
-        WBIId :WBIId
+        WBIId :WBIId,
+        remark: title
       },
       color: color,
       draggable: true,
@@ -527,12 +555,38 @@ export class AddTimeslipComponent{
       actions: this.actions
     });
     this.refresh.next(); 
-    console.log(this.events);
+   // console.log(this.events);
+  }
+
+  addFakeEvent(title,start,end,timeSlipId,WBIId,WBIName,color){
+    //console.log(start);
+      this.events.push({
+      title: WBIName,
+      start: new Date(start),
+      end: new Date(end),
+      meta:{
+        timeSlipId :timeSlipId,
+        WBIId :WBIId,
+        remark: title
+      },
+      color: color,
+      draggable: false,
+      resizable: {
+        beforeStart: false,
+        afterEnd: false
+      },
+      
+    });
+    this.refresh.next(); 
+   //console.log(this.events);    
   }
 
   showFakeCalendar(){
     this.getAllTimeSlips(); //each time call this method with make the this.events to be empty first.
     this.originalEvents = this.events;
+    if (this.selectedCustomday == null){
+      return ;
+    }
     console.log("I want to show fake custom day");
     this.timeSlipTemplateService.getAllTimeSlips(this.selectedCustomday).subscribe(
       data => {
@@ -558,7 +612,9 @@ export class AddTimeslipComponent{
           fakeEnd.setHours(endHour);
           fakeEnd.setMinutes(endMinute);
 
-          this.addNewEvent(fakeTimeSlip.remarks,fakeStart,fakeEnd,fakeTimeSlip.TimeslipTemplateId,fakeTimeSlip.NewChangeRequestId,colors.blue);
+          //this.getTitleName(fakeTimeSlip.remarks,fakeStart,fakeEnd,fakeTimeSlip.TimeslipTemplateId,fakeTimeSlip.NewChangeRequestId,colors.red,false)
+
+          this.addFakeEvent(fakeTimeSlip.remarks,fakeStart,fakeEnd,fakeTimeSlip.TimeslipTemplateId,fakeTimeSlip.NewChangeRequestId,fakeTimeSlip.wbiName,colors.red);
           
         }
         ///this.ShowAllTemplates();
@@ -603,7 +659,7 @@ export class AddTimeslipComponent{
     this.getProjectName(event.meta.WBIId);
     this.getWBIName(event.meta.WBIId);
     this.EditTimeSlipId = event.meta.timeSlipId;
-    this.EditRemark = event.title;
+    this.EditRemark = event.meta.remark;
     this.EditStartDate = event.start;
     this.EditEndDate = event.end;
     this.EditStartTime = {hour: event.start.getHours(),minute: event.start.getMinutes()};
@@ -650,7 +706,7 @@ export class AddTimeslipComponent{
     this.wbiService.getOneWBI(WBIId).subscribe(
       data=> {
         console.log(data);
-        this.EditWBIName = data["newRemarks"];
+        this.EditWBIName = data["newName"];
       },
       error =>{
         alert (error);
@@ -776,6 +832,7 @@ export class AddTimeslipComponent{
         data=> {
           console.log(data);
           this.getAllTimeSlips();
+          this.selectedCustomday = null;
         },error =>{
           alert(error);
         }
@@ -853,20 +910,33 @@ export class AddTimeslipComponent{
     this.selectedProject = "";
     this.selectedWBI = "";
     this.quickRemarks = "";
+    this.searchString = "";
+    this.searchWBIs = false;
+    this.WBIDisabled = true;
+    this.searchDisabled = false;
+    this.projectDisabled = false;
+    this.wbiRemainingHours = null;
   }
 
   changeProject(){
     console.log("hello");
     this.selectedWBI = "";
     this.wbiRemainingHours = "please select a WBI";
-    if (this.selectedProject == ""){
-        return ;
+    if (this.selectedProject == null || this.selectedProject== ""){
+      this.wbiList = null;
+      this.WBIDisabled = true;
+      this.searchDisabled = false;
+      return ;
     }else {
       this.wbiService.GetAllWBIsByProjectId(this.selectedProject).subscribe(data=>{
 
         console.log(data);
         this.projectDropdown = false;
         this.wbiList = data;
+        if (data != null){
+          this.WBIDisabled = false;
+          this.searchDisabled = true;
+        }
         
       },error=>{
         alert(error);

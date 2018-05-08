@@ -63,6 +63,7 @@
             name = "projectList"
             ng-selected="projectList"
             required ngModel
+            [disabled]="projectDisabled"
             >
             </ng-select>
             <p *ngIf="searchWBIs">{{selectedProject}}</p>
@@ -71,19 +72,21 @@
             <label for="wbi">WBI:</label>
             <ng-select 
             [items]="wbiList"
-            bindLabel="newRemarks"
+            bindLabel="newName"
             bindValue="newChangeRequestId"
             [(ngModel)]="selectedWBI"
             name = "wbiList"
             (change)="locateProject()"
             required ngModel
+            [disabled]="WBIDisabled"
+            open
             ></ng-select>
-
+            <!-- <popup>Success!</popup> -->
             <label class="pt-2" for="searchString">Search WBI:</label>
             <div class="input-group">
               <input type="search" class="form-control"  [(ngModel)]="searchString" name="searchString">
               <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" (click)="searchWBI()">
+                <button class="btn btn-outline-secondary" type="button" (click)="searchWBI()" [disabled]="searchDisabled">
                   Search
                 </button>
               </div>
@@ -109,7 +112,8 @@
             <button
             type="submit"
             class="btn btn-outline-success"
-            [disabled]="!form.valid"
+            [disabled]="(!form.valid || confirmDisabled) && !form.valid"
+            
            >
             Add Template
             </button>
@@ -142,7 +146,8 @@
           <div class="form-group">
             <button
             class="btn btn-outline-success"
-            (click)="confirmAndReturn(); refresh.next()">
+            (click)="confirmAndReturn(); refresh.next()"
+            [disabled]="confirmDisabled">
             Confirm
             </button>
             <button *ngIf="selected === true " class="btn btn-danger"(click)="deleteCustomDay()" > Delete </button>            
@@ -153,7 +158,7 @@
 
 <ng-template #modalContent let-close="close">
     <div class="modal-header">
-      <h5 class="modal-title">Event action occurred</h5>
+      <h5 class="modal-title">Edit Timeslip Template</h5>
       <button type="button" class="close" (click)="close()">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -187,15 +192,41 @@
         <button
         class="btn btn-outline-success"
         (click)="confirmEdit(); refresh.next();close()">
-        Finish
+        Confirm
         </button>
-        <button type="button" class="btn btn-outline-info"(click)="close()" >Clear</button>
+        <button type="button" class="btn btn-outline-info"(click)="close()" >Cancel</button>
       </form>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-secondary" (click)="close()">OK</button>
     </div>
   </ng-template>
 
+  <!-- modal: -->
+  <ng-template #searchSuccess let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Modal title</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>You Can Select Your WBI in the DropDown List Now!</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
 
+  <ng-template #searchFail let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Modal title</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>There is no Wbi found!</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
 

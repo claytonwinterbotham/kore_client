@@ -51,7 +51,7 @@ export class TimeslipTemplateService {
     // headers.append( 'Authorization', 'Bearer ' 
     // + sessionStorage.getItem('token'));   
     //id =  encodeURIComponent(id);    
-    let dataUrl = (this.site + "GetAllTimeslipTemplateByCustomDay/" + id);
+    let dataUrl = (this.site + "GetAllTimeslipTemplatesByCustomDayWithWBIName/" + id);
     console.log(dataUrl);
     return this.http.get(dataUrl,options)
     .map(this.extractData) 

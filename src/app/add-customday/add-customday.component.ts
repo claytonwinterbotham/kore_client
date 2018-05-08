@@ -41,6 +41,8 @@ import { Router, NavigationExtras } from '@angular/router';
 import { Inject} from "@angular/core";
 import { DOCUMENT } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+// import { Popup} from "ng2-opd-popup";
 
 //const
 const colors: any = {
@@ -66,6 +68,8 @@ const colors: any = {
 })
 export class AddCustomdayComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
+  @ViewChild('searchSuccess') searchSuccess: TemplateRef<any>;
+  @ViewChild('searchFail') searchFail: TemplateRef<any>;
   view: string = 'day';
 
   //variables 
@@ -104,6 +108,7 @@ export class AddCustomdayComponent implements OnInit {
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.timeSlipTemplateService.deleteTimeslipTemplate(event.meta.timeSlipId).subscribe(
           data=> {
+            console
             console.log(data);
             this.getAllTemplates();
           },error =>{
@@ -146,10 +151,16 @@ export class AddCustomdayComponent implements OnInit {
   EditStartDate : Date;
   EditEndDate : Date;
   customDayNameEmpty : boolean = false;
+  titleName : string;
+  WBIDisabled : boolean = true;
+  searchDisabled : boolean = false;
+  projectDisabled : boolean = false;
+  openWBI :boolean = false;
+  confirmDisabled : boolean = true;
 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
     public router:Router,_customdayService:MyCustomDayService, @Inject(DOCUMENT) private document: Document,private route: ActivatedRoute,
-   _timeSlipTemplateService : TimeslipTemplateService) { 
+   _timeSlipTemplateService : TimeslipTemplateService,private modalService: NgbModal) { 
     this.projectService = _projectService;
     this.wbiService = _wbiService;
     this.timeSlipService = _timeslipService;
@@ -162,6 +173,9 @@ export class AddCustomdayComponent implements OnInit {
       //this.isSelect = true;
       this.customDayName = res.name;
       this.customDayDescription = res.description;
+      if (res.id != ""  && res.id != null){
+        this.confirmDisabled = false;
+      }
     } )
   }
 
@@ -205,11 +219,34 @@ export class AddCustomdayComponent implements OnInit {
   }
 
   searchWBI(){
+
+    if (this.searchString == null || this.searchString == ""){
+      this.WBIDisabled = true;
+      this.projectDisabled = false;
+      this.searchWBIs = false;
+      alert("you can't search for empty WBI!");
+      return ;
+    }
+
+
     this.wbiService.searchWBI(this.searchString).subscribe(
       data=> {
         console.log(data);
         this.wbiList = (data);
         this.searchWBIs = true;
+        if (data.length != 0){
+          this.WBIDisabled = false;
+          this.projectDisabled = true;
+          this.openWBI = true;
+          // this.popup.show();
+          this.modalService.open(this.searchSuccess);
+        }
+        else{
+          this.WBIDisabled = true;
+          this.projectDisabled = false;
+          this.modalService.open(this.searchFail);
+          this.searchWBIs = false;
+        }
       },
       error =>{
         alert(error);
@@ -220,8 +257,15 @@ export class AddCustomdayComponent implements OnInit {
   locateProject(){
     console.log("i want to locate project");
     if (!this.searchWBIs){
+
       return ;
     }
+
+    if (this.selectedWBI == null){
+      this.selectedProject = null;
+      return ;
+    }
+
     this.projectService.getOneProjectByWBIId(this.selectedWBI).subscribe(
       data=>{
         console.log(data);
@@ -242,7 +286,17 @@ export class AddCustomdayComponent implements OnInit {
 
   getThisCustomDay(){
     this.selected = true;
-    for(let oneCustomDay of this.customdayList){
+    this.events = [];
+    if (this.selectedCustomday == null){
+      this.confirmDisabled = true;
+      
+      this.customDayName = "";
+      this.customDayDescription = "";
+      return ;
+    }
+    else {
+      this.confirmDisabled = false;
+      for(let oneCustomDay of this.customdayList){
         if (oneCustomDay.customDayId == this.selectedCustomday){
           //this.selectCustomDayItem = oneCustomDay;
          // console.log(this.selectCustomDayItem);
@@ -250,6 +304,7 @@ export class AddCustomdayComponent implements OnInit {
         this.customDayDescription = oneCustomDay.description;
         this.getAllTemplates();          
         }
+    }
     }
   }
 
@@ -271,11 +326,15 @@ export class AddCustomdayComponent implements OnInit {
 
     getAllTemplates(){
        // this.timeSlipTemplates 
+       this.events = [];
        console.log("i want to get all the timeslip template for this customday");
        this.timeSlipTemplateService.getAllTimeSlips(this.selectedCustomday).subscribe(
          data => {
            console.log(data);
            this.timeSlipTemplates = data;
+           if (data.length == 0){
+             return ;
+           }
            this.ShowAllTemplates();
          },
          error =>{
@@ -287,6 +346,9 @@ export class AddCustomdayComponent implements OnInit {
       ShowAllTemplates(){
           console.log("I want to show all ts");
           this.events = [];
+
+          //if (this.timeSlipTemplates)
+
            for (let oneTimeSlip of this.timeSlipTemplates){
             let startTime : string = oneTimeSlip.startTime;
             let endTime : string = oneTimeSlip.endTime;
@@ -308,8 +370,9 @@ export class AddCustomdayComponent implements OnInit {
             console.log(endDate);
             console.log("I want to see what is in one tiem slip");
             console.log(oneTimeSlip);
+            //this.getTitleName(oneTimeSlip.remarks,startDate,endDate,oneTimeSlip.timeslipTemplateId,oneTimeSlip.newChangeRequestId);
             
-            this.addNewEvent(oneTimeSlip.remarks,startDate,endDate,oneTimeSlip.timeslipTemplateId,oneTimeSlip.newChangeRequestId);
+            this.addNewEvent(oneTimeSlip.remarks,startDate,endDate,oneTimeSlip.timeslipTemplateId,oneTimeSlip.newChangeRequestId,oneTimeSlip.wbiName);
           }   
         }
 
@@ -341,6 +404,9 @@ export class AddCustomdayComponent implements OnInit {
             data=>{
               console.log(data);
               this.getAllTemplates();
+              this.ClearAllEvents();
+              this.TodaystartTime = this.TodayendTime;
+              this.TodayendTime = this.TodayendTime;
             },
             error =>{
               alert(error);
@@ -406,17 +472,20 @@ export class AddCustomdayComponent implements OnInit {
   }
 
 
-  addNewEvent(title,start,end,timeSlipId,WBIId){
-    console.log(start);
+  addNewEvent(title,start,end,timeSlipId,WBIId,WBIName){
+      console.log(start);
+      //this.getWBIName(WBIId);
+      //console.log("wbi name is : "+this.EditWBIName)
       this.events.push({
-      title: title,
+      title: WBIName,
       start: start,
       end: end,
       meta:{
         timeSlipId :timeSlipId,
-        WBIId : WBIId
+        WBIId : WBIId,
+        remark:title
       },
-      color: colors.red,
+      color: colors.blue,
       draggable: true,
       resizable: {
         beforeStart: true,
@@ -465,7 +534,7 @@ export class AddCustomdayComponent implements OnInit {
     this.getProjectName(event.meta.WBIId);
     this.getWBIName(event.meta.WBIId);
     this.EditTimeSlipId = event.meta.timeSlipId;
-    this.EditRemark = event.title;
+    this.EditRemark = event.meta.remark;
     this.EditStartDate = event.start;
     this.EditEndDate = event.end;
     this.EditStartTime = {hour: event.start.getHours(),minute: event.start.getMinutes()};
@@ -506,32 +575,60 @@ export class AddCustomdayComponent implements OnInit {
     )
   }
 
-  getWBIName(WBIId : string) {
+  getWBIName(WBIId : string){
     console.log("I want to get WBI Name!")
+    let name ;
     this.wbiService.getOneWBI(WBIId).subscribe(
       data=> {
         console.log(data);
-        this.EditWBIName = data["newRemarks"];
+        this.EditWBIName = data["newName"];
+        name=data["newName"];
       },
       error =>{
         alert (error);
+        
       }
-    )
+    ) 
+  }
+
+  getTitleName(remarks: any,startDate: Date,endDate:Date,timeslipTemplateId:any, WBIId : string) {
+    console.log("I want to get WBI Name!")
+    let WbiName ;
+    this.wbiService.getOneWBI(WBIId).subscribe(
+      data=> {
+        console.log(data);
+        //this.titleName = data["newRemarks"];
+        //name=data["newRemarks"];
+        WbiName = data["newName"];
+        this.addNewEvent(remarks,startDate,endDate,timeslipTemplateId,WBIId,WbiName)
+
+      },
+      error =>{
+        alert (error);
+        
+      }
+    )     
   }
 
   changeProject(){
     this.showSelect = true;
     this.showInput = false;
     console.log("hello");
-
-    //this.selectedWBI = "";
-    if (this.selectedProject == ""){
+    this.selectedWBI = null;
+    if (this.selectedProject == null || this.selectedProject== ""){
+        this.wbiList = null;
+        this.WBIDisabled = true;
+        this.searchDisabled = false;
         return ;
     }else {
       this.wbiService.GetAllWBIsByProjectId(this.selectedProject).subscribe(data=>{
 
         console.log(data);
         this.wbiList = data;
+        if (data != null){
+          this.WBIDisabled = false;
+          this.searchDisabled = true;
+        }
       },error=>{
         alert(error);
       })
@@ -596,6 +693,10 @@ export class AddCustomdayComponent implements OnInit {
     this.newEventTitle = "";
     this.selectedProject = "";
     this.selectedWBI = "";
+    this.searchString = "";
+    this.searchWBIs = false;
+    this.searchDisabled = false;
+    this.projectDisabled = false;
   }
 
   confirmAndReturn(){ 
