@@ -15,6 +15,7 @@
 .add_timeslip_scroll{
     height: 600px;
     overflow-x: scroll;
+    max-width: 300px;
 }
 
 .add_timeslip_day_form{
