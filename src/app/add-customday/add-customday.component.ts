@@ -181,6 +181,7 @@ export class AddCustomdayComponent implements OnInit {
       this.customDayDescription = res.description;
       if (res.id != ""  && res.id != null){
         this.confirmDisabled = false;
+        this.customDayNameEmpty = false;
       }
     } )
   }

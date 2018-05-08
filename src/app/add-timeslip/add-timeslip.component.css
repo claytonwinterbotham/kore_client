@@ -9,7 +9,7 @@
 }
 
 .main-content{
-    margin-top: 5em;
+    margin-top: 2em;
 }
 
 .add_timeslip_scroll{
@@ -37,7 +37,10 @@
 
 .custom_day_section{
     height: 300px;
-    margin-top: 40px;
+}
+
+.custom_day_blue_section{
+    height: 100%;
 }
 
 .timeslip-header {

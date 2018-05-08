@@ -3,11 +3,11 @@
     <li class="nav-item">
       <a class="nav-link" routerLink="/addtimeslip" routerLinkActive="active" href="">Timeslips</a>
     </li>
-    <li class="nav-item dropdown" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Custom<br>Day</a>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" [ngClass]="rla1.isActive || rla2.isActive ?'active':''" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Custom<br>Day</a>
       <div class="dropdown-menu" >
-        <a class="dropdown-item" routerLink="/Createcustomday" href="">Create</a>
-        <a class="dropdown-item" routerLink="/addcustomday" href="">Edit</a>
+        <a class="dropdown-item" routerLink="/Createcustomday" routerLinkActive="active" #rla1="routerLinkActive" href="">Create</a>
+        <a class="dropdown-item" routerLink="/addcustomday"  routerLinkActive="active" #rla2="routerLinkActive" href="">Edit</a>
       </div>
     </li>
     <li class="nav-item">

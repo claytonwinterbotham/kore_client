@@ -1,5 +1,5 @@
 
-  <div  class="row custom_day_main_content">
+  <div  class="row main_content">
       <div class="col-md-1 pr-0"></div>
       <div class="col-md-4 custom_day_form">
         <form #form="ngForm" (ngSubmit)="addToTemplate()">
@@ -79,7 +79,7 @@
         </form>
       </div>
       <div class="col-md-3">
-        <h3 class="text-center timeslip-header">Timeslot</h3>
+        <h3 class="text-center timeslip-header">Time View</h3>
         <hr>
         <div class="custom_day_view_container custom_day_scroll" id="day_view_scroll">
             <div [ngSwitch]="view">
@@ -211,7 +211,7 @@
     </div>
   </ng-template>
 
-  <ng-template #searchFail let-c="close" let-d="dismiss">
+  <ng-template #OriFail let-c="close" let-d="dismiss">
     <div class="modal-header" style="background-color: #ff8080">
       <h4 class="modal-title">Search WBI</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
@@ -221,6 +221,18 @@
     <div class="modal-body">
       <p><strong>No WBI found.</strong></p>
     </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+
+  <ng-template #searchFail let-c="close" let-d="dismiss">
+      <div class="modal-header"></div>
+      <div class="modal-body">
+          <div class="alert alert-danger">
+              <strong>Ooops!</strong> here is no Wbi found!
+          </div>
+      </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
     </div>

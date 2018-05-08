@@ -236,6 +236,7 @@ export class AddTimeslipComponent{
     
       controlsAreBinded : boolean;
 
+  remainingHourInvalid: boolean = false;
   //constructor 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
   _customdayService : MyCustomDayService,public router:Router, @Inject(DOCUMENT) private document: Document,
@@ -265,9 +266,6 @@ export class AddTimeslipComponent{
       }
     )
   }
-
-
-
   hourSegmentClicked(date: Date) {
     this.selectedDayViewDate = date;
     this.addSelectedDayViewClass();
@@ -281,10 +279,6 @@ export class AddTimeslipComponent{
 
   addSelectedDayViewClass() {
 
- 
-
-
-
     this.dayView.forEach(hourSegment => {
       hourSegment.segments.forEach(segment => {
         delete segment.cssClass;
@@ -293,7 +287,6 @@ export class AddTimeslipComponent{
           segment.date.getTime() === this.selectedDayViewDate.getTime()
         ) {
 
-          
           //segment.cssClass = 'cal-day-selected';
           //console.log(new Date(segment.date.getTime()));
           //this.endTime.setMinutes(this.startTime.getMinutes()+30);
@@ -414,6 +407,9 @@ export class AddTimeslipComponent{
   }
 
   validateNewEvent (validationEvent : CalendarEvent, events : Array<CalendarEvent<{ timeSlipId: string,WBIId : string }>>): boolean{
+    if (events.length == 0){
+      return true;
+    }
     for (let oneEvent of events){
       if (oneEvent.start>= validationEvent.end || oneEvent.end <= validationEvent.start){
 
@@ -465,6 +461,11 @@ export class AddTimeslipComponent{
       this.wbiRemainingHours = "";
     }
     this.wbiRemainingHours = "Remaining Hours: "+ this.getRemainingWBIHour(this.selectedWBI);
+    if(this.getRemainingWBIHour(this.selectedWBI) <= 0){
+     this.remainingHourInvalid = true;
+    }else {
+      this.remainingHourInvalid = false;
+    } 
     if (!this.searchWBIs){
       return ;
     }
@@ -551,7 +552,11 @@ export class AddTimeslipComponent{
     this.timeSlipService.getTimeSlipsByUserId(this.userId).subscribe(
       data=> {
         console.log(data);
-        this.allTimeSlips = data;
+        if (data[0]["newTimesheetEntryId"] == null){
+          this.allTimeSlips = "";
+        }else {
+          this.allTimeSlips = data;
+        }
         this.showInCalendar();
       },
     error => {
@@ -573,13 +578,16 @@ export class AddTimeslipComponent{
   }
 
   showInCalendar(){
-    if (this.allTimeSlips.length == 0){
+    if (this.allTimeSlips == ""){
       return ;
+    }else {
+      console.log(this.allTimeSlips);
+      for (let oneTimeSlip of this.allTimeSlips){
+        //this.getTitleName(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask,oneTimeSlip.newTimesheetEntryId,oneTimeSlip.newChangeRequestId,colors.blue,true);
+        this.addNewEvent(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask,oneTimeSlip.newTimesheetEntryId,oneTimeSlip.newChangeRequestId,oneTimeSlip.wbiName, colors.blue);
+      }
     }
-    for (let oneTimeSlip of this.allTimeSlips){
-      //this.getTitleName(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask,oneTimeSlip.newTimesheetEntryId,oneTimeSlip.newChangeRequestId,colors.blue,true);
-      this.addNewEvent(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask,oneTimeSlip.newTimesheetEntryId,oneTimeSlip.newChangeRequestId,oneTimeSlip.wbiName, colors.blue);
-    }
+
     console.log(this.events);
   }
 
@@ -976,6 +984,7 @@ export class AddTimeslipComponent{
       this.wbiList = null;
       this.WBIDisabled = true;
       this.searchDisabled = false;
+      this.wbiRemainingHours = null;
       return ;
     }else {
       this.wbiService.GetAllWBIsByProjectId(this.selectedProject).subscribe(data=>{
