@@ -1,36 +1,6 @@
-<!-- <div class="row custom_day_header">
-  <div class="col-md-4">
-     <p class="text-center">Current custom day:</p>
-    <h3 class="text-center" *ngIf="customDayName">{{customDayName}}</h3>
-    <h3 class="text-center" *ngIf="!customDayName">No day selected</h3> 
-  </div>
-   empty div for layout 
-  <div class="col-md-4">
-  </div> -->
-    <!-- <div class="col-md-12" *ngIf="!isSelect  ;else ShowAll"> -->
-  <!-- <div class="col-md-3">
-    <form>
-      <div class="form-group" *ngIf="!customDayId">
-        <label for="customdaylist">Select custom day:</label>
-        <ng-select
-        id="customdaylist"
-        [items]="customdayList"
-        bindLabel="name"
-        bindValue="customDayId"
-        [(ngModel)]="selectedCustomday"
-        (change)="getThisCustomDay()"
-        name="customDayList">
-        </ng-select>
-        
-      </div>
-      
-    </form>
-  </div>
-</div> -->
-<!-- <ng-template> -->
-<!-- <ng-template #ShowAll> -->
-  <div class="row main_content">
-      <div class="col-md-1"></div>
+
+  <div  class="row custom_day_main_content">
+      <div class="col-md-1 pr-0"></div>
       <div class="col-md-4 custom_day_form">
         <form #form="ngForm" (ngSubmit)="addToTemplate()">
             <h3 class="text-center timeslip-header">New Timeslip Template</h3>
@@ -99,7 +69,8 @@
             <button
             type="submit"
             class="btn btn-outline-success"
-            [disabled]="(!form.valid || confirmDisabled) && !form.valid"
+            [disabled]="(!form.valid || confirmDisabled)"
+            
            >
             Add Template
             </button>
@@ -146,7 +117,7 @@
                 </ng-select>
                 
               </div>
-              
+              <!-- <p *ngIf="!selectedCustomday" class="alert-danger"> Please select customday</p> -->
             </form>
             <div *ngIf="customDayNameEmpty" class="alert alert-danger"> Please choose a Custom Day to edit.</div>
             <hr>
@@ -174,7 +145,7 @@
             [disabled]="confirmDisabled">
             Confirm
             </button>
-            <button *ngIf="selected === true " class="btn btn-danger"(click)="deleteCustomDay()" > Delete </button>            
+            <button *ngIf="selectedCustomday" class="btn btn-danger"(click)="deleteCustomDay()" > Delete </button>            
           </div>
         </form>
       </div> 

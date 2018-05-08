@@ -336,6 +336,7 @@ export class AddCustomdayComponent implements OnInit {
     this.events = [];
     if (this.selectedCustomday == null){
       this.confirmDisabled = true;
+      this.selected = false;
 
       this.customDayNameEmpty = true;
 
