@@ -149,13 +149,14 @@
               </div>
               
             </form>
+            <div *ngIf="customDayNameEmpty" class="alert alert-danger"> Please choose a Custom Day to edit.</div>
             <hr>
               <label for="customDayName">Name:</label>
               <input *ngIf="!customDayId" 
               type="text" class="form-control" id="customDayName" placeholder="Enter name"
               name="customDayName" [(ngModel)]="customDayName"
               >
-              <div *ngIf="customDayNameEmpty" class="alert alert-danger"> Custom Day name should not Be Empty</div>
+              
               <p *ngIf="customDayId">{{customDayName}}</p> 
           </div>
           <div class="form-group">
