@@ -62,6 +62,7 @@ const colors: any = {
     secondary: '#FDF1BA'
   }
 };
+const DEFAULT_HOUR_INTERVAL = 3;
 
 interface RecurringEvent {
   title: string;
@@ -404,7 +405,7 @@ export class AddTimeslipComponent{
         this.wbiRemainingHours = "" ;
         this.ClearAllEvents();
         this.startTime = this.endTime;
-        this.endTime = this.endTime;
+        this.endTime = {hour:endDate.getHours() + DEFAULT_HOUR_INTERVAL,minute:endDate.getMinutes()}
       },error =>{
         alert(error);
       }
