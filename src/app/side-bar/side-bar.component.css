@@ -23,3 +23,10 @@
     color: rgb(155, 205, 231)!important;
 }
 
+.dropdown-menu{
+    background-color: #E8E8E8;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: #fff;
+}

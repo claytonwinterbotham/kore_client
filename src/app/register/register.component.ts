@@ -43,7 +43,9 @@ export class RegisterComponent implements OnInit {
       this._userDataService.registerUser(newUser).subscribe(
         data => {
           console.log(data)
-          this.router.navigate(['home'])
+          sessionStorage.setItem("userId",data["secret"]);
+          sessionStorage.setItem("token",data["token"]);
+          this.router.navigate(['addtimeslip'])
         },
         error => {
           alert(error)
