@@ -264,25 +264,30 @@
                   </mwl-calendar-day-view>
               </div>
           </div>
-         
-          <div class="col-md-3 custom_day_section alert alert-info">
-            <h3 class="text-center pb-2"> Select Custom Day</h3>
+          <div class="col-md-3 custom_day_section">
+            <h3 class="text-center timeslip-header">Custom Day</h3>
             <hr>
-            <strong *ngIf="clickedDate">You clicked on this day: {{ clickedDate | date:'mediumDate' }}</strong>
-                <label for="customdayList" class="pt-2">Use custom day:</label>             
-                  <ng-select [items]="customdayList"
-                  name="customdayList"
-                  bindLabel="name"
-                  bindValue="customDayId"
-                  [(ngModel)]="selectedCustomday"
-                  (change)="showFakeCalendar()">
-                  </ng-select> 
-                <button *ngIf="selectedCustomday"
-                class="btn btn-outline-success mt-3"
-                (click)="confirmAddCustomDay(); refresh.next()">
-                Add Timeslips
-              </button>            
-          </div>      
+            <div class=" alert alert-info  custom_day_blue_section">
+             
+                <strong *ngIf="clickedDate">You clicked on this day: {{ clickedDate | date:'mediumDate' }}</strong>
+                    <label for="customdayList" class="pt-2">Use custom day:</label>             
+                      <ng-select [items]="customdayList"
+                      name="customdayList"
+                      bindLabel="name"
+                      bindValue="customDayId"
+                      [(ngModel)]="selectedCustomday"
+                      (change)="showFakeCalendar()">
+                      </ng-select> 
+                    <p class="mt-4 mb-2">Instructions:</p>  
+                    <p>Selecting a custom day will allow you to add multiple timeslips for one day.</p>  
+                    <button *ngIf="selectedCustomday"
+                    class="btn btn-outline-success mt-3"
+                    (click)="confirmAddCustomDay(); refresh.next()">
+                    Add Timeslips
+                  </button>            
+              </div>   
+          </div>
+             
       </div>
     </div>   
   </div>
