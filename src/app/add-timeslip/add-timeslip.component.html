@@ -160,12 +160,16 @@
                 <div class="form-group clearfix">
                   <div id="start_time"class="border-right">
                       <label for="start_time">Start Time:</label>
-                      <ngb-timepicker size="small" name="startTime" [(ngModel)]="startTime" [meridian]="meridian" class="startTime"></ngb-timepicker>        
+                      <ngb-timepicker (click)="onStartTimeChange()" size="small" name="startTime" [(ngModel)]="startTime" [meridian]="meridian" class="startTime"></ngb-timepicker>        
                   </div>
         
                   <div id="end_time">
                       <label for="end_time">End Time:</label>
-                      <ngb-timepicker size="small" name="endTime" [(ngModel)]="endTime" [meridian]="meridian" class="endTime"></ngb-timepicker>       
+                      <ngb-timepicker (click)="onEndTimeChange()" size="small" name="endTime" [(ngModel)]="endTime" [meridian]="meridian" class="endTime"></ngb-timepicker>       
+                    </div>
+                    <div id="bind_controls_checkbox">
+                      <label for="bind_controls_cb">Bind Time Controls</label>
+                      <input (change)="onCheckboxChange()" type="checkbox" name="bind_controls_cb" [(ngModel)]="controlsAreBinded">
                     </div>
                 </div>
                 <!-- <div *ngIf="remark?.errors?.required" class="alert alert-danger form-group"> Remarks should not Be Empty!</div> -->
