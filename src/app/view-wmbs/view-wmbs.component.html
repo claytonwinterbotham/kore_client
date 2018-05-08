@@ -20,7 +20,8 @@
       <div class="form-group row">
         <label for="estHours" class="col-2 col-form-label">Est. Hours:</label>
         <div class="col-4">
-          <input name="estHours" [(ngModel)]="newWBI.EstimatedHours" class="form-control" type="number" value="0" id="example-number-input">
+          <input name="estHours" [(ngModel)]="newWBI.EstimatedHours" class="form-control" type="number" value="0" min="0" oninput="validity.valid||(value='')" id="example-number-input">
+          <div *ngIf="newWBI.EstimatedHours < 0" class="alert alert-danger">Estimated hours cannot be less than 0</div>
         </div>
       </div>
       <button type="submit" class="btn btn-outline-success" (click)="createWBI(f, newWBI)">Submit</button>
