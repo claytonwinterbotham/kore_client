@@ -290,14 +290,14 @@
 
   <!-- modal: -->
   <ng-template #searchSuccess let-c="close" let-d="dismiss">
-    <div class="modal-header">
-      <h4 class="modal-title">Modal title</h4>
+    <div class="modal-header" style="background-color: #809fff">
+      <h4 class="modal-title">Search WBI</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
-      <p>You Can Select Your WBI in the DropDown List Now!</p>
+      <p><strong>WBI(s) found! Please select your WBI from the dropdown list.</strong></p>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
@@ -305,14 +305,14 @@
   </ng-template>
 
   <ng-template #searchFail let-c="close" let-d="dismiss">
-    <div class="modal-header">
-      <h4 class="modal-title">Modal title</h4>
+    <div class="modal-header" style="background-color: #ff8080">
+      <h4 class="modal-title">Search WBI</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
-      <p>There is no Wbi found!</p>
+      <p><strong>No WBI found.</strong></p>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
@@ -320,14 +320,14 @@
   </ng-template>
 
   <ng-template #confirmDelete let-c="close" let-d="dismiss">
-    <div class="modal-header">
-      <h4 class="modal-title">{{id}}</h4>
+    <div class="modal-header" style="background-color: #ff8080">
+      <h4 class="modal-title">{{id}} Confirm Delete</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
-      <p>Are you sure to delete this timeslip????</p>
+      <p>Are you sure you want to delete this timeslip?</p>
     </div>
     <button type="button" class="btn btn-light" (click)="deleteTimeSlip();c('Close click')">Yes</button>
     <button type="button" class="btn btn-light" (click)="c('Close click')">No</button>
