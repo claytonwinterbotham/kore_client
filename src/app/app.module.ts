@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { NgbModalModule,NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarUtilsModule } from './calendar-utils/module';
 import { HttpModule }    from '@angular/http';
+import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { AddTimeslipComponent } from './add-timeslip/add-timeslip.component';
@@ -49,6 +50,7 @@ import { CreatecustomdayComponent } from './createcustomday/createcustomday.comp
   imports: [
     BrowserModule,
     NgbModule.forRoot(),
+    RouterModule,
     routing,
     FormsModule,
     NgSelectModule,

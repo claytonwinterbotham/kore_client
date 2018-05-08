@@ -158,6 +158,12 @@ export class AddCustomdayComponent implements OnInit {
   openWBI :boolean = false;
   confirmDisabled : boolean = true;
 
+  fixedHourInterval : number;
+  fixedMinuteInterval : number;
+
+  controlsAreBinded : boolean;
+
+ 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
     public router:Router,_customdayService:MyCustomDayService, @Inject(DOCUMENT) private document: Document,private route: ActivatedRoute,
    _timeSlipTemplateService : TimeslipTemplateService,private modalService: NgbModal) { 
@@ -200,7 +206,48 @@ export class AddCustomdayComponent implements OnInit {
    this.getAllCustomDays();
    this.scrollTo();
   }
+  onCheckboxChange(){
+    console.log("In the checkbox change method...");
+    console.log("Are controls binded = " + this.controlsAreBinded);
+    this.fixedHourInterval = this.TodayendTime.hour - this.TodaystartTime.hour;
+    this.fixedMinuteInterval = this.TodayendTime.minute - this.TodaystartTime.minute;
+    console.log("Fixed hour interval: " + this.fixedHourInterval);
+    console.log("Fixed minute interval: " + this.fixedMinuteInterval);
+  }
+  onStartTimeChange(){
+    console.log("In the onstartimechange method...");
+    if(!this.controlsAreBinded){
+        return;
+    }
+    let newHour = this.TodaystartTime.hour + this.fixedHourInterval;
+    let newMinute = this.TodaystartTime.minute + this.fixedMinuteInterval;
+    let newEndTime = { hour : newHour,
+                       minute : newMinute }
+    this.TodayendTime = newEndTime;
+  //this.TodayendTime.hour = this.TodaystartTime.hour + this.fixedHourInterval;
+    console.log("Today end hour: " + this.TodayendTime.hour);
+  //this.TodayendTime.minute = this.TodaystartTime.minute + this.fixedMinuteInterval;
+    console.log("Today end minute: " + this.TodayendTime.minute);
+   
+  }
 
+  onEndTimeChange(){
+
+    if(!this.controlsAreBinded){
+        return;
+    }
+    let newHour = this.TodayendTime.hour - this.fixedHourInterval;
+    let newMinute = this.TodayendTime.minute - this.fixedMinuteInterval;
+    let newEndTime = { hour : newHour,
+                       minute : newMinute }
+    this.TodaystartTime = newEndTime;
+
+    //this.TodaystartTime.hour = this.TodayendTime.hour - this.fixedHourInterval;
+    console.log("Today start hour: " + this.TodaystartTime.hour);
+    //this.TodaystartTime.minute = this.TodayendTime.minute - this.fixedMinuteInterval;
+    console.log("Today start minute: " + this.TodaystartTime.minute);
+    
+  }
   scrollTo(){
     var scrollContainer = document.getElementById("day_view_scroll")
     setTimeout(function(){ scrollContainer.scrollTop = 465 }, 500);
@@ -368,7 +415,7 @@ export class AddCustomdayComponent implements OnInit {
             //endDate.setMinutes(endMinute);
             console.log(startDate);
             console.log(endDate);
-            console.log("I want to see what is in one tiem slip");
+            console.log("I want to see what is in one time slip");
             console.log(oneTimeSlip);
             //this.getTitleName(oneTimeSlip.remarks,startDate,endDate,oneTimeSlip.timeslipTemplateId,oneTimeSlip.newChangeRequestId);
             

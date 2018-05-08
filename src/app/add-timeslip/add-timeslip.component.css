@@ -36,6 +36,12 @@
 
 .custom_day_section{
     height: 300px;
+    margin-top: 40px;
+}
+
+.timeslip-header {
+    margin-bottom: 20px;
+    font-size: 20px;
 }
 
 

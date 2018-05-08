@@ -366,7 +366,7 @@ export class AddTimeslipComponent{
 
   validateNewEvent (validationEvent : CalendarEvent, events : Array<CalendarEvent<{ timeSlipId: string,WBIId : string }>>): boolean{
     for (let oneEvent of events){
-      if (oneEvent.start>= validationEvent.end || oneEvent.end <= validationEvent.start){
+      if (oneEvent.start> validationEvent.end || oneEvent.end < validationEvent.start){
 
       }else {
         return false;
@@ -843,7 +843,8 @@ export class AddTimeslipComponent{
   validateCustomDay(originalEvents : CalendarEvent[], newEvents : CalendarEvent[]):boolean{
     for(let originalEvent of originalEvents){
       for (let newEvent of newEvents){
-        if (originalEvent.start >= newEvent.end || originalEvent.end <= newEvent.start){
+        if //(newEvent.start < originalEvent.end && newEvent.end > originalEvent.start){
+        (originalEvent.start > newEvent.end || originalEvent.end < newEvent.start){
 
         }else {
           return false;

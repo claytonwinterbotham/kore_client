@@ -76,7 +76,7 @@
           </div>
         </div>
         <div class="col-md-4">
-          <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+          <h2>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h2>
         </div>
         <div class="col-md-4">
           <div class="btn-group">
@@ -141,6 +141,8 @@
         <div *ngSwitchCase="'day'" class="row add_timeslip_main_content">
           <div class="col-md-1 pr-0"></div>
           <div class="col-md-3 pl-0">
+          <h3 class="text-center timeslip-header">Timeslot</h3>
+          <hr>
               <div class="
               add_timeslip_scroll" id="day_view_scroll">
                   <!-- <h1>My TimeSlips</h1> -->
@@ -159,7 +161,7 @@
                   </mwl-calendar-day-view>
               </div>
           </div>
-          <div class="col-md-4 add_timeslip_day_form border-right">
+          <div class="col-md-4 add_timeslip_day_form">
             <form #form="ngForm" (ngSubmit)="AddNewTimeSlip()">
                 <!-- <div class="form-group">
                     <label for="customDayName">customDayName:</label>
@@ -174,7 +176,7 @@
                     >
                 </div> -->
 
-                <h3 class="text-center">Create New Timeslip</h3>
+                <h3 class="text-center timeslip-header">Create New Timeslip</h3>
                 <hr>
 
                 <!-- <div *ngIf="remark?.errors?.required" class="alert alert-danger form-group"> Remarks should not Be Empty!</div> -->
@@ -272,9 +274,9 @@
                   (change)="showFakeCalendar()">
                   </ng-select> 
                 <button *ngIf="selectedCustomday"
-                class="btn btn-warning mt-3"
+                class="btn btn-outline-success mt-3"
                 (click)="confirmAddCustomDay(); refresh.next()">
-                Confirm
+                Add Timeslips
               </button>            
           </div>      
       </div>
