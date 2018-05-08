@@ -59,7 +59,7 @@ const colors: any = {
     secondary: '#FDF1BA'
   }
 };
-
+const DEFAULT_HOUR_INTERVAL = 3;
 @Component({
   selector: 'app-add-customday',
   templateUrl: './add-customday.component.html',
@@ -150,7 +150,7 @@ export class AddCustomdayComponent implements OnInit {
   EditTimeSlipId : string;
   EditStartDate : Date;
   EditEndDate : Date;
-  customDayNameEmpty : boolean = false;
+  customDayNameEmpty : boolean = true;
   titleName : string;
   WBIDisabled : boolean = true;
   searchDisabled : boolean = false;
@@ -337,11 +337,17 @@ export class AddCustomdayComponent implements OnInit {
     if (this.selectedCustomday == null){
       this.confirmDisabled = true;
       this.selected = false;
+
+      this.customDayNameEmpty = true;
+
       this.customDayName = "";
       this.customDayDescription = "";
       return ;
     }
     else {
+
+      this.customDayNameEmpty = false;
+      
       this.confirmDisabled = false;
       for(let oneCustomDay of this.customdayList){
         if (oneCustomDay.customDayId == this.selectedCustomday){
@@ -349,8 +355,12 @@ export class AddCustomdayComponent implements OnInit {
          // console.log(this.selectCustomDayItem);
         this.customDayName = oneCustomDay.name;
         this.customDayDescription = oneCustomDay.description;
+
+        
+
         this.getAllTemplates();          
         }
+        
     }
     }
   }
@@ -453,7 +463,8 @@ export class AddCustomdayComponent implements OnInit {
               this.getAllTemplates();
               this.ClearAllEvents();
               this.TodaystartTime = this.TodayendTime;
-              this.TodayendTime = this.TodayendTime;
+              //this doesn't work yet
+              this.TodayendTime = {hour:endDate.getHours() + DEFAULT_HOUR_INTERVAL,minute:endDate.getMinutes()};
             },
             error =>{
               alert(error);

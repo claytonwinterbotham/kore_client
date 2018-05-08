@@ -62,6 +62,7 @@ const colors: any = {
     secondary: '#FDF1BA'
   }
 };
+const DEFAULT_HOUR_INTERVAL = 3;
 
 interface RecurringEvent {
   title: string;
@@ -229,6 +230,12 @@ export class AddTimeslipComponent{
   projectDisabled : boolean = false;
   deletingTimeSlipId : string;
 
+      //for time control binding
+      fixedHourInterval : number;
+      fixedMinuteInterval : number;
+    
+      controlsAreBinded : boolean;
+
   //constructor 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
   _customdayService : MyCustomDayService,public router:Router, @Inject(DOCUMENT) private document: Document,
@@ -305,7 +312,49 @@ export class AddTimeslipComponent{
     });
   }
 
+  //Binding on time controls
+  onCheckboxChange(){
+    console.log("In the checkbox change method...");
+    console.log("Are controls binded = " + this.controlsAreBinded);
+    this.fixedHourInterval = this.endTime.hour - this.startTime.hour;
+    this.fixedMinuteInterval = this.endTime.minute - this.startTime.minute;
+    console.log("Fixed hour interval: " + this.fixedHourInterval);
+    console.log("Fixed minute interval: " + this.fixedMinuteInterval);
+  }
+  onStartTimeChange(){
+    console.log("In the onstartimechange method...");
+    if(!this.controlsAreBinded){
+        return;
+    }
+    let newHour = this.startTime.hour + this.fixedHourInterval;
+    let newMinute = this.startTime.minute + this.fixedMinuteInterval;
+    let newEndTime = { hour : newHour,
+                       minute : newMinute }
+    this.endTime = newEndTime;
+  //this.TodayendTime.hour = this.TodaystartTime.hour + this.fixedHourInterval;
+    console.log("Today end hour: " + this.endTime.hour);
+  //this.TodayendTime.minute = this.TodaystartTime.minute + this.fixedMinuteInterval;
+    console.log("Today end minute: " + this.endTime.minute);
+   
+  }
 
+  onEndTimeChange(){
+
+    if(!this.controlsAreBinded){
+        return;
+    }
+    let newHour = this.endTime.hour - this.fixedHourInterval;
+    let newMinute = this.endTime.minute - this.fixedMinuteInterval;
+    let newEndTime = { hour : newHour,
+                       minute : newMinute }
+    this.startTime = newEndTime;
+
+    //this.TodaystartTime.hour = this.TodayendTime.hour - this.fixedHourInterval;
+    console.log("Today start hour: " + this.startTime.hour);
+    //this.TodaystartTime.minute = this.TodayendTime.minute - this.fixedMinuteInterval;
+    console.log("Today start minute: " + this.startTime.minute);
+    
+  }
 
 
 
@@ -356,7 +405,7 @@ export class AddTimeslipComponent{
         this.wbiRemainingHours = "" ;
         this.ClearAllEvents();
         this.startTime = this.endTime;
-        this.endTime = this.endTime;
+        this.endTime = {hour:endDate.getHours() + DEFAULT_HOUR_INTERVAL,minute:endDate.getMinutes()}
       },error =>{
         alert(error);
       }

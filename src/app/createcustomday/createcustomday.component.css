@@ -2,6 +2,10 @@
     margin-top: 6em;
 }
 
+.row{
+    margin-right: 0;
+}
+
 .main-content h1{
     margin-bottom: 1em;
 }
