@@ -353,7 +353,7 @@ export class AddCustomdayComponent implements OnInit {
             //endDate.setMinutes(endMinute);
             console.log(startDate);
             console.log(endDate);
-            console.log("I want to see what is in one tiem slip");
+            console.log("I want to see what is in one time slip");
             console.log(oneTimeSlip);
             
             this.addNewEvent(oneTimeSlip.remarks,startDate,endDate,oneTimeSlip.timeslipTemplateId,oneTimeSlip.newChangeRequestId);

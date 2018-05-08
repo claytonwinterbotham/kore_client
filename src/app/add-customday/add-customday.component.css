@@ -8,7 +8,9 @@
     padding-top: .5em;
     margin-bottom: 2em;
 }
-
+.custom_day_main_content{
+    padding-top: 10px;
+}
 .custom_day_scroll{
     height: 600px;
     overflow-x: scroll;

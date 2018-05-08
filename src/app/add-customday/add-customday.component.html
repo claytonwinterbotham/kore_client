@@ -1,14 +1,14 @@
-<div class="row custom_day_header">
+<!-- <div class="row custom_day_header">
   <div class="col-md-4">
-    <!-- <p class="text-center">Current custom day:</p>
+     <p class="text-center">Current custom day:</p>
     <h3 class="text-center" *ngIf="customDayName">{{customDayName}}</h3>
-    <h3 class="text-center" *ngIf="!customDayName">No day selected</h3> -->
+    <h3 class="text-center" *ngIf="!customDayName">No day selected</h3> 
   </div>
-  <!-- empty div for layout -->
+   empty div for layout 
   <div class="col-md-4">
-  </div>
+  </div> -->
     <!-- <div class="col-md-12" *ngIf="!isSelect  ;else ShowAll"> -->
-  <div class="col-md-3">
+  <!-- <div class="col-md-3">
     <form>
       <div class="form-group" *ngIf="!customDayId">
         <label for="customdaylist">Select custom day:</label>
@@ -26,35 +26,29 @@
       
     </form>
   </div>
-</div>
+</div> -->
 <!-- <ng-template> -->
 <!-- <ng-template #ShowAll> -->
   <div  class="row custom_day_main_content">
       <div class="col-md-1 pr-0"></div>
-      <div class="col-md-3 pl-0">
-        <h3 class="text-center timeslip-header">Timeslot</h3>
-        <hr>
-        <div class="custom_day_view_container custom_day_scroll" id="day_view_scroll">
-            <div [ngSwitch]="view">
-                <mwl-calendar-day-view
-                  *ngSwitchCase="'day'"
-                  [viewDate]="viewDate"
-                  [events]="events"
-                  [refresh]="refresh"
-                  (eventClicked)="handleEvent('Clicked', $event.event)"
-                  (eventTimesChanged)="eventTimesChanged($event)"
-                  [dayStartHour]="0"
-                  [dayEndHour]="24"
-                  >
-                </mwl-calendar-day-view>
-            </div>
-        </div> 
-      </div>
       <div class="col-md-4 custom_day_form">
         <form #form="ngForm" (ngSubmit)="addToTemplate()">
             <h3 class="text-center timeslip-header">New Timeslip Template</h3>
             <hr>
-
+            <div class="form-group clearfix">
+              <div id="start_time"class="border-right">
+                <label for="start_time">Start Time:</label>
+                <ngb-timepicker (click)="onStartTimeChange()" size="small" name="startTime" [(ngModel)]="TodaystartTime" [meridian]="meridian"></ngb-timepicker>
+              </div>
+              <div id="end_time">
+                <label for="end_time">End Time:</label>
+                <ngb-timepicker (click)="onEndTimeChange()" size="small" name="endTime" [(ngModel)]="TodayendTime" [meridian]="meridian"></ngb-timepicker>
+              </div>
+              <div id="bind_controls_checkbox">
+                <label for="bind_controls_cb">Bind Time Controls</label>
+                <input (change)="onCheckboxChange()" type="checkbox" name="bind_controls_cb" [(ngModel)]="controlsAreBinded">
+              </div>
+            </div>
           <div class="form-group">
             <label for="project">Project:</label>
             <ng-select *ngIf="!searchWBIs" [items]="projectList"
@@ -97,20 +91,7 @@
             name="remark" [(ngModel)]="newEventTitle" 
             >
         </div>
-          <div class="form-group clearfix">
-            <div id="start_time"class="border-right">
-              <label for="start_time">Start Time:</label>
-              <ngb-timepicker (click)="onStartTimeChange()" size="small" name="startTime" [(ngModel)]="TodaystartTime" [meridian]="meridian"></ngb-timepicker>
-            </div>
-            <div id="end_time">
-              <label for="end_time">End Time:</label>
-              <ngb-timepicker (click)="onEndTimeChange()" size="small" name="endTime" [(ngModel)]="TodayendTime" [meridian]="meridian"></ngb-timepicker>
-            </div>
-            <div id="bind_controls_checkbox">
-              <label for="bind_controls_cb">Bind Time Controls</label>
-              <input (change)="onCheckboxChange()" type="checkbox" name="bind_controls_cb" [(ngModel)]="controlsAreBinded">
-            </div>
-          </div>
+          
           <div class="form-group text-left clearfix mt-2">
             <button
             type="submit"
@@ -123,12 +104,49 @@
           </div>
         </form>
       </div>
+      <div class="col-md-3 pl-0">
+        <h3 class="text-center timeslip-header">Timeslot</h3>
+        <hr>
+        <div class="custom_day_view_container custom_day_scroll" id="day_view_scroll">
+            <div [ngSwitch]="view">
+                <mwl-calendar-day-view
+                  *ngSwitchCase="'day'"
+                  [viewDate]="viewDate"
+                  [events]="events"
+                  [refresh]="refresh"
+                  (eventClicked)="handleEvent('Clicked', $event.event)"
+                  (eventTimesChanged)="eventTimesChanged($event)"
+                  [dayStartHour]="0"
+                  [dayEndHour]="24"
+                  >
+                </mwl-calendar-day-view>
+            </div>
+        </div> 
+      </div>
+      
       <div class="col-md-3 custom_day_section">
         <form>
           <div class="form-group">
             <h3 class="text-center timeslip-header">Edit Custom Day</h3>
             <hr>
-              <label for="customDayName">Custom day name:</label>
+            <form>
+              <div class="form-group" *ngIf="!customDayId">
+                <label for="customdaylist">Select custom day:</label>
+                <ng-select
+                id="customdaylist"
+                [items]="customdayList"
+                bindLabel="name"
+                bindValue="customDayId"
+                [(ngModel)]="selectedCustomday"
+                (change)="getThisCustomDay()"
+                name="customDayList">
+                </ng-select>
+                
+              </div>
+              
+            </form>
+            <hr>
+              <label for="customDayName">Name:</label>
               <input *ngIf="!customDayId" 
               type="text" class="form-control" id="customDayName" placeholder="Enter name"
               name="customDayName" [(ngModel)]="customDayName"
@@ -137,7 +155,7 @@
               <p *ngIf="customDayId">{{customDayName}}</p> 
           </div>
           <div class="form-group">
-              <label for="customDayDescription">Custom day description:</label>
+              <label for="customDayDescription">Description:</label>
               <input 
               *ngIf="!customDayId" 
               type="text" class="form-control" id="customDayDescription" placeholder="Enter description"
