@@ -42,7 +42,7 @@ export class MyTimeslipService {
             "UserId": _timeslip.UserId,
             "DayId": _timeslip.DayId,
         }
-        console.log(TimeslipJson)
+        // console.log(TimeslipJson)
         return this.http.post(dataUrl, TimeslipJson,options)
             .map(this.extractData) 
             .catch(this.handleError); 
@@ -126,7 +126,7 @@ export class MyTimeslipService {
         // headers.append( 'Authorization', 'Bearer ' 
         // + sessionStorage.getItem('token'));
         id = id.toUpperCase();
-        console.log("Timeslip id:" + id);
+        // console.log("Timeslip id:" + id);
         let timeslipVM = {
             "TimeSlipId" : id
         };
@@ -142,15 +142,14 @@ export class MyTimeslipService {
     }
     
     private handleError(error: any) {
-        // In a real world app, we might use a remote logging infrastructure
-        // We'd also dig deeper into the error to get a better message
+
         // console.log(error.json().err)
         // let errMsg = error.json().err
         
         let errMsg = (error.message) ? error.message :
             error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-        console.log(error._body);
-        console.log(JSON.parse(error._body).message);
+        // console.log(error._body);
+        // console.log(JSON.parse(error._body).message);
         //console.error(errMsg); // log to console instead
         return Observable.throw(JSON.parse(error._body).message);
     }

@@ -37,7 +37,7 @@ export class ViewWmbsComponent implements OnInit {
   showProjectList(){
     this.projectService.getProjects().subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         this.projectList = data;
       },
     error => {
@@ -50,7 +50,7 @@ export class ViewWmbsComponent implements OnInit {
     this.spinner.show();
     this.wbiService.postWBI(wbi).subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         this.spinner.hide();
         this.modalService.open(this.wbiCreated);
       },error =>{

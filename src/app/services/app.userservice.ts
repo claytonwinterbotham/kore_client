@@ -82,7 +82,7 @@ export class MyUserService {
 deleteUser(id: String): Observable<Comment[]> {
     let headers = new Headers({ 'Content-Type': 'application/json' }); 
     let options = new RequestOptions({headers: headers});
-    console.log("User id:" + id);
+    // console.log("User id:" + id);
     let dataUrl = this.site + "Delete/" + id;
     
     return this.http.delete(dataUrl,options)
@@ -101,7 +101,7 @@ deleteUser(id: String): Observable<Comment[]> {
             "FirstName": _user.FirstName,
             "LastName": _user.LastName
         }
-        console.log(UserJson)
+        // console.log(UserJson)
         return this.http.post(dataUrl, UserJson,options)
             .map(this.extractData) 
             .catch(this.handleError); 
@@ -116,8 +116,8 @@ deleteUser(id: String): Observable<Comment[]> {
     private handleError(error: any) {
         let errMsg = (error.message) ? error.message :
             error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-        console.log(error._body);
-        console.log(JSON.parse(error._body).message);
+        // console.log(error._body);
+        // console.log(JSON.parse(error._body).message);
         //console.error(errMsg); // log to console instead
         return Observable.throw(JSON.parse(error._body).message);
     }

@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
   }
 
   login(){
-    //add logic
+   
     // Set our navigation extras object
     // that passes on our global query params and fragment
     let userInfo : LoginModel = {
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
       data =>{
         sessionStorage.setItem("userId",data["secret"]);
         sessionStorage.setItem("token",data["token"]);
-        console.log(data);
+        // console.log(data);
         this.spinner.hide();
         let navigationExtras: NavigationExtras = {
           queryParamsHandling: 'preserve',

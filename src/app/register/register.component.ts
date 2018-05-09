@@ -42,7 +42,7 @@ export class RegisterComponent implements OnInit {
       }
       this._userDataService.registerUser(newUser).subscribe(
         data => {
-          console.log(data)
+          // console.log(data)
           sessionStorage.setItem("userId",data["secret"]);
           sessionStorage.setItem("token",data["token"]);
           this.router.navigate(['addtimeslip'])
@@ -52,7 +52,7 @@ export class RegisterComponent implements OnInit {
         },
         //3. execute final instructions
         () => {
-          console.log("Finished")          
+          // console.log("Finished")          
         }
 
       )

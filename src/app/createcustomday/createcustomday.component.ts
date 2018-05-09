@@ -25,7 +25,7 @@ export class CreatecustomdayComponent implements OnInit {
   }
 
   createCustomday(){
-    console.log("I want to create a new customday");
+    // console.log("I want to create a new customday");
     if (this.customDayName == "" || this.customDayDescription == ""){
       if (this.customDayName == ""){
         this.nameNotEmpty = false;
@@ -47,10 +47,10 @@ export class CreatecustomdayComponent implements OnInit {
       this.spinner.show();
       this.customdayService.create(customDay).subscribe(
         data=>{
-          console.log(data);
+          // console.log(data);
           this.createdCustomday = data["customDayId"];
   
-          console.log("i want to go to another page!");
+          // console.log("i want to go to another page!");
           this.spinner.hide();
           this.router.navigate(["/addcustomday",{id:this.createdCustomday,
           name:this.customDayName,description:this.customDayDescription}]);

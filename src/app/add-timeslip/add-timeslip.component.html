@@ -141,18 +141,6 @@
           <div class="col-md-1 pr-0"></div>
           <div class="col-md-4 add_timeslip_day_form">
             <form #form="ngForm" (ngSubmit)="AddNewTimeSlip()">
-                <!-- <div class="form-group">
-                    <label for="customDayName">customDayName:</label>
-                    <input type="text" class="form-control" id="customDayName" placeholder="Enter custom Day Name"
-                    name="customDayName" [(ngModel)]="customDayName"
-                    >
-                </div> -->
-                <!-- <div class="form-group">
-                    <label for="customDayDescription">customday description:</label>
-                    <input type="text" class="form-control" id="customDayDescription" placeholder="Enter custom Day Description"
-                    name="customDayDescription" [(ngModel)]="customDayDescription"
-                    >
-                </div> -->
 
                 <h3 class="text-center timeslip-header">Create New Timeslip</h3>
                 <hr>
@@ -235,13 +223,7 @@
                   </button>
                   <button type="button" class="btn btn-outline-info" (click)="ClearAllEvents()">Clear</button>
                 </div>
-                <!-- <div class="form-group">
-                  <button
-                  class="btn btn-success"
-                  (click)="confirmAndReturn(); refresh.next()">
-                  Create
-                  </button>            
-                </div> -->
+
             </form>
           </div>
           <div class="col-md-3 pl-0">
@@ -290,7 +272,6 @@
       </div>
     </div>   
   </div>
-
 
   <!-- modal: -->
   <ng-template #searchSuccess let-c="close" let-d="dismiss">

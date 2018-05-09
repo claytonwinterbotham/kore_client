@@ -21,7 +21,6 @@ export class ViewProjectsComponent implements OnInit {
 
   projectTypeList : any;
  
-
   oneProject :any = {};
   newProject : any = {};
 
@@ -46,7 +45,7 @@ export class ViewProjectsComponent implements OnInit {
     this.spinner.show();
     this.projectService.postProject(project).subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         this.spinner.hide();
         this.modalService.open(this.projectCreated);
       },error =>{
@@ -59,7 +58,7 @@ export class ViewProjectsComponent implements OnInit {
   showProjectList(){
     this.projectService.getProjects().subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         this.projectList = data;
       },
     error => {
@@ -70,7 +69,7 @@ export class ViewProjectsComponent implements OnInit {
   showProjectTypeList(){
     this.projectService.getProjectTypes().subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         this.projectTypeList = data;
       },
     error => {
@@ -82,7 +81,7 @@ export class ViewProjectsComponent implements OnInit {
   showClientList(){
     this.clientService.getClients().subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         this.clientList = data;
       },
     error => {
@@ -94,7 +93,7 @@ export class ViewProjectsComponent implements OnInit {
   getOneProject(id : string){
     this.projectService.getOneProject(id).subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         this.oneProject = data;
       },error =>{
         alert(error);
@@ -105,7 +104,7 @@ export class ViewProjectsComponent implements OnInit {
   updateProject(project : any){
     this.projectService.updateProject(project).subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
       },error => {
         alert(error);
       }
@@ -115,30 +114,15 @@ export class ViewProjectsComponent implements OnInit {
   deleteOneProject(id : string){
     this.projectService.deleteProject(id).subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         this.clientList = data;
       },error => {
         alert(error);
       }      
     )
   }
-
-  // onSubmit(form: NgForm){
-  //   const value = form.value;
-  //   console.log(
-  //   ` project: ${value.project} 
-  //     client:  ${value.client.label}
-  //     start date: ${new Date(value.start_date.year, value.start_date.month, value.start_date.day)} 
-  //     end date: ${new Date(value.end_date.year, value.end_date.month, value.end_date.day)}   
-  //     project type: ${value.project_type}`)
-  //   form.reset();
-  // }
-
   onClear(form: NgForm){
     form.reset();
   }
 
 }
-
-
-//this.modalService.open(this.searchSuccess);
