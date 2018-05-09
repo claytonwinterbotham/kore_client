@@ -40,12 +40,12 @@ import {
   CalendarMonthViewDay 
 } from 'angular-calendar';
 // import {layui} from "layui-src"
-import { ClickOutsideModule } from 'ng-click-outside';
 // import * as $ from "jquery";
 import { Router, NavigationExtras } from '@angular/router';
 import { Inject} from "@angular/core";
 import { DOCUMENT } from '@angular/platform-browser';
-import { DayViewHour } from 'calendar-utils';
+import { ActivatedRoute } from '@angular/router';
+import { NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 //const
@@ -81,7 +81,6 @@ interface RecurringEvent {
 
 @Component({
   selector: 'calendar-component',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['add-timeslip.component.css'],
   templateUrl: 'add-timeslip.component.html'
 })
@@ -156,8 +155,6 @@ export class AddTimeslipComponent{
       }
     }
   ];
-
-
       // exclude weekends
       excludeDays: number[] = [0, 6];
 
@@ -174,8 +171,6 @@ export class AddTimeslipComponent{
           }
         }
       }
-
-
 
   //variables 
   activeDayIsOpen: boolean = true;
@@ -224,7 +219,6 @@ export class AddTimeslipComponent{
   originalEvents :CalendarEvent[] = [];
   wbiRemainingHours : string;
   selectedDayViewDate: Date;
-  dayView: DayViewHour[];
   newTimeSlipTest: boolean = true;
   WBIDisabled : boolean = true;
   searchDisabled : boolean = false;
@@ -235,7 +229,7 @@ export class AddTimeslipComponent{
       fixedHourInterval : number;
       fixedMinuteInterval : number;
     
-      controlsAreBinded : boolean;
+      controlsAreBinded : boolean = false;
 
   remainingHourInvalid: boolean = false;
   //constructor 
@@ -255,20 +249,14 @@ export class AddTimeslipComponent{
     this.showProjectList();
     this.getAllTimeSlips();
     this.getAllCustomDays(); 
-        /** spinner starts on init */
-        // this.spinner.show();
- 
-        // setTimeout(() => {
-        //     /** spinner ends after 5 seconds */
-        //     this.spinner.hide();
-        // }, 1000);
+    this.refresh.next();
   }
 
   deleteTimeSlip(){
     this.spinner.show();
     this.timeSlipService.deleteTimeslip(this.deletingTimeSlipId).subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         this.getAllTimeSlips();
         this.deletingTimeSlipId = null;
         this.spinner.hide();
@@ -277,87 +265,58 @@ export class AddTimeslipComponent{
       }
     )
   }
-  hourSegmentClicked(date: Date) {
-    this.selectedDayViewDate = date;
-    //this.addSelectedDayViewClass();
-  }
-
-  beforeDayViewRender(dayView: DayViewHour[]) {
-   
-    this.dayView = dayView;
-    //this.addSelectedDayViewClass();
-  }
-
-  // addSelectedDayViewClass() {
-
- 
-
-
-
-  //   this.dayView.forEach(hourSegment => {
-  //     hourSegment.segments.forEach(segment => {
-  //       delete segment.cssClass;
-  //       if (
-  //         this.selectedDayViewDate &&
-  //         segment.date.getTime() === this.selectedDayViewDate.getTime()
-  //       ) {
-
-          
-  //         //segment.cssClass = 'cal-day-selected';
-  //         //console.log(new Date(segment.date.getTime()));
-  //         //this.endTime.setMinutes(this.startTime.getMinutes()+30);
-  //         console.log(segment.date.getHours());
-  //         this.startTime = {hour: segment.date.getHours(), minute: segment.date.getMinutes()};
-  //         let newDate = new Date(segment.date.getTime());
-  //         newDate.setMinutes(newDate.getMinutes()+30);
-  //         //segment.date.setMinutes(segment.date.getMinutes()+30);
-  //         this.endTime = {hour:newDate.getHours(), minute: newDate.getMinutes()};
-  //         console.log(this.startTime.hour)
-  //         console.log(newDate);
-  //         this.refresh.next();
-
-  //       }
-  //     });
-  //   });
-  // }
 
   //Binding on time controls
   onCheckboxChange(){
-    console.log("In the checkbox change method...");
-    console.log("Are controls binded = " + this.controlsAreBinded);
+    if (this.controlsAreBinded == true){
+      this.controlsAreBinded = false;
+    }else {
+      this.controlsAreBinded = true;
+    }
+    // console.log("In the checkbox change method...");
+    // console.log("Are controls binded = " + this.controlsAreBinded);
     this.fixedHourInterval = this.endTime.hour - this.startTime.hour;
     this.fixedMinuteInterval = this.endTime.minute - this.startTime.minute;
-    console.log("Fixed hour interval: " + this.fixedHourInterval);
-    console.log("Fixed minute interval: " + this.fixedMinuteInterval);
+    // console.log("Fixed hour interval: " + this.fixedHourInterval);
+    // console.log("Fixed minute interval: " + this.fixedMinuteInterval);
   }
-  onStartTimeChange(){
+
+  onStartTimeChange($event: Event){
     console.log("In the onstartimechange method...");
+    console.log($event);
+    console.log(this.startTime);
     console.log(this.controlsAreBinded);
-    if(!this.controlsAreBinded){
+    if(this.controlsAreBinded == false){
         return;
-    }
-    let newHour = this.startTime.hour + this.fixedHourInterval;
-    let newMinute = this.startTime.minute + this.fixedMinuteInterval;
-    // let newEndTime = { hour : newHour,
-    //                    minute : newMinute }
-    this.endTime = { hour : newHour,
-      minute : newMinute };
+    }else {
+      let newHour = this.startTime.hour + this.fixedHourInterval;
+      let newMinute = this.startTime.minute + this.fixedMinuteInterval;
+      // let newEndTime = { hour : newHour,
+      //                    minute : newMinute }
       this.endTime = { hour : newHour,
         minute : newMinute };
-    this.refresh.next();
-  //this.TodayendTime.hour = this.TodaystartTime.hour + this.fixedHourInterval;
-    console.log("Today end hour: " + this.endTime.hour);
-  //this.TodayendTime.minute = this.TodaystartTime.minute + this.fixedMinuteInterval;
-    console.log("Today end minute: " + this.endTime.minute);
-   
+        console.log(this.endTime);
+      this.refresh.next();
+    
+      // console.log("Today end hour: " + this.endTime.hour);
+    
+      // console.log("Today end minute: " + this.endTime.minute);
+     /// this.endTime.hour = this.endTime.hour+1;
+     // this.endTime
+    }
+  }
+
+  changeEndTime(){
+    // console.log("I want to assign to it again!");
+    this.endTime = this.endTime;
   }
 
   refreshMe(){
-    console.log("i want to refresh");
+    // console.log("i want to refresh");
   }
 
   onEndTimeChange(){
-
+    // console.log("the end time changed now");
     if(!this.controlsAreBinded){
         return;
     }
@@ -366,36 +325,30 @@ export class AddTimeslipComponent{
     let newEndTime = { hour : newHour,
                        minute : newMinute }
     this.startTime = newEndTime;
-
-    //this.TodaystartTime.hour = this.TodayendTime.hour - this.fixedHourInterval;
-    console.log("Today start hour: " + this.startTime.hour);
-    //this.TodaystartTime.minute = this.TodayendTime.minute - this.fixedMinuteInterval;
-    console.log("Today start minute: " + this.startTime.minute);
     
+    // console.log("Today start hour: " + this.startTime.hour);
+    // console.log("Today start minute: " + this.startTime.minute);  
   }
 
 
 
   AddNewTimeSlip(){
-    console.log("I want to add a new timeslip");
-    console.log(this.viewDate);
+    // console.log("I want to add a new timeslip");
+    // console.log(this.viewDate);
     //console.log(this.startTime)
     let startDate : Date = new Date(this.viewDate.valueOf());
-    console.log(startDate);
-    console.log(this.startTime.hour)
+    // console.log(startDate);
+    // console.log(this.startTime.hour)
     startDate.setHours(this.startTime.hour, this.startTime.minute);
     let endDate : Date = new Date(this.viewDate.valueOf());
     endDate.setHours(this.endTime.hour, this.endTime.minute);
-    console.log(startDate);
-
+    // console.log(startDate);
     let validationEvent : CalendarEvent= {
       start:startDate,
       end:endDate,
       title: " test"
     }
-
    let result : boolean =  this.validateNewEvent(validationEvent,this.events);
-
    if (result != true){
      alert("please ensure that there is not time overlap!");
    }else {
@@ -411,8 +364,8 @@ export class AddTimeslipComponent{
     this.timeslipModel = newTimeSlip; 
     this.timeSlipService.postTimeslip(this.timeslipModel).subscribe(
       data=> {
-        console.log(this.timeslipModel)
-        console.log(data);
+        // console.log(this.timeslipModel)
+        // console.log(data);
         //this.addEvent()
         this.getAllTimeSlips();
         this.newEvent = [];
@@ -457,7 +410,7 @@ export class AddTimeslipComponent{
 
     this.wbiService.searchWBI(this.searchString).subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         this.wbiList = (data);
         this.searchWBIs = true;
         if (data.length != 0){
@@ -481,7 +434,7 @@ export class AddTimeslipComponent{
   }
 
   locateProject(){
-    console.log("i want to locate project");
+    // console.log("i want to locate project");
     if (this.selectedWBI == null || this.selectedWBI == ""){
       this.wbiRemainingHours = "";
     }
@@ -498,7 +451,7 @@ export class AddTimeslipComponent{
 
     this.projectService.getOneProjectByWBIId(this.selectedWBI).subscribe(
       data=>{
-        console.log(data);
+        // console.log(data);
         //this.fixedProject = true;
         //this.ngselectProject = false;
         this.selectedProject = data["newName"];
@@ -520,10 +473,10 @@ export class AddTimeslipComponent{
     }else {
       let wbi = this.wbiList.filter(i=> i.newChangeRequestId == WBI);
       //return wbi.
-      console.log("I want to get remaining wbi hours");
+      // console.log("I want to get remaining wbi hours");
       //console.log(wbi);
       //console.log(wbi[0]["newActualHours"]);
-      console.log(Number.parseInt(wbi[0]["newActualHours"])  - Number.parseInt(wbi[0]["newEstimatedHours"]));
+      // console.log(Number.parseInt(wbi[0]["newActualHours"])  - Number.parseInt(wbi[0]["newEstimatedHours"]));
       return Number.parseInt(wbi[0]["newEstimatedHours"])  - Number.parseInt(wbi[0]["newActualHours"])
       //return 1;
     }
@@ -533,7 +486,7 @@ export class AddTimeslipComponent{
       setTimeout(function(){
          var scrollContainer = document.getElementById("day_view_scroll")
          scrollContainer.scrollTop = 465 
-         console.log("scroll " + scrollContainer.scrollTop)
+        //  console.log("scroll " + scrollContainer.scrollTop)
         }, 300);
       
   }
@@ -541,7 +494,7 @@ export class AddTimeslipComponent{
   showProjectList(){
     this.projectService.getProjects().subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         this.projectList = data;
       },
     error => {
@@ -551,7 +504,7 @@ export class AddTimeslipComponent{
   }
 
   showProjectDropdown(){
-    console.log("karl");
+    // console.log("karl");
     this.projectDropdown = !this.projectDropdown;
   }
 
@@ -577,7 +530,7 @@ export class AddTimeslipComponent{
     this.spinner.show();
     this.timeSlipService.getTimeSlipsByUserId(this.userId).subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         if (data[0]["newTimesheetEntryId"] == null){
           this.allTimeSlips = "";
         }else {
@@ -595,7 +548,7 @@ export class AddTimeslipComponent{
   getAllCustomDays(){
     this.customdayService.getCustomdays(sessionStorage.getItem('userId')).subscribe(
       data=> {
-      console.log(data);
+      // console.log(data);
       this.customdayList = data;
       },
       error => {
@@ -608,14 +561,14 @@ export class AddTimeslipComponent{
     if (this.allTimeSlips == ""){
       return ;
     }else {
-      console.log(this.allTimeSlips);
+      // console.log(this.allTimeSlips);
       for (let oneTimeSlip of this.allTimeSlips){
         //this.getTitleName(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask,oneTimeSlip.newTimesheetEntryId,oneTimeSlip.newChangeRequestId,colors.blue,true);
         this.addNewEvent(oneTimeSlip.newRemarks,oneTimeSlip.newStartTask,oneTimeSlip.newEndTask,oneTimeSlip.newTimesheetEntryId,oneTimeSlip.newChangeRequestId,oneTimeSlip.wbiName, colors.blue);
       }
     }
 
-    console.log(this.events);
+    // console.log(this.events);
   }
 
   addNewEvent(title,start,end,timeSlipId,WBIId,WBIName, color)
@@ -671,14 +624,14 @@ export class AddTimeslipComponent{
     if (this.selectedCustomday == null){
       return ;
     }
-    console.log("I want to show fake custom day");
+    // console.log("I want to show fake custom day");
     this.timeSlipTemplateService.getAllTimeSlips(this.selectedCustomday).subscribe(
       data => {
-        console.log(data);
+        // console.log(data);
         this.fakeTimeSlips = data;
         for (let fakeTimeSlip of this.fakeTimeSlips){
           let fakeStart = new Date(fakeTimeSlip.startTime);
-          console.log(fakeStart);
+          // console.log(fakeStart);
           let fakeEnd = new Date(fakeTimeSlip.endTime);
           let startHour = fakeStart.getHours();
           let startMinute = fakeStart.getMinutes();
@@ -686,11 +639,11 @@ export class AddTimeslipComponent{
           let endMinute = fakeEnd.getMinutes();
           
           fakeStart.setFullYear(this.viewDate.getFullYear(), this.viewDate.getMonth(),this.viewDate.getDate());
-          console.log(fakeStart);
-          console.log(startHour);
+          // console.log(fakeStart);
+          // console.log(startHour);
           fakeStart.setHours(startHour);
           fakeStart.setMinutes(startMinute);
-          console.log(fakeStart);
+          // console.log(fakeStart);
          
           fakeEnd.setFullYear(this.viewDate.getFullYear(), this.viewDate.getMonth(),this.viewDate.getDate());
           fakeEnd.setHours(endHour);
@@ -738,8 +691,8 @@ export class AddTimeslipComponent{
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
-    console.log(action);
-    console.log(event);
+    // console.log(action);
+    // console.log(event);
     this.getProjectName(event.meta.WBIId);
     this.getWBIName(event.meta.WBIId);
     this.EditTimeSlipId = event.meta.timeSlipId;
@@ -774,7 +727,7 @@ export class AddTimeslipComponent{
   getProjectName(WBIId : string){
     this.projectService.getOneProjectByWBIId(WBIId).subscribe(
       data=>{
-        console.log(data);
+        // console.log(data);
         this.EditProjectName = data["newName"];
       },
       error=>{
@@ -786,10 +739,10 @@ export class AddTimeslipComponent{
   }
 
   getWBIName(WBIId : string) {
-    console.log("I want to get WBI Name!")
+    // console.log("I want to get WBI Name!")
     this.wbiService.getOneWBI(WBIId).subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         this.EditWBIName = data["newName"];
       },
       error =>{
@@ -834,7 +787,7 @@ export class AddTimeslipComponent{
   }
 
   confirmAddEvent(){
-    console.log(this.newEvent[0].start.toISOString());
+    // console.log(this.newEvent[0].start.toISOString());
     let newTimeSlip: TimeslipModel  = {
       StartDate : this.newEvent[0].start.toISOString(),
       EndDate : this.newEvent[0].end.toISOString(),
@@ -847,8 +800,8 @@ export class AddTimeslipComponent{
     this.timeslipModel = newTimeSlip; 
     this.timeSlipService.postTimeslip(this.timeslipModel).subscribe(
       data=> {
-        console.log(this.timeslipModel)
-        console.log(data);
+        // console.log(this.timeslipModel)
+        // console.log(data);
         //this.addEvent()
         this.getAllTimeSlips();
         this.newEvent = [];
@@ -861,12 +814,12 @@ export class AddTimeslipComponent{
   }
 
   confirmQuickAddts(){
-    console.log(this.selectedProject);
-    console.log(this.selectedWBI);
-    console.log(this.quickRemarks);
-    console.log(this.quickAddDate);
-    console.log(this.startTime);
-    console.log(this.endTime);
+    // console.log(this.selectedProject);
+    // console.log(this.selectedWBI);
+    // console.log(this.quickRemarks);
+    // console.log(this.quickAddDate);
+    // console.log(this.startTime);
+    // console.log(this.endTime);
     let newTimeSlip: TimeslipModel  = {
       StartDate : this.quickAddDate.year + "/" + this.quickAddDate.month + "/" + this.quickAddDate.day +" "+ this.startTime.hour+ ":"+this.startTime.minute ,
       EndDate : this.quickAddDate.year + "/" + this.quickAddDate.month + "/" + this.quickAddDate.day+" "+ this.endTime.hour+ ":"+this.endTime.minute,
@@ -879,8 +832,8 @@ export class AddTimeslipComponent{
     this.timeslipModel = newTimeSlip; 
     this.timeSlipService.postTimeslip(this.timeslipModel).subscribe(
       data=> {
-        console.log(this.timeslipModel)
-        console.log(data);
+        // console.log(this.timeslipModel)
+        // console.log(data);
         //this.addEvent()
         this.getAllTimeSlips();
         this.newEvent = [];
@@ -899,7 +852,7 @@ export class AddTimeslipComponent{
 
 
   confirmAddCustomDay(){
-    console.log(this.selectedCustomday); 
+    // console.log(this.selectedCustomday); 
     //console.log(this.clickedDate.getFullYear()+"-"+this.clickedDate.getMonth()+"-"+this.clickedDate.getDay()+"" );
     let result = this.validateCustomDay(this.events.filter(event=> event.color == colors.red),this.events.filter(event=> event.color == colors.blue));
     if (result == false){
@@ -907,14 +860,14 @@ export class AddTimeslipComponent{
       return ;
     }
     else {
-      console.log(this.clickedDate.toISOString());
+      // console.log(this.clickedDate.toISOString());
       let CustomdayTimeslip : customdayTimeslip = {
         CustomdayId :this.selectedCustomday,
         Date :this.clickedDate.toISOString()
       }
       this.timeSlipTemplateService.applyTimeTemplate(CustomdayTimeslip).subscribe(
         data=> {
-          console.log(data);
+          // console.log(data);
           this.getAllTimeSlips();
           this.selectedCustomday = null;
         },error =>{
@@ -972,12 +925,12 @@ export class AddTimeslipComponent{
         UserId : sessionStorage.getItem('userId'),
         DayId : ""      
       }
-      console.log("i want to comfirm edit");
-      console.log(newTimeSlip);
+      // console.log("i want to comfirm edit");
+      // console.log(newTimeSlip);
       this.spinner.show();
       this.timeSlipService.updateTimeslip(newTimeSlip).subscribe(
         data=>{
-          console.log(data);
+          // console.log(data);
           this.getAllTimeSlips();
           //this.mr.close();
           this.spinner.hide();
@@ -1006,7 +959,7 @@ export class AddTimeslipComponent{
   }
 
   changeProject(){
-    console.log("hello");
+    // console.log("hello");
     this.selectedWBI = "";
     this.wbiRemainingHours = "please select a WBI";
     if (this.selectedProject == null || this.selectedProject== ""){
@@ -1018,7 +971,7 @@ export class AddTimeslipComponent{
     }else {
       this.wbiService.GetAllWBIsByProjectId(this.selectedProject).subscribe(data=>{
 
-        console.log(data);
+        // console.log(data);
         this.projectDropdown = false;
         this.wbiList = data;
         if (data != null){

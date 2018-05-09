@@ -41,8 +41,8 @@ export class MyClientService {
     private handleError(error: any) {
         let errMsg = (error.message) ? error.message :
             error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-        console.log(error._body);
-        console.log(JSON.parse(error._body).message);
+        // console.log(error._body);
+        // console.log(JSON.parse(error._body).message);
         //console.error(errMsg); // log to console instead
         return Observable.throw(JSON.parse(error._body).message);
     }

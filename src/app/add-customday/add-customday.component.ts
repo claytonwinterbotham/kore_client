@@ -111,8 +111,8 @@ export class AddCustomdayComponent implements OnInit {
         this.spinner.show();
         this.timeSlipTemplateService.deleteTimeslipTemplate(event.meta.timeSlipId).subscribe(
           data=> {
-            console
-            console.log(data);
+           
+            // console.log(data);
             this.getAllTemplates();
             this.spinner.hide();
           },error =>{
@@ -161,10 +161,8 @@ export class AddCustomdayComponent implements OnInit {
   projectDisabled : boolean = false;
   openWBI :boolean = false;
   confirmDisabled : boolean = true;
-
   fixedHourInterval : number;
   fixedMinuteInterval : number;
-
   controlsAreBinded : boolean;
 
  
@@ -178,10 +176,10 @@ export class AddCustomdayComponent implements OnInit {
     this.mycustomdayService = _customdayService;
     this.timeSlipTemplateService = _timeSlipTemplateService;
     this.route.params.subscribe(res =>{
-      console.log(res.id);
+      // console.log(res.id);
       this.customDayId = res.id;
       this.selectedCustomday = res.id;
-      //this.isSelect = true;
+      
       this.customDayName = res.name;
       this.customDayDescription = res.description;
       if (res.id != ""  && res.id != null){
@@ -193,7 +191,7 @@ export class AddCustomdayComponent implements OnInit {
 
   ngOnInit() {
    //this.mySecretDay = new Date(this.randomDate(new Date(1, 1, 1),new Date(2000, 1, 1)))  ;
-   console.log(this.mySecretDay);
+   //console.log(this.mySecretDay);
    this.showProjectList();
    this.newEvent.push({
      title: '',
@@ -214,15 +212,15 @@ export class AddCustomdayComponent implements OnInit {
    
   }
   onCheckboxChange(){
-    console.log("In the checkbox change method...");
-    console.log("Are controls binded = " + this.controlsAreBinded);
+    // console.log("In the checkbox change method...");
+    // console.log("Are controls binded = " + this.controlsAreBinded);
     this.fixedHourInterval = this.TodayendTime.hour - this.TodaystartTime.hour;
     this.fixedMinuteInterval = this.TodayendTime.minute - this.TodaystartTime.minute;
-    console.log("Fixed hour interval: " + this.fixedHourInterval);
-    console.log("Fixed minute interval: " + this.fixedMinuteInterval);
+    // console.log("Fixed hour interval: " + this.fixedHourInterval);
+    // console.log("Fixed minute interval: " + this.fixedMinuteInterval);
   }
   onStartTimeChange(){
-    console.log("In the onstartimechange method...");
+    // console.log("In the onstartimechange method...");
     if(!this.controlsAreBinded){
         return;
     }
@@ -231,10 +229,9 @@ export class AddCustomdayComponent implements OnInit {
     let newEndTime = { hour : newHour,
                        minute : newMinute }
     this.TodayendTime = newEndTime;
-  //this.TodayendTime.hour = this.TodaystartTime.hour + this.fixedHourInterval;
-    console.log("Today end hour: " + this.TodayendTime.hour);
-  //this.TodayendTime.minute = this.TodaystartTime.minute + this.fixedMinuteInterval;
-    console.log("Today end minute: " + this.TodayendTime.minute);
+
+    // console.log("Today end hour: " + this.TodayendTime.hour);
+    // console.log("Today end minute: " + this.TodayendTime.minute);
    
   }
 
@@ -249,10 +246,8 @@ export class AddCustomdayComponent implements OnInit {
                        minute : newMinute }
     this.TodaystartTime = newEndTime;
 
-    //this.TodaystartTime.hour = this.TodayendTime.hour - this.fixedHourInterval;
-    console.log("Today start hour: " + this.TodaystartTime.hour);
-    //this.TodaystartTime.minute = this.TodayendTime.minute - this.fixedMinuteInterval;
-    console.log("Today start minute: " + this.TodaystartTime.minute);
+    // console.log("Today start hour: " + this.TodaystartTime.hour);   
+    // console.log("Today start minute: " + this.TodaystartTime.minute);
     
   }
   scrollTo(){
@@ -263,7 +258,7 @@ export class AddCustomdayComponent implements OnInit {
   showProjectList(){
     this.projectService.getProjects().subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         this.projectList = data;
       },
     error => {
@@ -282,14 +277,13 @@ export class AddCustomdayComponent implements OnInit {
     }
     this.wbiService.searchWBI(this.searchString).subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         this.wbiList = (data);
         this.searchWBIs = true;
         if (data.length != 0){
           this.WBIDisabled = false;
           this.projectDisabled = true;
           this.openWBI = true;
-          // this.popup.show();
           this.modalService.open(this.searchSuccess);
         }
         else{
@@ -306,7 +300,7 @@ export class AddCustomdayComponent implements OnInit {
   }
 
   locateProject(){
-    console.log("i want to locate project");
+    // console.log("i want to locate project");
     if (!this.searchWBIs){
       return ;
     }
@@ -316,15 +310,8 @@ export class AddCustomdayComponent implements OnInit {
     }
     this.projectService.getOneProjectByWBIId(this.selectedWBI).subscribe(
       data=>{
-        console.log(data);
-        //this.fixedProject = true;
-        //this.ngselectProject = false;
+        // console.log(data);   
         this.selectedProject = data["newName"];
-        //this.selectedProject = data;
-        //let dataArray  = [];
-        //dataArray.push(data);
-        //ng-select only accept arrays, that's why i need to define an array here.
-        //this. = dataArray;
       },
       error =>{
         alert(error);
@@ -346,9 +333,7 @@ export class AddCustomdayComponent implements OnInit {
       return ;
     }
     else {
-
       this.customDayNameEmpty = false;
-      
       this.confirmDisabled = false;
       for(let oneCustomDay of this.customdayList){
         if (oneCustomDay.customDayId == this.selectedCustomday){
@@ -356,21 +341,17 @@ export class AddCustomdayComponent implements OnInit {
          // console.log(this.selectCustomDayItem);
         this.customDayName = oneCustomDay.name;
         this.customDayDescription = oneCustomDay.description;
-
-        
-
         this.getAllTemplates();          
         }
-        
-    }
+      }
     }
   }
 
   deleteCustomDay(){
-    console.log("I want to delete this custom day!");
+    // console.log("I want to delete this custom day!");
     this.mycustomdayService.deleteCustomDay(this.selectedCustomday).subscribe(
       data=>{
-        console.log(data);
+        // console.log(data);
         let navigationExtras: NavigationExtras = {
           queryParamsHandling: 'preserve',
           preserveFragment: true
@@ -385,10 +366,10 @@ export class AddCustomdayComponent implements OnInit {
     getAllTemplates(){
        // this.timeSlipTemplates 
        this.events = [];
-       console.log("i want to get all the timeslip template for this customday");
+      //  console.log("i want to get all the timeslip template for this customday");
        this.timeSlipTemplateService.getAllTimeSlips(this.selectedCustomday).subscribe(
          data => {
-           console.log(data);
+          //  console.log(data);
            this.timeSlipTemplates = data;
            if (data.length == 0){
              return ;
@@ -402,7 +383,7 @@ export class AddCustomdayComponent implements OnInit {
     }
 
       ShowAllTemplates(){
-          console.log("I want to show all ts");
+          // console.log("I want to show all ts");
           this.events = [];
 
           //if (this.timeSlipTemplates)
@@ -410,25 +391,24 @@ export class AddCustomdayComponent implements OnInit {
            for (let oneTimeSlip of this.timeSlipTemplates){
             let startTime : string = oneTimeSlip.startTime;
             let endTime : string = oneTimeSlip.endTime;
-           console.log("I want to get the sliced string");
+          //  console.log("I want to get the sliced string");
             let startHour =  parseInt(startTime.slice(11,13));
             let startMinute= parseInt(startTime.slice(14,16));
             let endHour = parseInt(endTime.slice(11,13));
             let endMinute = parseInt(endTime.slice(14,16));
-            console.log(startHour);
-            console.log(startMinute);
-            //this.mySecretDay.setHours()
+            // console.log(startHour);
+            // console.log(startMinute);
+            
             let startDate : Date = new Date(this.mySecretDay.valueOf()) ;
             let endDate : Date =  new Date (this.mySecretDay.valueOf());
             startDate.setHours(startHour,startMinute);
-            //startDate.setMinutes(startMinute);
+            
             endDate.setHours(endHour,endMinute);
-            //endDate.setMinutes(endMinute);
-            console.log(startDate);
-            console.log(endDate);
-            console.log("I want to see what is in one time slip");
-            console.log(oneTimeSlip);
-            //this.getTitleName(oneTimeSlip.remarks,startDate,endDate,oneTimeSlip.timeslipTemplateId,oneTimeSlip.newChangeRequestId);
+            
+            // console.log(startDate);
+            // console.log(endDate);
+            // console.log("I want to see what is in one time slip");
+            // console.log(oneTimeSlip);
             
             this.addNewEvent(oneTimeSlip.remarks,startDate,endDate,oneTimeSlip.timeslipTemplateId,oneTimeSlip.newChangeRequestId,oneTimeSlip.wbiName);
           }   
@@ -446,7 +426,7 @@ export class AddCustomdayComponent implements OnInit {
     }   
         let result = this.validateNewEvent(validationEvent,this.events);
         if (result == false){
-          alert("you need to ensure there is no time overlap Or Time is correct!!");
+          alert("Please ensure there is no overlap and the timeframe is valid.");
           return ;
         }else {
           let oneTemplate : TimeSlipTemplate = {
@@ -456,15 +436,14 @@ export class AddCustomdayComponent implements OnInit {
             EndTime :  this.padNumber(this.TodayendTime.hour) + ":"+ this.padNumber(this.TodayendTime.minute),
             Remarks : this.newEventTitle  
           }
-          console.log("I want to post a timeslip template");
-          console.log(oneTemplate);
+          // console.log("I want to post a timeslip template");
+          // console.log(oneTemplate);
           this.timeSlipTemplateService.postTemplate(oneTemplate).subscribe(
             data=>{
-              console.log(data);
+              // console.log(data);
               this.getAllTemplates();
               this.ClearAllEvents();
               this.TodaystartTime = this.TodayendTime;
-              //this doesn't work yet
               this.TodayendTime = {hour:endDate.getHours() + DEFAULT_HOUR_INTERVAL,minute:endDate.getMinutes()};
             },
             error =>{
@@ -489,10 +468,10 @@ export class AddCustomdayComponent implements OnInit {
   }
 
   confirmEdit(){
-    console.log("i want to see what's start time hour");
-    console.log(this.EditStartTime.hour)
+    // console.log("i want to see what's start time hour");
+    // console.log(this.EditStartTime.hour)
     this.EditStartDate.setHours(this.EditStartTime.hour,this.EditStartTime.minute);
-    console.log(this.EditStartDate);
+    // console.log(this.EditStartDate);
     this.EditEndDate.setHours(this.EditEndTime.hour,this.EditEndTime.minute);
 
     let event: CalendarEvent = {
@@ -504,9 +483,9 @@ export class AddCustomdayComponent implements OnInit {
       }
     }
 
-    let reuslt = this.validateEditEvent(event);
-    if (reuslt == false){
-      alert("Please Ensure there is no time overlap!");
+    let result = this.validateEditEvent(event);
+    if (result == false){
+      alert("Please ensure that times do not overlap.");
       this.getAllTemplates();
       return ;
     }else {
@@ -516,13 +495,13 @@ export class AddCustomdayComponent implements OnInit {
         EndTime : this.EditEndDate.toLocaleString(),
         Remarks : this.EditRemark    
       }
-      console.log("i want to comfirm edit");
-      console.log(editedTimeSlipTemplate);
+      // console.log("i want to comfirm edit");
+      // console.log(editedTimeSlipTemplate);
       this.timeSlipTemplateService.updateTimeSlipTemplate(editedTimeSlipTemplate).subscribe(
         data=>{
-          console.log(data);
+          // console.log(data);
           this.getAllTemplates();
-          //this.mr.close();
+          
         },error =>{
           alert(error);
         }
@@ -532,7 +511,7 @@ export class AddCustomdayComponent implements OnInit {
 
 
   addNewEvent(title,start,end,timeSlipId,WBIId,WBIName){
-      console.log(start);
+      // console.log(start);
       //this.getWBIName(WBIId);
       //console.log("wbi name is : "+this.EditWBIName)
       this.events.push({
@@ -553,8 +532,8 @@ export class AddCustomdayComponent implements OnInit {
       actions: this.actions
     });
     this.refresh.next(); 
-    console.log("i'm here");
-    console.log(this.events);
+    // console.log("i'm here");
+    // console.log(this.events);
     //this.selectedWBIs.push(WBI);
   }
     // handler for clicking each day.
@@ -588,8 +567,8 @@ export class AddCustomdayComponent implements OnInit {
     //this.modalData = { event, action };
     //this.modal.open(this.modalContent, { size: 'lg' });
 
-    console.log(action);
-    console.log(event);
+    // console.log(action);
+    // console.log(event);
     this.getProjectName(event.meta.WBIId);
     this.getWBIName(event.meta.WBIId);
     this.EditTimeSlipId = event.meta.timeSlipId;
@@ -599,8 +578,8 @@ export class AddCustomdayComponent implements OnInit {
     this.EditStartTime = {hour: event.start.getHours(),minute: event.start.getMinutes()};
     this.EditEndTime = {hour: event.end.getHours(),minute: event.end.getMinutes()};
 
-    let reuslt = this.validateEditEvent(event);
-    if (reuslt == false){
+    let result = this.validateEditEvent(event);
+    if (result == false){
       alert("Please Ensure there is no time overlap!");
       this.getAllTemplates();
       return ;
@@ -623,44 +602,40 @@ export class AddCustomdayComponent implements OnInit {
   getProjectName(WBIId : string){
     this.projectService.getOneProjectByWBIId(WBIId).subscribe(
       data=>{
-        console.log(data);
+        // console.log(data);
         this.EditProjectName = data["newName"];
       },
       error=>{
         alert(error);
-        
-      }
-      
+      }    
     )
   }
 
   getWBIName(WBIId : string){
-    console.log("I want to get WBI Name!")
+    // console.log("I want to get WBI Name!")
     let name ;
     this.wbiService.getOneWBI(WBIId).subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         this.EditWBIName = data["newName"];
         name=data["newName"];
       },
       error =>{
-        alert (error);
-        
+        alert (error);       
       }
     ) 
   }
 
   getTitleName(remarks: any,startDate: Date,endDate:Date,timeslipTemplateId:any, WBIId : string) {
-    console.log("I want to get WBI Name!")
+    // console.log("I want to get WBI Name!")
     let WbiName ;
     this.wbiService.getOneWBI(WBIId).subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         //this.titleName = data["newRemarks"];
         //name=data["newRemarks"];
         WbiName = data["newName"];
         this.addNewEvent(remarks,startDate,endDate,timeslipTemplateId,WBIId,WbiName)
-
       },
       error =>{
         alert (error);
@@ -672,7 +647,7 @@ export class AddCustomdayComponent implements OnInit {
   changeProject(){
     this.showSelect = true;
     this.showInput = false;
-    console.log("hello");
+    // console.log("hello");
     this.selectedWBI = null;
     if (this.selectedProject == null || this.selectedProject== ""){
         this.wbiList = null;
@@ -682,7 +657,7 @@ export class AddCustomdayComponent implements OnInit {
     }else {
       this.wbiService.GetAllWBIsByProjectId(this.selectedProject).subscribe(data=>{
 
-        console.log(data);
+        // console.log(data);
         this.wbiList = data;
         if (data != null){
           this.WBIDisabled = false;
@@ -697,7 +672,7 @@ export class AddCustomdayComponent implements OnInit {
   getAllCustomDays(){
     this.mycustomdayService.getCustomdays(sessionStorage.getItem('userId')).subscribe(
       data=> {
-      console.log(data);
+      // console.log(data);
       this.customdayList = data;
       },
       error => {
@@ -716,9 +691,9 @@ export class AddCustomdayComponent implements OnInit {
    // console.log(new Date(Date.parse(this.newEvent[0].start.getFullYear().toString() + "/" + this.newEvent[0].start.getMonth().toString() + "/" + this.newEvent[0].start.getDate().toString() + " " + this.TodaystartTime.hour + ":"+ this.TodayendTime.minute))  )
     this.showProjectList();
     this.newEvent[0].start = new Date(new Date(Date.parse(this.newEvent[0].start.getFullYear().toString() + "/" + (this.newEvent[0].start.getMonth()+1).toString() + "/" + this.newEvent[0].start.getDate().toString() + " " + this.TodaystartTime.hour + ":"+ this.TodaystartTime.minute)));
-    console.log(this.newEvent[0].start);
+    // console.log(this.newEvent[0].start);
     this.newEvent[0].end = new Date(new Date(Date.parse(this.newEvent[0].start.getFullYear().toString() + "/" + (this.newEvent[0].start.getMonth()+1).toString() + "/" + this.newEvent[0].start.getDate().toString() + " " + this.TodayendTime.hour + ":"+ this.TodayendTime.minute))); 
-    console.log(this.newEvent[0].end);     
+    // console.log(this.newEvent[0].end);     
     //this.addNewEvent(this.newEventTitle,this.newEvent[0].start,this.newEvent[0].end,this.selectedWBI);
     this.newEvent = [];
     //this.newEventForm = false;
@@ -773,7 +748,7 @@ export class AddCustomdayComponent implements OnInit {
       }
       this.mycustomdayService.upDateCustomday(customDay).subscribe(
         data=>{
-          console.log(data);
+          // console.log(data);
           let navigationExtras: NavigationExtras = {
             queryParamsHandling: 'preserve',
             preserveFragment: true

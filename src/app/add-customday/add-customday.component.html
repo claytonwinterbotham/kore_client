@@ -117,7 +117,7 @@
                 </ng-select>
                 
               </div>
-              <!-- <p *ngIf="!selectedCustomday" class="alert-danger"> Please select customday</p> -->
+              
             </form>
             <div *ngIf="customDayNameEmpty" class="alert alert-danger"> Please choose a Custom Day to edit.</div>
             <hr>
@@ -150,7 +150,7 @@
         </form>
       </div> 
 </div>
-<!-- </ng-template> -->
+
 
 <ng-template #modalContent let-close="close">
     <div class="modal-header">
@@ -225,6 +225,7 @@
       <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
     </div>
   </ng-template>
+  <ngx-spinner bdColor = "rgba(75,59,58,0.8)" size = "medium"color = "#fff"type = "pacman"></ngx-spinner>
 
   <ng-template #confirmDelete let-c="close" let-d="dismiss">
     <div class="modal-header" style="background-color: #ff8080">
