@@ -6,6 +6,7 @@ import  {ClientModel} from "../services/app.clientservice";
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-view-projects',
@@ -27,7 +28,8 @@ export class ViewProjectsComponent implements OnInit {
   clientService : MyClientService;
   clientList: any;
 
-  constructor(_projectService:MyProjectService, _clientService:MyClientService, private modalService: NgbModal) {
+  constructor(_projectService:MyProjectService, _clientService:MyClientService, 
+              private modalService: NgbModal, private spinner: NgxSpinnerService) {
     this.projectService = _projectService;
     this.clientService = _clientService;
    }
@@ -41,9 +43,11 @@ export class ViewProjectsComponent implements OnInit {
   }
 
   createProject(form: NgForm, project : ProjectModel){
+    this.spinner.show();
     this.projectService.postProject(project).subscribe(
       data=> {
         console.log(data);
+        this.spinner.hide();
         this.modalService.open(this.projectCreated);
       },error =>{
         alert(error);
