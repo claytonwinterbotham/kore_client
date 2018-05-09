@@ -29,6 +29,20 @@
     </form>  
   </div>
 </div>        
+<ng-template #wbiCreated let-c="close" let-d="dismiss">
+  <div class="modal-header" style="background-color: #809fff">
+    <h4 class="modal-title">Create WBI</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p><strong>WBI created!</strong></p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>
 
   
   

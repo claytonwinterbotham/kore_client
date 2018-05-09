@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild, TemplateRef } from '@angular/core';
 import { MyProjectService } from '../services/app.projectservice';
 import { MyWBIService } from '../services/app.wbiservice';
 import  {WBIModel} from "../services/app.wbiservice";
 import { NgForm } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-view-wmbs',
@@ -14,6 +15,7 @@ import { NgForm } from '@angular/forms';
   ]
 })
 export class ViewWmbsComponent implements OnInit {
+  @ViewChild('wbiCreated') wbiCreated: TemplateRef<any>;
 
   projectList: any;
   projectService: MyProjectService;
@@ -21,7 +23,7 @@ export class ViewWmbsComponent implements OnInit {
   newWBI : any = {};
 
 
-  constructor(_projectService: MyProjectService, _wbiService: MyWBIService) { 
+  constructor(_projectService: MyProjectService, _wbiService: MyWBIService, private modalService: NgbModal) { 
     this.projectService = _projectService;
     this.wbiService = _wbiService;
   }
@@ -46,6 +48,7 @@ export class ViewWmbsComponent implements OnInit {
     this.wbiService.postWBI(wbi).subscribe(
       data=> {
         console.log(data);
+        this.modalService.open(this.wbiCreated);
       },error =>{
         alert(error);
       }
