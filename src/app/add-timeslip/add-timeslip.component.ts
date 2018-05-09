@@ -277,9 +277,6 @@ export class AddTimeslipComponent{
       }
     )
   }
-
-
-
   hourSegmentClicked(date: Date) {
     this.selectedDayViewDate = date;
     //this.addSelectedDayViewClass();
