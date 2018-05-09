@@ -43,6 +43,7 @@ import { DOCUMENT } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 // import { Popup} from "ng2-opd-popup";
+import { NgxSpinnerService } from 'ngx-spinner';
 
 //const
 const colors: any = {
@@ -106,11 +107,13 @@ export class AddCustomdayComponent implements OnInit {
     {
       label: '<i class="fa fa-fw fa-times"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.spinner.show();
         this.timeSlipTemplateService.deleteTimeslipTemplate(event.meta.timeSlipId).subscribe(
           data=> {
             console
             console.log(data);
             this.getAllTemplates();
+            this.spinner.hide();
           },error =>{
             alert(error);
           }
@@ -166,7 +169,8 @@ export class AddCustomdayComponent implements OnInit {
  
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
     public router:Router,_customdayService:MyCustomDayService, @Inject(DOCUMENT) private document: Document,private route: ActivatedRoute,
-   _timeSlipTemplateService : TimeslipTemplateService,private modalService: NgbModal) { 
+   _timeSlipTemplateService : TimeslipTemplateService,private modalService: NgbModal,
+   private spinner: NgxSpinnerService) { 
     this.projectService = _projectService;
     this.wbiService = _wbiService;
     this.timeSlipService = _timeslipService;
@@ -206,6 +210,7 @@ export class AddCustomdayComponent implements OnInit {
    this.selectedProject = "";
    this.getAllCustomDays();
    this.scrollTo();
+   
   }
   onCheckboxChange(){
     console.log("In the checkbox change method...");
@@ -267,7 +272,6 @@ export class AddCustomdayComponent implements OnInit {
   }
 
   searchWBI(){
-
     if (this.searchString == null || this.searchString == ""){
       this.WBIDisabled = true;
       this.projectDisabled = false;
@@ -275,8 +279,6 @@ export class AddCustomdayComponent implements OnInit {
       alert("you can't search for empty WBI!");
       return ;
     }
-
-
     this.wbiService.searchWBI(this.searchString).subscribe(
       data=> {
         console.log(data);
@@ -305,15 +307,12 @@ export class AddCustomdayComponent implements OnInit {
   locateProject(){
     console.log("i want to locate project");
     if (!this.searchWBIs){
-
       return ;
     }
-
     if (this.selectedWBI == null){
       this.selectedProject = null;
       return ;
     }
-
     this.projectService.getOneProjectByWBIId(this.selectedWBI).subscribe(
       data=>{
         console.log(data);

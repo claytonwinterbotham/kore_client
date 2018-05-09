@@ -46,6 +46,7 @@ import { Router, NavigationExtras } from '@angular/router';
 import { Inject} from "@angular/core";
 import { DOCUMENT } from '@angular/platform-browser';
 import { DayViewHour } from 'calendar-utils';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 //const
 const colors: any = {
@@ -240,7 +241,8 @@ export class AddTimeslipComponent{
   //constructor 
   constructor(private modal: NgbModal,_projectService:MyProjectService,_wbiService:MyWBIService, _timeslipService:MyTimeslipService,
   _customdayService : MyCustomDayService,public router:Router, @Inject(DOCUMENT) private document: Document,
-  _timeSlipTemplateService : TimeslipTemplateService,private modalService: NgbModal) {
+  _timeSlipTemplateService : TimeslipTemplateService,private modalService: NgbModal,
+  private spinner: NgxSpinnerService) {
     this.projectService = _projectService;
     this.wbiService = _wbiService;
     this.timeSlipService = _timeslipService;
@@ -253,14 +255,23 @@ export class AddTimeslipComponent{
     this.showProjectList();
     this.getAllTimeSlips();
     this.getAllCustomDays(); 
+        /** spinner starts on init */
+        // this.spinner.show();
+ 
+        // setTimeout(() => {
+        //     /** spinner ends after 5 seconds */
+        //     this.spinner.hide();
+        // }, 1000);
   }
 
   deleteTimeSlip(){
+    this.spinner.show();
     this.timeSlipService.deleteTimeslip(this.deletingTimeSlipId).subscribe(
       data=> {
         console.log(data);
         this.getAllTimeSlips();
         this.deletingTimeSlipId = null;
+        this.spinner.hide();
       },error =>{
         alert(error);
       }
@@ -271,47 +282,47 @@ export class AddTimeslipComponent{
 
   hourSegmentClicked(date: Date) {
     this.selectedDayViewDate = date;
-    this.addSelectedDayViewClass();
+    //this.addSelectedDayViewClass();
   }
 
   beforeDayViewRender(dayView: DayViewHour[]) {
    
     this.dayView = dayView;
-    this.addSelectedDayViewClass();
+    //this.addSelectedDayViewClass();
   }
 
-  addSelectedDayViewClass() {
+  // addSelectedDayViewClass() {
 
  
 
 
 
-    this.dayView.forEach(hourSegment => {
-      hourSegment.segments.forEach(segment => {
-        delete segment.cssClass;
-        if (
-          this.selectedDayViewDate &&
-          segment.date.getTime() === this.selectedDayViewDate.getTime()
-        ) {
+  //   this.dayView.forEach(hourSegment => {
+  //     hourSegment.segments.forEach(segment => {
+  //       delete segment.cssClass;
+  //       if (
+  //         this.selectedDayViewDate &&
+  //         segment.date.getTime() === this.selectedDayViewDate.getTime()
+  //       ) {
 
           
-          //segment.cssClass = 'cal-day-selected';
-          //console.log(new Date(segment.date.getTime()));
-          //this.endTime.setMinutes(this.startTime.getMinutes()+30);
-          console.log(segment.date.getHours());
-          this.startTime = {hour: segment.date.getHours(), minute: segment.date.getMinutes()};
-          let newDate = new Date(segment.date.getTime());
-          newDate.setMinutes(newDate.getMinutes()+30);
-          //segment.date.setMinutes(segment.date.getMinutes()+30);
-          this.endTime = {hour:newDate.getHours(), minute: newDate.getMinutes()};
-          console.log(this.startTime.hour)
-          console.log(newDate);
-          this.refresh.next();
+  //         //segment.cssClass = 'cal-day-selected';
+  //         //console.log(new Date(segment.date.getTime()));
+  //         //this.endTime.setMinutes(this.startTime.getMinutes()+30);
+  //         console.log(segment.date.getHours());
+  //         this.startTime = {hour: segment.date.getHours(), minute: segment.date.getMinutes()};
+  //         let newDate = new Date(segment.date.getTime());
+  //         newDate.setMinutes(newDate.getMinutes()+30);
+  //         //segment.date.setMinutes(segment.date.getMinutes()+30);
+  //         this.endTime = {hour:newDate.getHours(), minute: newDate.getMinutes()};
+  //         console.log(this.startTime.hour)
+  //         console.log(newDate);
+  //         this.refresh.next();
 
-        }
-      });
-    });
-  }
+  //       }
+  //     });
+  //   });
+  // }
 
   //Binding on time controls
   onCheckboxChange(){
@@ -324,19 +335,28 @@ export class AddTimeslipComponent{
   }
   onStartTimeChange(){
     console.log("In the onstartimechange method...");
+    console.log(this.controlsAreBinded);
     if(!this.controlsAreBinded){
         return;
     }
     let newHour = this.startTime.hour + this.fixedHourInterval;
     let newMinute = this.startTime.minute + this.fixedMinuteInterval;
-    let newEndTime = { hour : newHour,
-                       minute : newMinute }
-    this.endTime = newEndTime;
+    // let newEndTime = { hour : newHour,
+    //                    minute : newMinute }
+    this.endTime = { hour : newHour,
+      minute : newMinute };
+      this.endTime = { hour : newHour,
+        minute : newMinute };
+    this.refresh.next();
   //this.TodayendTime.hour = this.TodaystartTime.hour + this.fixedHourInterval;
     console.log("Today end hour: " + this.endTime.hour);
   //this.TodayendTime.minute = this.TodaystartTime.minute + this.fixedMinuteInterval;
     console.log("Today end minute: " + this.endTime.minute);
    
+  }
+
+  refreshMe(){
+    console.log("i want to refresh");
   }
 
   onEndTimeChange(){
@@ -557,6 +577,7 @@ export class AddTimeslipComponent{
 
   getAllTimeSlips(){
     this.events = [];
+    this.spinner.show();
     this.timeSlipService.getTimeSlipsByUserId(this.userId).subscribe(
       data=> {
         console.log(data);
@@ -565,6 +586,7 @@ export class AddTimeslipComponent{
         }else {
           this.allTimeSlips = data;
         }
+        this.spinner.hide();
         this.showInCalendar();
       },
     error => {
@@ -955,11 +977,13 @@ export class AddTimeslipComponent{
       }
       console.log("i want to comfirm edit");
       console.log(newTimeSlip);
+      this.spinner.show();
       this.timeSlipService.updateTimeslip(newTimeSlip).subscribe(
         data=>{
           console.log(data);
           this.getAllTimeSlips();
           //this.mr.close();
+          this.spinner.hide();
         },error =>{
           alert(error);
         }
