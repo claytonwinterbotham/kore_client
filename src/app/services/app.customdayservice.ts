@@ -21,8 +21,8 @@ export class MyCustomDayService {
 
     //create new customday
     create(_customday : CustomDayVM): Observable<Comment[]> {
-        console.log(sessionStorage.getItem('token'));
-        console.log(_customday);
+        // console.log(sessionStorage.getItem('token'));
+        // console.log(_customday);
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
         // headers.append( 'Authorization', 'Bearer ' 
@@ -63,7 +63,7 @@ export class MyCustomDayService {
         let options = new RequestOptions({headers: headers});
         // headers.append( 'Authorization', 'Bearer ' 
         // + sessionStorage.getItem('token'));
-        console.log("Custom day id:" + id);
+        // console.log("Custom day id:" + id);
         let dataUrl = this.site + "Delete/" + id;
        
         return this.http.delete(dataUrl,options)
@@ -80,8 +80,8 @@ export class MyCustomDayService {
     private handleError(error: any) {
         let errMsg = (error.message) ? error.message :
             error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-        console.log(error._body);
-        console.log(JSON.parse(error._body).message);
+        // console.log(error._body);
+        // console.log(JSON.parse(error._body).message);
         //console.error(errMsg); // log to console instead
         return Observable.throw(JSON.parse(error._body).message);
     }

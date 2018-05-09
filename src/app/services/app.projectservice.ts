@@ -47,7 +47,7 @@ export class MyProjectService {
             "ProjectType": _project.ProjectType,
             "ClientId": _project.Client
         }
-        console.log(ProjectJson)
+        // console.log(ProjectJson)
         return this.http.post(dataUrl, ProjectJson,options)
             .map(this.extractData) 
             .catch(this.handleError); 
@@ -112,7 +112,7 @@ export class MyProjectService {
     deleteProject(id: String): Observable<Comment[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' }); 
         let options = new RequestOptions({headers: headers});
-        console.log("Project id:" + id);
+        // console.log("Project id:" + id);
         let dataUrl = this.site + "Delete/" + id;
        
         return this.http.delete(dataUrl,options)
@@ -140,8 +140,8 @@ export class MyProjectService {
     private handleError(error: any) {
         let errMsg = (error.message) ? error.message :
             error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-        console.log(error._body);
-        console.log(JSON.parse(error._body).message);
+        // console.log(error._body);
+        // console.log(JSON.parse(error._body).message);
         //console.error(errMsg); // log to console instead
         return Observable.throw(JSON.parse(error._body).message);
     }

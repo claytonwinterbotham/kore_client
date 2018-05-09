@@ -37,7 +37,7 @@ export class MyWBIService {
             "ActualHours": 0, 
             "ProjectId": _wbi.ProjectId,
         }
-        console.log(WBIJson)
+        // console.log(WBIJson)
         return this.http.post(dataUrl, WBIJson,options)
             .map(this.extractData) 
             .catch(this.handleError); 
@@ -86,7 +86,7 @@ export class MyWBIService {
         // headers.append( 'Authorization', 'Bearer ' 
         // + sessionStorage.getItem('token'));
         wbiId = wbiId.toUpperCase();
-        console.log("WBI ID is "+ wbiId);
+        // console.log("WBI ID is "+ wbiId);
         let dataUrl = this.site + "GetOneWBI/" + wbiId;
         return this.http.get(dataUrl, options)
                 .map(this.extractData)
@@ -118,7 +118,7 @@ export class MyWBIService {
         let options = new RequestOptions({headers: headers});
         // headers.append( 'Authorization', 'Bearer ' 
         // + sessionStorage.getItem('token'));
-        console.log("WBI id:" + id);
+        // console.log("WBI id:" + id);
         let dataUrl = this.site + "Delete/" + id;
         
         return this.http.delete(dataUrl,options)
@@ -135,8 +135,8 @@ export class MyWBIService {
     private handleError(error: any) {
         let errMsg = (error.message) ? error.message :
             error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-        console.log(error._body);
-        console.log(JSON.parse(error._body).message);
+        // console.log(error._body);
+        // console.log(JSON.parse(error._body).message);
         //console.error(errMsg); // log to console instead
         return Observable.throw(JSON.parse(error._body).message);
     }

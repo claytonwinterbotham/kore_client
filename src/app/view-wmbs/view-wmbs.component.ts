@@ -4,6 +4,7 @@ import { MyWBIService } from '../services/app.wbiservice';
 import  {WBIModel} from "../services/app.wbiservice";
 import { NgForm } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-view-wmbs',
@@ -23,7 +24,8 @@ export class ViewWmbsComponent implements OnInit {
   newWBI : any = {};
 
 
-  constructor(_projectService: MyProjectService, _wbiService: MyWBIService, private modalService: NgbModal) { 
+  constructor(_projectService: MyProjectService, _wbiService: MyWBIService, 
+              private modalService: NgbModal, private spinner: NgxSpinnerService) { 
     this.projectService = _projectService;
     this.wbiService = _wbiService;
   }
@@ -35,7 +37,7 @@ export class ViewWmbsComponent implements OnInit {
   showProjectList(){
     this.projectService.getProjects().subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
         this.projectList = data;
       },
     error => {
@@ -45,9 +47,11 @@ export class ViewWmbsComponent implements OnInit {
   }
 
   createWBI(form: NgForm, wbi : WBIModel){
+    this.spinner.show();
     this.wbiService.postWBI(wbi).subscribe(
       data=> {
-        console.log(data);
+        // console.log(data);
+        this.spinner.hide();
         this.modalService.open(this.wbiCreated);
       },error =>{
         alert(error);
