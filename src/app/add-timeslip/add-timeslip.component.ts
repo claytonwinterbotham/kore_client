@@ -40,12 +40,12 @@ import {
   CalendarMonthViewDay 
 } from 'angular-calendar';
 // import {layui} from "layui-src"
-import { ClickOutsideModule } from 'ng-click-outside';
 // import * as $ from "jquery";
 import { Router, NavigationExtras } from '@angular/router';
 import { Inject} from "@angular/core";
 import { DOCUMENT } from '@angular/platform-browser';
-import { DayViewHour } from 'calendar-utils';
+import { ActivatedRoute } from '@angular/router';
+import { NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 //const
@@ -81,7 +81,6 @@ interface RecurringEvent {
 
 @Component({
   selector: 'calendar-component',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['add-timeslip.component.css'],
   templateUrl: 'add-timeslip.component.html'
 })
@@ -224,7 +223,6 @@ export class AddTimeslipComponent{
   originalEvents :CalendarEvent[] = [];
   wbiRemainingHours : string;
   selectedDayViewDate: Date;
-  dayView: DayViewHour[];
   newTimeSlipTest: boolean = true;
   WBIDisabled : boolean = true;
   searchDisabled : boolean = false;
@@ -271,16 +269,6 @@ export class AddTimeslipComponent{
       }
     )
   }
-  hourSegmentClicked(date: Date) {
-    this.selectedDayViewDate = date;
-    //this.addSelectedDayViewClass();
-  }
-
-  beforeDayViewRender(dayView: DayViewHour[]) {
-   
-    this.dayView = dayView;
-    //this.addSelectedDayViewClass();
-  }
 
   //Binding on time controls
   onCheckboxChange(){
@@ -297,8 +285,10 @@ export class AddTimeslipComponent{
     console.log("Fixed minute interval: " + this.fixedMinuteInterval);
   }
 
-  onStartTimeChange(){
+  onStartTimeChange($event: Event){
     console.log("In the onstartimechange method...");
+    console.log($event);
+    console.log(this.startTime);
     console.log(this.controlsAreBinded);
     if(this.controlsAreBinded == false){
         return;
@@ -309,6 +299,7 @@ export class AddTimeslipComponent{
       //                    minute : newMinute }
       this.endTime = { hour : newHour,
         minute : newMinute };
+        console.log(this.endTime);
       this.refresh.next();
     //this.TodayendTime.hour = this.TodaystartTime.hour + this.fixedHourInterval;
       console.log("Today end hour: " + this.endTime.hour);
