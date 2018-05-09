@@ -161,10 +161,8 @@ export class AddCustomdayComponent implements OnInit {
   projectDisabled : boolean = false;
   openWBI :boolean = false;
   confirmDisabled : boolean = true;
-
   fixedHourInterval : number;
   fixedMinuteInterval : number;
-
   controlsAreBinded : boolean;
 
  
@@ -346,9 +344,7 @@ export class AddCustomdayComponent implements OnInit {
       return ;
     }
     else {
-
       this.customDayNameEmpty = false;
-      
       this.confirmDisabled = false;
       for(let oneCustomDay of this.customdayList){
         if (oneCustomDay.customDayId == this.selectedCustomday){
@@ -356,13 +352,9 @@ export class AddCustomdayComponent implements OnInit {
          // console.log(this.selectCustomDayItem);
         this.customDayName = oneCustomDay.name;
         this.customDayDescription = oneCustomDay.description;
-
-        
-
         this.getAllTemplates();          
         }
-        
-    }
+      }
     }
   }
 

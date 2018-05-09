@@ -159,16 +159,16 @@
                 <div class="form-group clearfix">
                   <div id="start_time"class="border-right">
                       <label for="start_time">Start Time:</label>
-                      <ngb-timepicker (click)="onStartTimeChange();refreshMe()" size="small" name="startTime" [(ngModel)]="startTime" [meridian]="meridian" class="startTime"></ngb-timepicker>        
+                      <ngb-timepicker  [(ngModel)]="startTime" (ngModelChange)="onStartTimeChange()"  size="small" name="startTimeKarl"  [meridian]="meridian" ></ngb-timepicker>        
                   </div>
         
                   <div id="end_time">
                       <label for="end_time">End Time:</label>
-                      <ngb-timepicker (click)="onEndTimeChange()" size="small" name="endTime" [(ngModel)]="endTime" [meridian]="meridian" class="endTime"></ngb-timepicker>       
+                      <ngb-timepicker  [(ngModel)]="endTime" (ngModelChange)="onEndTimeChange()" size="small" name="endTimeKarl" [meridian]="meridian" ></ngb-timepicker>       
                     </div>
                     <div id="bind_controls_checkbox">
                       <label for="bind_controls_cb">Bind Time Controls</label>
-                      <input (change)="onCheckboxChange();refreshMe() " type="checkbox" name="bind_controls_cb" [(ngModel)]="controlsAreBinded">
+                      <input  [checked]="controlsAreBinded" (change)="onCheckboxChange();refreshMe() " type="checkbox" name="bind_controls_cb" >
                     </div>
                 </div>
                 <!-- <div *ngIf="remark?.errors?.required" class="alert alert-danger form-group"> Remarks should not Be Empty!</div> -->
@@ -258,10 +258,8 @@
                   (eventClicked)="handleEvent('Clicked', $event.event)"
                   (eventTimesChanged)="eventTimesChanged($event)"
                   [dayStartHour]="0"
-                  [dayEndHour]="24"
-                  (beforeViewRender)="beforeDayViewRender($event.body.hourGrid)"
-                  (hourSegmentClicked)="hourSegmentClicked($event.date)">
-                  >
+                  [dayEndHour]="24">
+                  
                   </mwl-calendar-day-view>
               </div>
           </div>
@@ -339,3 +337,4 @@
     <button type="button" class="btn btn-light" (click)="deleteTimeSlip();c('Close click')">Yes</button>
     <button type="button" class="btn btn-light" (click)="c('Close click')">No</button>
   </ng-template>
+  <ngx-spinner bdColor = "rgba(75,59,58,0.8)" size = "medium"color = "#fff"type = "pacman"></ngx-spinner>
