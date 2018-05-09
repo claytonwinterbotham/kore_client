@@ -54,6 +54,7 @@ export class ViewWmbsComponent implements OnInit {
         this.spinner.hide();
         this.modalService.open(this.wbiCreated);
       },error =>{
+        this.spinner.hide();
         alert(error);
       }
     )

@@ -49,6 +49,7 @@ export class ViewProjectsComponent implements OnInit {
         this.spinner.hide();
         this.modalService.open(this.projectCreated);
       },error =>{
+        this.spinner.hide();
         alert(error);
       }
     )
