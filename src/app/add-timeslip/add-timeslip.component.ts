@@ -879,9 +879,11 @@ export class AddTimeslipComponent{
         CustomdayId :this.selectedCustomday,
         Date :this.clickedDate.toISOString()
       }
+      this.spinner.show();
       this.timeSlipTemplateService.applyTimeTemplate(CustomdayTimeslip).subscribe(
         data=> {
           console.log(data);
+          this.spinner.hide();
           this.getAllTimeSlips();
           this.selectedCustomday = null;
         },error =>{
