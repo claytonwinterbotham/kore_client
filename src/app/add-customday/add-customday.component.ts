@@ -160,10 +160,8 @@ export class AddCustomdayComponent implements OnInit {
   projectDisabled : boolean = false;
   openWBI :boolean = false;
   confirmDisabled : boolean = true;
-
   fixedHourInterval : number;
   fixedMinuteInterval : number;
-
   controlsAreBinded : boolean;
 
  

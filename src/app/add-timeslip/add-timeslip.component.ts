@@ -235,7 +235,7 @@ export class AddTimeslipComponent{
       fixedHourInterval : number;
       fixedMinuteInterval : number;
     
-      controlsAreBinded : boolean;
+      controlsAreBinded : boolean = false;
 
   remainingHourInvalid: boolean = false;
   //constructor 
@@ -255,6 +255,7 @@ export class AddTimeslipComponent{
     this.showProjectList();
     this.getAllTimeSlips();
     this.getAllCustomDays(); 
+    this.refresh.next();
   }
 
   deleteTimeSlip(){
@@ -281,41 +282,13 @@ export class AddTimeslipComponent{
     //this.addSelectedDayViewClass();
   }
 
-  // addSelectedDayViewClass() {
-
- 
-
-
-
-  //   this.dayView.forEach(hourSegment => {
-  //     hourSegment.segments.forEach(segment => {
-  //       delete segment.cssClass;
-  //       if (
-  //         this.selectedDayViewDate &&
-  //         segment.date.getTime() === this.selectedDayViewDate.getTime()
-  //       ) {
-
-          
-  //         //segment.cssClass = 'cal-day-selected';
-  //         //console.log(new Date(segment.date.getTime()));
-  //         //this.endTime.setMinutes(this.startTime.getMinutes()+30);
-  //         console.log(segment.date.getHours());
-  //         this.startTime = {hour: segment.date.getHours(), minute: segment.date.getMinutes()};
-  //         let newDate = new Date(segment.date.getTime());
-  //         newDate.setMinutes(newDate.getMinutes()+30);
-  //         //segment.date.setMinutes(segment.date.getMinutes()+30);
-  //         this.endTime = {hour:newDate.getHours(), minute: newDate.getMinutes()};
-  //         console.log(this.startTime.hour)
-  //         console.log(newDate);
-  //         this.refresh.next();
-
-  //       }
-  //     });
-  //   });
-  // }
-
   //Binding on time controls
   onCheckboxChange(){
+    if (this.controlsAreBinded == true){
+      this.controlsAreBinded = false;
+    }else {
+      this.controlsAreBinded = true;
+    }
     console.log("In the checkbox change method...");
     console.log("Are controls binded = " + this.controlsAreBinded);
     this.fixedHourInterval = this.endTime.hour - this.startTime.hour;
@@ -323,26 +296,32 @@ export class AddTimeslipComponent{
     console.log("Fixed hour interval: " + this.fixedHourInterval);
     console.log("Fixed minute interval: " + this.fixedMinuteInterval);
   }
+
   onStartTimeChange(){
     console.log("In the onstartimechange method...");
     console.log(this.controlsAreBinded);
-    if(!this.controlsAreBinded){
+    if(this.controlsAreBinded == false){
         return;
-    }
-    let newHour = this.startTime.hour + this.fixedHourInterval;
-    let newMinute = this.startTime.minute + this.fixedMinuteInterval;
-    // let newEndTime = { hour : newHour,
-    //                    minute : newMinute }
-    this.endTime = { hour : newHour,
-      minute : newMinute };
+    }else {
+      let newHour = this.startTime.hour + this.fixedHourInterval;
+      let newMinute = this.startTime.minute + this.fixedMinuteInterval;
+      // let newEndTime = { hour : newHour,
+      //                    minute : newMinute }
       this.endTime = { hour : newHour,
         minute : newMinute };
-    this.refresh.next();
-  //this.TodayendTime.hour = this.TodaystartTime.hour + this.fixedHourInterval;
-    console.log("Today end hour: " + this.endTime.hour);
-  //this.TodayendTime.minute = this.TodaystartTime.minute + this.fixedMinuteInterval;
-    console.log("Today end minute: " + this.endTime.minute);
-   
+      this.refresh.next();
+    //this.TodayendTime.hour = this.TodaystartTime.hour + this.fixedHourInterval;
+      console.log("Today end hour: " + this.endTime.hour);
+    //this.TodayendTime.minute = this.TodaystartTime.minute + this.fixedMinuteInterval;
+      console.log("Today end minute: " + this.endTime.minute);
+     /// this.endTime.hour = this.endTime.hour+1;
+     // this.endTime
+    }
+  }
+
+  changeEndTime(){
+    console.log("I want to assign to it again!");
+    this.endTime = this.endTime;
   }
 
   refreshMe(){
@@ -350,7 +329,7 @@ export class AddTimeslipComponent{
   }
 
   onEndTimeChange(){
-
+    console.log("the end time changed now");
     if(!this.controlsAreBinded){
         return;
     }
@@ -359,12 +338,10 @@ export class AddTimeslipComponent{
     let newEndTime = { hour : newHour,
                        minute : newMinute }
     this.startTime = newEndTime;
-
     //this.TodaystartTime.hour = this.TodayendTime.hour - this.fixedHourInterval;
     console.log("Today start hour: " + this.startTime.hour);
     //this.TodaystartTime.minute = this.TodayendTime.minute - this.fixedMinuteInterval;
-    console.log("Today start minute: " + this.startTime.minute);
-    
+    console.log("Today start minute: " + this.startTime.minute);  
   }
 
 
@@ -380,15 +357,12 @@ export class AddTimeslipComponent{
     let endDate : Date = new Date(this.viewDate.valueOf());
     endDate.setHours(this.endTime.hour, this.endTime.minute);
     console.log(startDate);
-
     let validationEvent : CalendarEvent= {
       start:startDate,
       end:endDate,
       title: " test"
     }
-
    let result : boolean =  this.validateNewEvent(validationEvent,this.events);
-
    if (result != true){
      alert("please ensure that there is not time overlap!");
    }else {
