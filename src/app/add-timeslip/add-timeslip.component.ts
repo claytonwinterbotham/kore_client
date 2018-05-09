@@ -255,13 +255,6 @@ export class AddTimeslipComponent{
     this.showProjectList();
     this.getAllTimeSlips();
     this.getAllCustomDays(); 
-        /** spinner starts on init */
-        // this.spinner.show();
- 
-        // setTimeout(() => {
-        //     /** spinner ends after 5 seconds */
-        //     this.spinner.hide();
-        // }, 1000);
   }
 
   deleteTimeSlip(){
