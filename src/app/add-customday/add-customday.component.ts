@@ -70,6 +70,7 @@ export class AddCustomdayComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
   @ViewChild('searchSuccess') searchSuccess: TemplateRef<any>;
   @ViewChild('searchFail') searchFail: TemplateRef<any>;
+  @ViewChild('confirmDelete') confirmDelete: TemplateRef<any>;
   view: string = 'day';
 
   //variables 

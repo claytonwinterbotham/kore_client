@@ -145,7 +145,7 @@
             [disabled]="confirmDisabled">
             Confirm
             </button>
-            <button *ngIf="selectedCustomday" class="btn btn-danger"(click)="deleteCustomDay()" > Delete </button>            
+            <button *ngIf="selectedCustomday" class="btn btn-danger"(click)="this.modalService.open(this.confirmDelete)" > Delete </button>            
           </div>
         </form>
       </div> 
@@ -226,3 +226,16 @@
     </div>
   </ng-template>
 
+  <ng-template #confirmDelete let-c="close" let-d="dismiss">
+    <div class="modal-header" style="background-color: #ff8080">
+      <h4 class="modal-title">{{id}} Confirm Delete</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to delete this Custom Day?</p>
+    </div>
+    <button type="button" class="btn btn-light" (click)="deleteCustomDay();c('Close click')">Yes</button>
+    <button type="button" class="btn btn-light" (click)="c('Close click')">No</button>
+  </ng-template>
