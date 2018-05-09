@@ -3,8 +3,9 @@ import { MyProjectService } from "../services/app.projectservice";
 import  {ProjectModel} from "../services/app.projectservice";
 import { MyClientService } from "../services/app.clientservice";
 import  {ClientModel} from "../services/app.clientservice";
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-view-projects',
@@ -12,6 +13,7 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./view-projects.component.css']
 })
 export class ViewProjectsComponent implements OnInit {
+  @ViewChild('projectCreated') projectCreated: TemplateRef<any>;
 
   projectService : MyProjectService;
   projectList : any;
@@ -25,7 +27,7 @@ export class ViewProjectsComponent implements OnInit {
   clientService : MyClientService;
   clientList: any;
 
-  constructor(_projectService:MyProjectService, _clientService:MyClientService) {
+  constructor(_projectService:MyProjectService, _clientService:MyClientService, private modalService: NgbModal) {
     this.projectService = _projectService;
     this.clientService = _clientService;
    }
@@ -42,6 +44,7 @@ export class ViewProjectsComponent implements OnInit {
     this.projectService.postProject(project).subscribe(
       data=> {
         console.log(data);
+        this.modalService.open(this.projectCreated);
       },error =>{
         alert(error);
       }
@@ -132,3 +135,6 @@ export class ViewProjectsComponent implements OnInit {
   }
 
 }
+
+
+//this.modalService.open(this.searchSuccess);
