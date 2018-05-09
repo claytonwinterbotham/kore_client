@@ -47,5 +47,6 @@ mwl-calendar-day-view{
 
 .cal-month-view .cal-day-badge {
     background-color: rgb(30, 144, 255);
+    display: none;
 }
 
