@@ -306,6 +306,7 @@ export class AddCustomdayComponent implements OnInit {
     }
     if (this.selectedWBI == null){
       this.selectedProject = null;
+      this.ClearAllEvents();
       return ;
     }
     this.projectService.getOneProjectByWBIId(this.selectedWBI).subscribe(

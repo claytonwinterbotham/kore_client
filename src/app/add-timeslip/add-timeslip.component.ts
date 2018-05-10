@@ -434,37 +434,44 @@ export class AddTimeslipComponent{
   }
 
   locateProject(){
+    
     // console.log("i want to locate project");
     if (this.selectedWBI == null || this.selectedWBI == ""){
+      
+      this.ClearAllEvents();
       this.wbiRemainingHours = "";
-    }
-    this.wbiRemainingHours = "Remaining Hours: "+ this.getRemainingWBIHour(this.selectedWBI);
-    if(this.getRemainingWBIHour(this.selectedWBI) <= 0){
-     this.remainingHourInvalid = true;
-    }else {
-      this.remainingHourInvalid = false;
-    } 
-    if (!this.searchWBIs){
       return ;
+    }else {
+      this.wbiRemainingHours = "Remaining Hours: "+ this.getRemainingWBIHour(this.selectedWBI);
+      if(this.getRemainingWBIHour(this.selectedWBI) <= 0){
+        this.remainingHourInvalid = true;
+       }else {
+         this.remainingHourInvalid = false;
+       } 
+       if (!this.searchWBIs){
+         return ;
+       }
+   
+   
+       this.projectService.getOneProjectByWBIId(this.selectedWBI).subscribe(
+         data=>{
+           // console.log(data);
+           //this.fixedProject = true;
+           //this.ngselectProject = false;
+           this.selectedProject = data["newName"];
+           //this.selectedProject = data;
+           //let dataArray  = [];
+           //dataArray.push(data);
+           //ng-select only accept arrays, that's why i need to define an array here.
+           //this. = dataArray;
+         },
+         error =>{
+           alert(error);
+         }
+       )
     }
+   
 
-
-    this.projectService.getOneProjectByWBIId(this.selectedWBI).subscribe(
-      data=>{
-        // console.log(data);
-        //this.fixedProject = true;
-        //this.ngselectProject = false;
-        this.selectedProject = data["newName"];
-        //this.selectedProject = data;
-        //let dataArray  = [];
-        //dataArray.push(data);
-        //ng-select only accept arrays, that's why i need to define an array here.
-        //this. = dataArray;
-      },
-      error =>{
-        alert(error);
-      }
-    )
   }
 
   getRemainingWBIHour(WBI : string) : number{
@@ -863,7 +870,7 @@ export class AddTimeslipComponent{
       // console.log(this.clickedDate.toISOString());
       let CustomdayTimeslip : customdayTimeslip = {
         CustomdayId :this.selectedCustomday,
-        Date :this.clickedDate.toISOString()
+        Date :this.viewDate.toISOString()
       }
       this.spinner.show();
       this.timeSlipTemplateService.applyTimeTemplate(CustomdayTimeslip).subscribe(
