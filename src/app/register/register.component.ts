@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MyUserService, UserModel } from '../services/app.userservice';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-register',
@@ -20,7 +21,8 @@ export class RegisterComponent implements OnInit {
 
   _userDataService: MyUserService;
 
-  constructor(userDataService: MyUserService, private router: Router) { 
+  constructor(userDataService: MyUserService, private router: Router, 
+              private spinner: NgxSpinnerService) { 
       this._userDataService = userDataService;
   }
 
@@ -40,14 +42,17 @@ export class RegisterComponent implements OnInit {
         "FirstName": this.firstName,
         "LastName": this.lastName
       }
+      this.spinner.show();
       this._userDataService.registerUser(newUser).subscribe(
         data => {
           // console.log(data)
           sessionStorage.setItem("userId",data["secret"]);
           sessionStorage.setItem("token",data["token"]);
+          this.spinner.hide();
           this.router.navigate(['addtimeslip'])
         },
         error => {
+          this.spinner.hide();
           alert(error)
         },
         //3. execute final instructions
