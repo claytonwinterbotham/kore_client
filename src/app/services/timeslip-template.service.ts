@@ -14,7 +14,7 @@ export class TimeslipTemplateService {
   public site: string;
   constructor(private http: Http) {
     // for aws:
-    this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/customDay_WBI/';
+    this.site = 'http://koretimeslipwebapi.azurewebsites.net/customDay_WBI/';
     // for local host:
     //this.site = "http://localhost:64779/customDay_WBI/"
   }

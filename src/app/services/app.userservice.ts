@@ -26,7 +26,7 @@ export class MyUserService {
     constructor(private http: Http) {
 
         //for asw:
-        this.site = "https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/user/"
+        this.site = "http://koretimeslipwebapi.azurewebsites.net/user/"
 
         //for localhost:
         //this.site = 'http://localhost:64779/user/';

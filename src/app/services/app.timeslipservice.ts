@@ -22,7 +22,7 @@ export class MyTimeslipService {
     public site:string;
     constructor(private http: Http) {
         // for aws:
-        this.site = 'https://yuu5n724ub.execute-api.us-east-1.amazonaws.com/Prod/timeslip/';
+        this.site = 'http://koretimeslipwebapi.azurewebsites.net/timeslip/';
         // for local host:
        //this.site = "http://localhost:64779/timeslip/"
      }
